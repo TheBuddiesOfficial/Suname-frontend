@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface BackgroundEffectsProps {
@@ -8,6 +8,217 @@ interface BackgroundEffectsProps {
 const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) => {
   const [showLightning, setShowLightning] = useState(false);
   const [prevMode, setPrevMode] = useState(isDarkRealm);
+
+  // Memoize static styles and configurations that don't depend on state or props
+  const backgroundGradients = useMemo(
+    () => ({
+      dark: 'linear-gradient(180deg, #01040f 0%, #0a1128 20%, #151b3d 40%, #2a345e 60%, #404b7a 80%, #151b3d 100%)',
+      light: 'linear-gradient(180deg, #ff8c00 0%, #ff6f00 25%, #ff4f00 50%, #ff2a00 75%, #ff0000 100%)',
+    }),
+    []
+  );
+
+  const atmosphericHazeGradients = useMemo(
+    () => ({
+      dark: 'radial-gradient(ellipse at center top, rgba(70, 100, 150, 0.25), rgba(90, 130, 180, 0.18), transparent 75%)',
+      light: 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.4), rgba(255, 140, 0, 0.3), transparent 85%)',
+    }),
+    []
+  );
+
+  const sunMoonGradients = useMemo(
+    () => ({
+      dark: 'radial-gradient(circle at 30% 30%, #f5f8ff 5%, #e6efff 25%, #d0e0ff 50%, #b3c7ff 75%, #94a5ff 100%)',
+      light: 'radial-gradient(circle at 35% 35%, #fffbe6 0%, #fff0b3 20%, #ffd700 60%, #ffa500 100%)',
+    }),
+    []
+  );
+
+  const sunMoonShadows = useMemo(
+    () => ({
+      dark: '0 0 clamp(35px, 7vw, 75px) rgba(220, 230, 255, 0.8), inset -7px -7px 18px rgba(180, 200, 255, 0.5)',
+      light: '0 0 clamp(70px, 14vw, 180px) rgba(255, 215, 0, 0.9), 0 0 clamp(120px, 20vw, 300px) rgba(255, 165, 0, 0.6), inset -5px -5px 12px rgba(255, 165, 0, 0.4)',
+    }),
+    []
+  );
+
+  const sunMoonHaloGradients = useMemo(
+    () => ({
+      dark: 'radial-gradient(circle, transparent 40%, rgba(200, 220, 255, 0.15) 50%, transparent 80%)',
+      light: 'radial-gradient(circle, transparent 30%, rgba(255, 140, 0, 0.35) 45%, rgba(255, 165, 0, 0.25) 70%, transparent 90%)',
+    }),
+    []
+  );
+
+  const horizonLineGradients = useMemo(
+    () => ({
+      dark: 'linear-gradient(90deg, transparent 0%, rgba(180, 220, 240, 0.8) 20%, rgba(230, 250, 255, 0.95) 50%, rgba(180, 220, 240, 0.8) 80%, transparent 100%)',
+      light: 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 245, 0.95) 20%, rgba(255, 240, 220, 1) 50%, rgba(255, 250, 245, 0.95) 80%, transparent 100%)',
+    }),
+    []
+  );
+
+  const oceanGradients = useMemo(
+    () => ({
+      dark: `
+        linear-gradient(to top,
+          rgba(10, 25, 50, 0.98) 0%,
+          rgba(20, 40, 75, 0.9) 15%,
+          rgba(35, 60, 105, 0.8) 30%,
+          rgba(55, 85, 135, 0.7) 45%,
+          rgba(75, 110, 165, 0.6) 60%,
+          rgba(95, 135, 195, 0.5) 75%,
+          rgba(120, 160, 220, 0.3) 90%,
+          transparent 100%
+        )
+      `,
+      light: `
+        linear-gradient(to top,
+          rgba(200, 70, 10, 0.9) 0%,
+          rgba(220, 100, 20, 0.8) 25%,
+          rgba(240, 140, 50, 0.7) 50%,
+          rgba(255, 180, 80, 0.6) 75%,
+          rgba(255, 220, 110, 0.4) 90%,
+          transparent 100%
+        )
+      `,
+    }),
+    []
+  );
+
+  const waterWaveGradients1 = useMemo(
+    () => ({
+      dark: `
+        repeating-linear-gradient(90deg,
+          transparent,
+          transparent clamp(30px, 6vw, 80px),
+          rgba(50, 90, 160, 0.45) clamp(30px, 6vw, 80px),
+          rgba(50, 90, 160, 0.45) clamp(70px, 14vw, 150px),
+          transparent clamp(70px, 14vw, 150px),
+          transparent clamp(110px, 22vw, 230px)
+        )
+      `,
+      light: `
+        repeating-linear-gradient(90deg,
+          transparent,
+          transparent clamp(40px, 8vw, 100px),
+          rgba(255, 100, 30, 0.35) clamp(40px, 8vw, 100px),
+          rgba(255, 100, 30, 0.35) clamp(80px, 16vw, 200px)
+        )
+      `,
+    }),
+    []
+  );
+
+  const waterWaveGradients2 = useMemo(
+    () => ({
+      dark: `
+        repeating-linear-gradient(45deg,
+          transparent,
+          transparent clamp(15px, 3vw, 50px),
+          rgba(80, 130, 200, 0.35) clamp(15px, 3vw, 50px),
+          rgba(80, 130, 200, 0.35) clamp(35px, 7vw, 100px)
+        )
+      `,
+      light: `
+        repeating-linear-gradient(45deg,
+          transparent,
+          transparent clamp(20px, 4vw, 60px),
+          rgba(255, 150, 60, 0.3) clamp(20px, 4vw, 60px),
+          rgba(255, 150, 60, 0.3) clamp(40px, 8vw, 120px)
+        )
+      `,
+    }),
+    []
+  );
+
+  const reflectionGradients = useMemo(
+    () => ({
+      dark: `
+        linear-gradient(to bottom,
+          transparent 0%,
+          rgba(230, 240, 255, 0.65) 10%,
+          rgba(200, 225, 255, 0.85) 30%,
+          rgba(170, 200, 255, 0.75) 50%,
+          rgba(120, 170, 255, 0.65) 70%,
+          transparent 100%
+        )
+      `,
+      light: `
+        linear-gradient(to bottom,
+          transparent 0%,
+          rgba(255, 150, 60, 0.65) 20%,
+          rgba(255, 170, 80, 0.55) 50%,
+          rgba(255, 200, 100, 0.45) 80%,
+          transparent 100%
+        )
+      `,
+    }),
+    []
+  );
+
+  const beachSandGradients = useMemo(
+    () => ({
+      dark: `
+        linear-gradient(to top,
+          rgba(50, 60, 75, 0.98) 0%,
+          rgba(75, 90, 110, 0.9) 20%,
+          rgba(110, 125, 150, 0.8) 40%,
+          rgba(150, 165, 190, 0.65) 60%,
+          rgba(190, 205, 225, 0.5) 80%,
+          transparent 100%
+        )
+      `,
+      light: `
+        linear-gradient(to top,
+          rgba(160, 80, 0, 1) 0%,
+          rgba(190, 110, 30, 0.92) 15%,
+          rgba(220, 140, 70, 0.84) 30%,
+          rgba(250, 170, 100, 0.72) 50%,
+          rgba(255, 200, 140, 0.6) 70%,
+          rgba(255, 230, 190, 0.45) 85%,
+          transparent 100%
+        )
+      `,
+    }),
+    []
+  );
+
+  const sandTextureGradients = useMemo(
+    () => ({
+      dark: `
+        radial-gradient(circle at 25% 30%, rgba(190, 205, 225, 0.5) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 75% 70%, rgba(150, 165, 190, 0.4) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 50% 50%, rgba(170, 185, 205, 0.45) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 30% 80%, rgba(160, 175, 195, 0.35) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 80% 20%, rgba(190, 205, 225, 0.4) 1.2px, transparent 1.2px)
+      `,
+      light: `
+        radial-gradient(circle at 25% 30%, rgba(220, 140, 70, 0.6) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 75% 70%, rgba(250, 170, 100, 0.5) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 50% 50%, rgba(255, 200, 140, 0.55) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 30% 80%, rgba(255, 210, 160, 0.5) 1.2px, transparent 1.2px),
+        radial-gradient(circle at 80% 20%, rgba(255, 230, 190, 0.45) 1.2px, transparent 1.2px)
+      `,
+    }),
+    []
+  );
+
+  const wetSandEdgeGradients = useMemo(
+    () => ({
+      dark: 'linear-gradient(90deg, transparent 0%, rgba(220, 230, 240, 0.95) 15%, rgba(240, 245, 250, 1) 35%, rgba(255, 255, 255, 1) 50%, rgba(240, 245, 250, 1) 65%, rgba(220, 230, 240, 0.95) 85%, transparent 100%)',
+      light: 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 240, 0.98) 15%, rgba(255, 235, 200, 0.95) 35%, rgba(255, 255, 255, 1) 50%, rgba(255, 235, 200, 0.95) 65%, rgba(255, 250, 240, 0.98) 85%, transparent 100%)',
+    }),
+    []
+  );
+
+  const duneGradients = useMemo(
+    () => ({
+      dark: `linear-gradient(to top, rgba(45, 55, 70, 0.95) 0%, rgba(60, 75, 95, 0.9) 50%, transparent 100%)`,
+      light: `linear-gradient(to top, rgba(140, 70, 0, 0.95) 0%, rgba(180, 110, 20, 0.9) 50%, transparent 100%)`,
+    }),
+    []
+  );
 
   useEffect(() => {
     if (prevMode !== isDarkRealm) {
@@ -27,9 +238,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         className="fixed inset-0"
         style={{ zIndex: -21 }}
         animate={{
-          background: isDarkRealm
-            ? 'linear-gradient(180deg, #01040f 0%, #0a1128 20%, #151b3d 40%, #2a345e 60%, #404b7a 80%, #151b3d 100%)' // Even deeper, more textured night
-            : 'linear-gradient(180deg, #ff8c00 0%, #ff6f00 25%, #ff4f00 50%, #ff2a00 75%, #ff0000 100%)', // More vibrant and realistic day
+          background: isDarkRealm ? backgroundGradients.dark : backgroundGradients.light,
         }}
         transition={{ duration: 3.5, ease: 'easeInOut' }}
       />
@@ -39,9 +248,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         className="fixed inset-0"
         style={{
           zIndex: -20,
-          background: isDarkRealm
-            ? 'radial-gradient(ellipse at center top, rgba(70, 100, 150, 0.25), rgba(90, 130, 180, 0.18), transparent 75%)' // Softer, more atmospheric night haze
-            : 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.4), rgba(255, 140, 0, 0.3), transparent 85%)', // Warmer, more subtle day haze
+          background: isDarkRealm ? atmosphericHazeGradients.dark : atmosphericHazeGradients.light,
         }}
         animate={{
           opacity: [0.6, 0.95, 0.6],
@@ -71,7 +278,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               style={{
                 // More jagged, thunder-like shape
                 background: `radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.95) 5%, transparent 15%),
-                             radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.8) 5%, transparent 15%)`,
+                              radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.8) 5%, transparent 15%)`,
                 mixBlendMode: 'screen',
                 zIndex: -3,
                 pointerEvents: 'none',
@@ -121,15 +328,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           width: 'clamp(70px, 12vw, 150px)', // Smaller and responsive
           height: 'clamp(70px, 12vw, 150px)', // Smaller and responsive
           borderRadius: '50%',
-          background: isDarkRealm
-            ? 'radial-gradient(circle at 30% 30%, #f5f8ff 5%, #e6efff 25%, #d0e0ff 50%, #b3c7ff 75%, #94a5ff 100%)' // Brighter, more defined moon
-            : 'radial-gradient(circle at 35% 35%, #fffbe6 0%, #fff0b3 20%, #ffd700 60%, #ffa500 100%)', // More intense, warmer sun
+          background: isDarkRealm ? sunMoonGradients.dark : sunMoonGradients.light,
           top: 'clamp(10vh, 14vh, 18vh)', // Adjusted position
           right: 'clamp(14vw, 18vw, 22vw)', // Adjusted position
           filter: isDarkRealm ? 'blur(0.6px)' : 'blur(0.3px)', // Sharper filter
-          boxShadow: isDarkRealm
-            ? '0 0 clamp(35px, 7vw, 75px) rgba(220, 230, 255, 0.8), inset -7px -7px 18px rgba(180, 200, 255, 0.5)' // Stronger, clearer moon glow
-            : '0 0 clamp(70px, 14vw, 180px) rgba(255, 215, 0, 0.9), 0 0 clamp(120px, 20vw, 300px) rgba(255, 165, 0, 0.6), inset -5px -5px 12px rgba(255, 165, 0, 0.4)', // More vibrant sun glow
+          boxShadow: isDarkRealm ? sunMoonShadows.dark : sunMoonShadows.light,
         }}
         animate={{
           scale: [1, 1.07, 1],
@@ -155,9 +358,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           width: 'clamp(100px, 18vw, 220px)', // Smaller and responsive
           height: 'clamp(100px, 18vw, 220px)', // Smaller and responsive
           borderRadius: '50%',
-          background: isDarkRealm
-            ? 'radial-gradient(circle, transparent 40%, rgba(200, 220, 255, 0.15) 50%, transparent 80%)' // More subtle night halo
-            : 'radial-gradient(circle, transparent 30%, rgba(255, 140, 0, 0.35) 45%, rgba(255, 165, 0, 0.25) 70%, transparent 90%)', // Warmer, more defined day halo
+          background: isDarkRealm ? sunMoonHaloGradients.dark : sunMoonHaloGradients.light,
           top: 'clamp(8vh, 12vh, 16vh)', // Adjusted position
           right: 'clamp(11vw, 15vw, 19vw)', // Adjusted position
         }}
@@ -277,9 +478,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -16,
           height: 'clamp(1.2px, 0.25vw, 3.5px)', // Sharper line
-          background: isDarkRealm
-            ? 'linear-gradient(90deg, transparent 0%, rgba(180, 220, 240, 0.8) 20%, rgba(230, 250, 255, 0.95) 50%, rgba(180, 220, 240, 0.8) 80%, transparent 100%)' // Lighter, more ethereal night horizon
-            : 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 245, 0.95) 20%, rgba(255, 240, 220, 1) 50%, rgba(255, 250, 245, 0.95) 80%, transparent 100%)', // Brighter, more distinct day horizon
+          background: isDarkRealm ? horizonLineGradients.dark : horizonLineGradients.light,
           top: `calc(100% - clamp(25vh, 32vh, 35vh))`, // Adjusted position
           filter: 'blur(clamp(0.6px, 0.2vw, 2px))',
         }}
@@ -300,29 +499,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -15,
           height: 'clamp(25vh, 32vh, 35vh)', // Adjusted height
-          background: isDarkRealm
-            ? `
-              linear-gradient(to top,
-                rgba(10, 25, 50, 0.98) 0%,
-                rgba(20, 40, 75, 0.9) 15%,
-                rgba(35, 60, 105, 0.8) 30%,
-                rgba(55, 85, 135, 0.7) 45%,
-                rgba(75, 110, 165, 0.6) 60%,
-                rgba(95, 135, 195, 0.5) 75%,
-                rgba(120, 160, 220, 0.3) 90%,
-                transparent 100%
-              )
-            `
-            : `
-              linear-gradient(to top,
-                rgba(200, 70, 10, 0.9) 0%,
-                rgba(220, 100, 20, 0.8) 25%,
-                rgba(240, 140, 50, 0.7) 50%,
-                rgba(255, 180, 80, 0.6) 75%,
-                rgba(255, 220, 110, 0.4) 90%,
-                transparent 100%
-              )
-            `,
+          background: isDarkRealm ? oceanGradients.dark : oceanGradients.light,
         }}
         animate={{
           opacity: [0.95, 1, 0.95],
@@ -340,25 +517,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -14,
           height: 'clamp(20vh, 28vh, 32vh)', // Adjusted height
-          background: isDarkRealm
-            ? `
-              repeating-linear-gradient(90deg,
-                transparent,
-                transparent clamp(30px, 6vw, 80px),
-                rgba(50, 90, 160, 0.45) clamp(30px, 6vw, 80px),
-                rgba(50, 90, 160, 0.45) clamp(70px, 14vw, 150px),
-                transparent clamp(70px, 14vw, 150px),
-                transparent clamp(110px, 22vw, 230px)
-              )
-            `
-            : `
-              repeating-linear-gradient(90deg,
-                transparent,
-                transparent clamp(40px, 8vw, 100px),
-                rgba(255, 100, 30, 0.35) clamp(40px, 8vw, 100px),
-                rgba(255, 100, 30, 0.35) clamp(80px, 16vw, 200px)
-              )
-            `,
+          background: isDarkRealm ? waterWaveGradients1.dark : waterWaveGradients1.light,
           backgroundSize: '100% 100%', // Ensure it covers the area
         }}
         animate={{
@@ -378,23 +537,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -13,
           height: 'clamp(15vh, 22vh, 28vh)', // Adjusted height
-          background: isDarkRealm
-            ? `
-              repeating-linear-gradient(45deg,
-                transparent,
-                transparent clamp(15px, 3vw, 50px),
-                rgba(80, 130, 200, 0.35) clamp(15px, 3vw, 50px),
-                rgba(80, 130, 200, 0.35) clamp(35px, 7vw, 100px)
-              )
-            `
-            : `
-              repeating-linear-gradient(45deg,
-                transparent,
-                transparent clamp(20px, 4vw, 60px),
-                rgba(255, 150, 60, 0.3) clamp(20px, 4vw, 60px),
-                rgba(255, 150, 60, 0.3) clamp(40px, 8vw, 120px)
-              )
-            `,
+          background: isDarkRealm ? waterWaveGradients2.dark : waterWaveGradients2.light,
           backgroundSize: '100% 100%', // Ensure it covers the area
         }}
         animate={{
@@ -415,26 +558,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           zIndex: -12,
           width: 'clamp(40px, 8vw, 80px)',
           height: 'clamp(120px, 25vh, 250px)',
-          background: isDarkRealm
-            ? `
-              linear-gradient(to bottom,
-                transparent 0%,
-                rgba(230, 240, 255, 0.65) 10%,
-                rgba(200, 225, 255, 0.85) 30%,
-                rgba(170, 200, 255, 0.75) 50%,
-                rgba(120, 170, 255, 0.65) 70%,
-                transparent 100%
-              )
-            `
-            : `
-              linear-gradient(to bottom,
-                transparent 0%,
-                rgba(255, 150, 60, 0.65) 20%,
-                rgba(255, 170, 80, 0.55) 50%,
-                rgba(255, 200, 100, 0.45) 80%,
-                transparent 100%
-              )
-            `,
+          background: isDarkRealm ? reflectionGradients.dark : reflectionGradients.light,
           right: 'clamp(16vw, 21vw, 26vw)', // Aligned with sun/moon
           bottom: '0',
           filter: 'blur(clamp(1px, 0.5vw, 3px))',
@@ -457,28 +581,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -11,
           height: 'clamp(18vh, 25vh, 30vh)', // Adjusted height
-          background: isDarkRealm
-            ? `
-              linear-gradient(to top,
-                rgba(50, 60, 75, 0.98) 0%,
-                rgba(75, 90, 110, 0.9) 20%,
-                rgba(110, 125, 150, 0.8) 40%,
-                rgba(150, 165, 190, 0.65) 60%,
-                rgba(190, 205, 225, 0.5) 80%,
-                transparent 100%
-              )
-            `
-            : `
-              linear-gradient(to top,
-                rgba(160, 80, 0, 1) 0%,
-                rgba(190, 110, 30, 0.92) 15%,
-                rgba(220, 140, 70, 0.84) 30%,
-                rgba(250, 170, 100, 0.72) 50%,
-                rgba(255, 200, 140, 0.6) 70%,
-                rgba(255, 230, 190, 0.45) 85%,
-                transparent 100%
-              )
-            `,
+          background: isDarkRealm ? beachSandGradients.dark : beachSandGradients.light,
         }}
       />
 
@@ -488,21 +591,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -10,
           height: 'clamp(16vh, 23vh, 28vh)', // Adjusted height
-          background: isDarkRealm
-            ? `
-              radial-gradient(circle at 25% 30%, rgba(190, 205, 225, 0.5) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 75% 70%, rgba(150, 165, 190, 0.4) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 50% 50%, rgba(170, 185, 205, 0.45) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 30% 80%, rgba(160, 175, 195, 0.35) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 80% 20%, rgba(190, 205, 225, 0.4) 1.2px, transparent 1.2px)
-            `
-            : `
-              radial-gradient(circle at 25% 30%, rgba(220, 140, 70, 0.6) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 75% 70%, rgba(250, 170, 100, 0.5) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 50% 50%, rgba(255, 200, 140, 0.55) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 30% 80%, rgba(255, 210, 160, 0.5) 1.2px, transparent 1.2px),
-              radial-gradient(circle at 80% 20%, rgba(255, 230, 190, 0.45) 1.2px, transparent 1.2px)
-            `,
+          background: isDarkRealm ? sandTextureGradients.dark : sandTextureGradients.light,
           backgroundSize: `
             clamp(25px, 5vw, 60px) clamp(25px, 5vw, 60px),
             clamp(35px, 7vw, 80px) clamp(35px, 7vw, 80px),
@@ -527,9 +616,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -9,
           height: 'clamp(2px, 0.5vw, 4.5px)', // Sharper line
-          background: isDarkRealm
-            ? 'linear-gradient(90deg, transparent 0%, rgba(220, 230, 240, 0.95) 15%, rgba(240, 245, 250, 1) 35%, rgba(255, 255, 255, 1) 50%, rgba(240, 245, 250, 1) 65%, rgba(220, 230, 240, 0.95) 85%, transparent 100%)'
-            : 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 240, 0.98) 15%, rgba(255, 235, 200, 0.95) 35%, rgba(255, 255, 255, 1) 50%, rgba(255, 235, 200, 0.95) 65%, rgba(255, 250, 240, 0.98) 85%, transparent 100%)',
+          background: isDarkRealm ? wetSandEdgeGradients.dark : wetSandEdgeGradients.light,
           top: `calc(100% - clamp(18vh, 25vh, 30vh))`, // Aligned with new sand height
           filter: 'blur(clamp(0.7px, 0.3vw, 2.5px))',
         }}
@@ -611,9 +698,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             width: `clamp(80px, ${14 + Math.random() * 10}vw, 200px)`,
             height: `clamp(20px, ${4 + Math.random() * 3}vh, 50px)`,
             borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
-            background: isDarkRealm
-              ? `linear-gradient(to top, rgba(45, 55, 70, 0.95) 0%, rgba(60, 75, 95, 0.9) 50%, transparent 100%)`
-              : `linear-gradient(to top, rgba(140, 70, 0, 0.95) 0%, rgba(180, 110, 20, 0.9) 50%, transparent 100%)`,
+            background: isDarkRealm ? duneGradients.dark : duneGradients.light,
             left: `${i * 20 + (Math.random() * 8 - 4)}vw`, // Adjusted spacing
             transform: `translateX(-50%)`,
             bottom: `clamp(16vh, 23vh, 28vh)`, // Adjusted position
