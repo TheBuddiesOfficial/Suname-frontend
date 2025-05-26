@@ -73,15 +73,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           animate={isMounted ? "animate" : "initial"}
         >
           {/* Logo - Subtle pulse animation on load */}
-          <motion.img
-            src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
-            alt="SUNAME"
-            className="w-48 h-48 mx-auto mb-8 object-contain"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.6, -0.05, 0.01, 0.99] }}
-            whileHover={{ scale: 1.05 }}
-          />
 
           {/* Artist Photo with Border Animation - Subtle zoom on hover */}
           <motion.div
