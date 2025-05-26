@@ -102,6 +102,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     className="flex items-center space-x-2"
                     whileHover={{ x: 5 }}
                   >
+                    {/* Replaced Music2 with SUNAME logo for desktop */}
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
