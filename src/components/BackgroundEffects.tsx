@@ -79,22 +79,22 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Sun/Moon Orb - Z-index adjusted for visibility */}
+      {/* Sun/Moon Orb */}
       <motion.div
         className="fixed"
         style={{
-          zIndex: -14, // Placed above ocean layers and horizon
+          zIndex: -14,
           width: 'clamp(80px, 15vw, 200px)',
           height: 'clamp(80px, 15vw, 200px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle at 30% 30%, #f9fbfd 5%, #e6f0ff 25%, #d0e0f0 50%, #a8c0e0 75%, #829ab1 100%)'
+            ? 'radial-gradient(circle at 40% 40%, #c0c0c0 0%, #808080 30%, #404040 60%, #202020 100%)' // Moon: Grey tones for craters/texture
             : 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ffd23f 20%, #ff6b35 60%, #ee4035 100%)',
           top: 'clamp(10vh, 15vh, 20vh)',
           right: 'clamp(15vw, 20vw, 25vw)',
-          filter: isDarkRealm ? 'blur(1px)' : 'blur(0.5px)',
+          filter: isDarkRealm ? 'blur(0.5px)' : 'blur(0.5px)', // Slightly less blur for moon
           boxShadow: isDarkRealm
-            ? '0 0 clamp(40px, 8vw, 80px) rgba(248, 250, 252, 0.8), inset -8px -8px 20px rgba(148, 163, 184, 0.6)' // Enhanced moon glow
+            ? '0 0 clamp(30px, 6vw, 60px) rgba(180, 200, 220, 0.7), inset -5px -5px 15px rgba(50, 60, 70, 0.4)' // Moon glow: softer, cooler
             : '0 0 clamp(80px, 15vw, 200px) rgba(255, 107, 53, 0.8), 0 0 clamp(150px, 25vw, 400px) rgba(238, 64, 53, 0.5), inset -5px -5px 15px rgba(238, 64, 53, 0.3)',
         }}
         animate={{
@@ -113,16 +113,16 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Outer Halo of Sun/Moon - Z-index adjusted for visibility */}
+      {/* Outer Halo of Sun/Moon */}
       <motion.div
         className="fixed"
         style={{
-          zIndex: -15, // Placed above horizon, behind orb
+          zIndex: -15,
           width: 'clamp(120px, 22vw, 280px)',
           height: 'clamp(120px, 22vw, 280px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle, transparent 40%, rgba(248, 250, 252, 0.2) 50%, transparent 80%)' // Enhanced moon halo
+            ? 'radial-gradient(circle, transparent 40%, rgba(150, 180, 220, 0.15) 50%, transparent 80%)' // Moon halo: subtle blue glow
             : 'radial-gradient(circle, transparent 30%, rgba(255, 107, 53, 0.3) 45%, rgba(238, 64, 53, 0.2) 70%, transparent 90%)',
           top: 'clamp(8vh, 12vh, 17vh)',
           right: 'clamp(12vw, 17vw, 22vw)',
@@ -228,7 +228,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed left-0 right-0"
         style={{
-          zIndex: -16, // Horizon behind stars/seagulls
+          zIndex: -16,
           height: 'clamp(1px, 0.2vw, 3px)',
           background: isDarkRealm
             ? 'linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.6) 20%, rgba(203, 213, 225, 0.8) 50%, rgba(148, 163, 184, 0.6) 80%, transparent 100%)'
@@ -251,7 +251,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -13, // Ocean behind moon reflection
+          zIndex: -13,
           height: 'clamp(25vh, 32vh, 35vh)',
           background: isDarkRealm
             ? `
@@ -360,7 +360,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed"
         style={{
-          zIndex: -10, // Moon/Sun reflection above ocean layers
+          zIndex: -10,
           width: 'clamp(40px, 8vw, 80px)',
           height: 'clamp(120px, 25vh, 250px)',
           background: isDarkRealm
@@ -402,7 +402,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -9, // Beach sand main body
+          zIndex: -9,
           height: 'clamp(18vh, 25vh, 30vh)',
           background: isDarkRealm
             ? `
@@ -432,7 +432,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -8, // Beach texture / Grain
+          zIndex: -8,
           height: 'clamp(16vh, 22vh, 28vh)',
           background: isDarkRealm
             ? `
@@ -470,7 +470,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -7, // Shoreline Foam/Wet sand line
+          zIndex: -7,
           height: 'clamp(2px, 0.5vw, 4px)',
           background: isDarkRealm
             ? 'linear-gradient(90deg, transparent 0%, rgba(241, 245, 249, 0.9) 15%, rgba(248, 250, 252, 1) 35%, rgba(255, 255, 255, 0.95) 50%, rgba(248, 250, 252, 1) 65%, rgba(241, 245, 249, 0.9) 85%, transparent 100%)'
@@ -550,7 +550,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           key={`dune-${i}`}
           className="fixed bottom-0"
           style={{
-            zIndex: -5, // Dunes
+            zIndex: -5,
             width: `clamp(80px, ${15 + Math.random() * 10}vw, 200px)`,
             height: `clamp(20px, ${4 + Math.random() * 3}vh, 50px)`,
             borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
