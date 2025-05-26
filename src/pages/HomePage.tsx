@@ -230,6 +230,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
+  const galleryImages = [
+    { src: "/images/gallery-beach-1.jpg", alt: "Beach Set 1" },
+    { src: "/images/gallery-beach-2.jpg", alt: "Beach Set 2" },
+    { src: "/images/gallery-beach-3.jpg", alt: "Beach Set 3" },
+  ];
+
   const splitTagline = biography.tagline.split(" ");
   const quoteTagline = "WITHIN EVERY DARK REALM, THERE IS LIGHT – SUNAME";
 
@@ -397,18 +403,34 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 rel="noopener noreferrer"
                 className="text-4xl md:text-5xl"
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  color: isDarkRealm ? '#8B5CF6' : '#FF7043',
-                  filter: isDarkRealm
-                    ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
-                    : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
-                }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
               >
-                <Icon />
+                <motion.span
+                  className="inline-block"
+                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set initial color without glow
+                  whileHover={{
+                    scale: 1.2,
+                    color: isDarkRealm ? '#8B5CF6' : '#FF7043',
+                    filter: isDarkRealm
+                      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
+                      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
+                  }}
+                  onHoverEnd={() => {
+                    return {
+                      scale: 1,
+                      color: isDarkRealm ? '#FFFFFF' : '#1A202C',
+                      filter: 'none'
+                    };
+                  }}
+                  transition={{
+                    filter: { duration: 0.001, ease: "easeOut" },
+                    color: { duration: 0.001, ease: "easeOut" },
+                    scale: { type: "spring", stiffness: 400, damping: 30, duration: 0.15 }
+                  }}
+                >
+                  <Icon />
+                </motion.span>
               </motion.a>
             ))}
           </motion.div>
@@ -469,7 +491,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             viewport={{ once: true, amount: 0.3 }}
             variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
           >
-            {[1, 2, 3].map((_, index) => (
+            {galleryImages.map((image, index) => (
               <motion.div
                 key={index}
                 className="relative aspect-square rounded-xl overflow-hidden shadow-lg"
@@ -487,8 +509,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 }}
               >
                 <img
-                  src={`/images/artist_gallery.jpg`}
-                  alt={`SUNAME ${index + 1}`}
+                  src={image.src}
+                  alt={image.alt}
                   className="w-full h-full object-cover"
                 />
                 <motion.div
@@ -496,7 +518,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   whileHover={{ opacity: 1 }}
                 >
                   <p className="text-white text-lg font-semibold" style={getDynamicWhiteTextStyle(isDarkRealm)}>
-                    Beach Set {index + 1}
+                    {image.alt}
                   </p>
                 </motion.div>
               </motion.div>
