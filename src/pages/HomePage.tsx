@@ -72,7 +72,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           initial="initial"
           animate={isMounted ? "animate" : "initial"}
         >
-          {/* Logo - Subtle pulse animation on load */}
 
           {/* Artist Photo with Border Animation - Subtle zoom on hover */}
           <motion.div
