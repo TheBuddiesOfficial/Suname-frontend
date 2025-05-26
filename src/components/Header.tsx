@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Menu, X } from 'lucide-react'; // Removed Music2 as it's no longer used
+import { Menu, X } from 'lucide-react'; // Music2 is removed as it's no longer used
 
 interface HeaderProps {
   isDarkRealm: boolean;
@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     className="flex items-center space-x-2"
                     whileHover={{ x: 5 }}
                   >
-                    {/* REPLACE MUSIC2 ICON WITH IMG FOR DESKTOP NAV */}
+                    {/* Replaced Music2 with SUNAME logo for desktop */}
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -124,10 +124,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                       {item.title}
                     </motion.span>
                   </motion.div>
+                  {/* Dark hover underline for desktop nav items */}
                   <motion.div
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-current transform origin-left ${
-                      isDarkRealm ? 'bg-primary-400' : 'bg-primary-600'
-                    }`}
+                    className={`absolute -bottom-1 left-0 h-0.5 transform origin-left bg-gray-800`} // Always use dark gray for underline
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isActive ? 1 : 0 }}
                     whileHover={{ scaleX: 1 }}
@@ -221,7 +220,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     whileHover={{ x: 5, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {/* THIS WAS ALREADY MODIFIED FOR MOBILE NAV */}
+                    {/* SUNAME logo for mobile menu */}
                     <img
                       src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
                       alt="SUNAME Icon"
