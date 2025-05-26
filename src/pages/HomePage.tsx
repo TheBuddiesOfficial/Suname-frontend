@@ -231,9 +231,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   ];
 
   const galleryImages = [
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" }, // Added main artist image
     { src: "/images/gallery-beach-1.jpg", alt: "Beach Set 1" },
-    { src: "/images/gallery-beach-2.jpg", alt: "Beach Set 2" },
-    { src: "/images/gallery-beach-3.jpg", alt: "Beach Set 3" },
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" }, // Added main artist image again
   ];
 
   const splitTagline = biography.tagline.split(" ");
