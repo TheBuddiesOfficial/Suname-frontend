@@ -93,13 +93,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (REFINED for Glow)
+  // Social Icon Hover Effect (CRITICAL FIX: Using filter: drop-shadow for SVG icons)
   const socialIconHover = {
     scale: 1.2, // Slightly larger scale on hover
-    textShadow: isDarkRealm
-      ? '0px 0px 15px rgba(139,92,246,0.9), 0px 0px 25px rgba(139,92,246,0.7), 0px 0px 35px rgba(139,92,246,0.5)' // Dark purple glow
-      : '0px 0px 15px rgba(255,165,0,0.9), 0px 0px 25px rgba(255,165,0,0.7), 0px 0px 35px rgba(255,165,0,0.5)', // Orange glow
-    transition: { type: "spring", stiffness: 400, damping: 25 } // Faster spring transition
+    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Change icon color to glow color on hover
+    filter: isDarkRealm
+      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))' // Dark purple glow
+      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))', // Orange glow
+    transition: { type: "spring", stiffness: 400, damping: 25 } // Fast spring transition
   };
 
 
@@ -400,7 +401,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
-          {/* Social Icons - Hover Effect (REFINED - Glow ONLY) */}
+          {/* Social Icons - Hover Effect (FIXED) */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -429,16 +430,15 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                // The main anchor tag's class remains simple, it's just a container
-                className="text-4xl md:text-5xl"
+                className="text-4xl md:text-5xl" // Initial size (color handled by child span)
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
               >
-                {/* Wrap the icon in a motion.span to apply color and shadow */}
                 <motion.span
-                  className="inline-block text-white" // Keep text-white for initial color
-                  whileHover={socialIconHover}
+                  className="inline-block" // Ensure it's inline-block to apply transform correctly
+                  style={{ color: 'white' }} // Explicitly set initial color to white
+                  whileHover={socialIconHover} // Apply hover effects here
                 >
                   <Icon />
                 </motion.span>
