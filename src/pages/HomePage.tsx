@@ -6,7 +6,7 @@ import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, F
 import { biography } from '../data/biography';
 import AudioVisualizer from '../components/AudioVisualizer';
 import ParticleSystem from '../components/ParticleSystem';
-import MusicCard from '../components/MusicCard';
+import MusicCard from '../components/MusicCard'; // Assuming MusicCard is a separate component
 
 interface HomePageProps {
   isDarkRealm: boolean;
@@ -14,7 +14,7 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false); // To trigger animations after mount
   const heroRef = useRef<HTMLElement>(null);
 
   // Parallax scroll effects for hero section - Softer movement
@@ -98,7 +98,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     scale: 1.15,
     textShadow: isDarkRealm
       ? '0px 0px 15px rgba(139,92,246,0.6)' // Purple for dark realm
-      : '0px 0px 15px rgba(0,0,0,0.5)', // Changed: Dark shadow for light realm
+      : '0px 0px 15px rgba(0,0,0,0.5)', // Dark shadow for light realm
     transition: { type: "spring", stiffness: 300, damping: 15 }
   };
 
@@ -133,7 +133,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           }
         }
       : { // Light Realm: Dark text with subtle warm glow
-          color: ['#1A202C', '#2D3748', '#1A202C'], // Changed: Dark charcoal/gray color pulse
+          color: ['#1A202C', '#2D3748', '#1A202C'], // Dark charcoal/gray color pulse
           textShadow: [
             '0 0 4px rgba(255,165,0,0.3), 0 0 8px rgba(255,127,80,0.2)', // Very subtle glow
             '0 0 6px rgba(255,165,0,0.5), 0 0 10px rgba(255,127,80,0.3)',
@@ -157,7 +157,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Staggered start
         }
       : { // Light Realm: Gentle Dark Color Shift (Charcoal to Deep Plum/Blue)
-          color: ['#1A202C', '#36454F', '#1A202C'], // Changed: Dark colors for contrast
+          color: ['#1A202C', '#36454F', '#1A202C'], // Dark colors for contrast
           transition: { repeat: Infinity, duration: 5, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Slower, softer shift
         }
   };
@@ -189,7 +189,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           }
         }
       : { // Light Realm: Dark breath with subtle glow (ensuring contrast)
-          color: ['#1A202C', '#4A5568', '#1A202C'], // Changed: Darker colors for quote text
+          color: ['#1A202C', '#4A5568', '#1A202C'], // Darker colors for quote text
           textShadow: [
             '0 0 3px rgba(0,0,0,0.2)', '0 0 5px rgba(0,0,0,0.4)', '0 0 3px rgba(0,0,0,0.2)' // Subtle dark shadow
           ],
@@ -218,7 +218,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   // Dynamic Text Shadow/Outline for White Text - Simplified for clarity
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
     return {
-      // Changed: For light realm, a stronger, clearer black shadow
       textShadow: isDark
         ? '0 0 8px rgba(255,255,255,0.1), 0 0 10px rgba(139,92,246,0.1)'
         : '0 0 8px rgba(0,0,0,0.6), 0 0 12px rgba(0,0,0,0.4)'
@@ -333,7 +332,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           {/* SUNAME Heading - Character Ripple Reveal with Gentle Glow */}
           <motion.h1
-            className={`text-7xl md:text-8xl font-extrabold mb-4 relative text-white leading-none`} // Text color is white here, dynamic style applied via animation
+            className={`text-7xl md:text-8xl font-extrabold mb-4 relative text-white leading-none`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
           >
             <motion.span
@@ -352,10 +351,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   key={index}
                   className="inline-block"
                   variants={sunameCharReveal}
-                  // Applying the animation which now has color/textShadow for light realm
                   animate={isMounted ? sunameActiveTextAnimation.animate : undefined}
-                  // Conditional text color for initial render (before animation takes over or when not animating)
-                  style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}} // Ensure dark text if not animating in light realm
+                  style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}}
                 >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
@@ -366,7 +363,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           {/* Tagline - Word by Word Reveal with Gentle Wave Color Shift */}
           <motion.p
-            className={`text-xl md:text-2xl mb-8 text-white max-w-2xl mx-auto`} // Text color is white here, dynamic style applied via animation
+            className={`text-xl md:text-2xl mb-8 text-white max-w-2xl mx-auto`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
             variants={{
                 visible: {
@@ -382,10 +379,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={index}
                 className="inline-block mr-2"
                 variants={taglineWordReveal}
-                // Applying the animation which now has color for light realm
                 animate={isMounted ? taglineActiveTextAnimation.animate : undefined}
-                // Conditional text color for initial render
-                style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}} // Ensure dark text if not animating in light realm
+                style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}}
               >
                 {word}
               </motion.span>
@@ -421,15 +416,22 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl text-white`} // Icons are white
+                className={`text-4xl md:text-5xl text-white`}
                 style={{
-                  // Changed: Ensuring a strong dark shadow for white icons on light background
                   textShadow: !isDarkRealm ? '0 0 10px rgba(0,0,0,0.6)' : 'none'
                 }}
                 whileHover={iconHover}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.08 }}
+                // Enhanced initial state for icons
+                initial={{ opacity: 0, y: 50, scale: 0.8, rotate: -15 }}
+                // Animate to visible, normal scale, no rotation
+                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                transition={{ // Adjust transition for slightly bouncy entry
+                  duration: 0.8,
+                  delay: index * 0.08,
+                  type: "spring", // Use spring for a subtle bounce
+                  stiffness: 150,
+                  damping: 10
+                }}
               >
                 <Icon />
               </motion.a>
@@ -534,7 +536,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
-            className={`text-3xl md:text-4xl font-bold italic mb-8 relative text-white`} // Base text color is white here
+            className={`text-3xl md:text-4xl font-bold italic mb-8 relative text-white`}
             variants={{
                 visible: {
                     transition: {
@@ -547,22 +549,36 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.6 }}
           >
-            <span className={`absolute -top-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}>&ldquo;</span>
+            {/* Animated opening quote mark */}
+            <motion.span
+              className={`absolute -top-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+            >
+                &ldquo;
+            </motion.span>
             {splitQuote.map((line, index) => (
                 <motion.span
                   key={index}
                   className="block mb-2"
                   variants={quoteLineReveal}
-                  // Applying the animation which now has color/textShadow for light realm
                   animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
-                  // Conditional text color for initial render
-                  style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}} // Ensure dark text if not animating in light realm
+                  style={!isMounted && !isDarkRealm ? { color: '#1A202C' } : {}}
                 >
                     {line}
                     {index < splitQuote.length - 1 && "."}
                 </motion.span>
             ))}
-            <span className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}>&rdquo;</span>
+            {/* Animated closing quote mark */}
+            <motion.span
+              className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: splitQuote.length * 0.1 + 0.3 }}
+            >
+                &rdquo;
+            </motion.span>
           </motion.blockquote>
 
           <motion.div
@@ -599,7 +615,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400 font-semibold"
-            whileHover={{ scale: 1.05, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(0,0,0,0.5)' }} // Changed: Dark shadow for light realm
+            whileHover={{ scale: 1.05, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(0,0,0,0.5)' }}
             transition={{ duration: 0.2 }}
           >
             JimmyDesigns
