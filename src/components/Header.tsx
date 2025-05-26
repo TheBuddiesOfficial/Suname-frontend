@@ -23,20 +23,11 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { scrollY } = useScroll();
   const location = useLocation();
-
-  // Define color constants for better readability and consistency
-  const darkRealmAccentColor = '#80a0e0'; // A cool blue from dark ocean gradients
-  const lightRealmAccentColor = '#ff8c00'; // DarkOrange from sunset gradients
-
+  
   const headerBackground = useTransform(
     scrollY,
     [0, 100],
-    [
-      'rgba(0, 0, 0, 0)', // Transparent when at top
-      isDarkRealm
-        ? 'rgba(15, 15, 25, 0.9)' // Dark, subtle blue/grey for dark mode
-        : 'rgba(255, 165, 0, 0.1)', // Very light, transparent orange for sunset mode
-    ]
+    ['rgba(0, 0, 0, 0)', isDarkRealm ? 'rgba(15, 15, 25, 0.9)' : 'rgba(255, 255, 255, 0.9)']
   );
 
   return (
@@ -55,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             >
-              <motion.img
+              <motion.img 
                 src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
                 alt="SUNAME"
                 className="w-12 h-12 rounded-full object-cover"
@@ -63,17 +54,18 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               />
             </motion.div>
-            <motion.div
+            <motion.div 
               className="ml-3"
               whileHover={{ x: 5 }}
             >
-              <motion.h1
-                className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r`}
+              <motion.h1 
+                className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${
+                  isDarkRealm 
+                    ? 'from-white via-primary-400 to-white' 
+                    : 'from-black via-primary-600 to-black'
+                }`}
                 style={{
                   backgroundSize: '200% auto',
-                  backgroundImage: isDarkRealm
-                    ? `linear-gradient(to right, white, ${darkRealmAccentColor}, white)`
-                    : `linear-gradient(to right, #ff8c00, #ff4500, #ff8c00)`, // Sunset gradient
                 }}
                 animate={{
                   backgroundPosition: ['0% center', '200% center', '0% center'],
@@ -86,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
               >
                 SUNAME
               </motion.h1>
-              <motion.p
+              <motion.p 
                 className={`text-xs ${
                   isDarkRealm ? 'text-gray-300' : 'text-gray-600'
                 }`}
@@ -101,8 +93,8 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
-                <Link
-                  key={item.path}
+                <Link 
+                  key={item.path} 
                   to={item.path}
                   className="group relative"
                 >
@@ -114,18 +106,18 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                       animate={{ rotate: 360 }}
                       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     >
-                      <Music2
-                        size={16}
+                      <Music2 
+                        size={16} 
                         className={`opacity-0 group-hover:opacity-100 transition-opacity ${
-                          isDarkRealm ? `text-[${darkRealmAccentColor}]` : `text-[${lightRealmAccentColor}]`
-                        }`}
+                          isDarkRealm ? 'text-primary-400' : 'text-primary-600'
+                        }`} 
                       />
                     </motion.div>
-                    <motion.span
+                    <motion.span 
                       className={`text-sm font-medium transition-colors duration-300 ${
-                        isDarkRealm
-                          ? isActive ? `text-[${darkRealmAccentColor}]` : 'text-gray-300 hover:text-white'
-                          : isActive ? `text-[${lightRealmAccentColor}]` : 'text-gray-700 hover:text-black'
+                        isDarkRealm 
+                          ? isActive ? 'text-primary-400' : 'text-gray-300 hover:text-white' 
+                          : isActive ? 'text-primary-600' : 'text-gray-700 hover:text-black'
                       }`}
                       whileHover={{ y: -2 }}
                     >
@@ -133,14 +125,13 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     </motion.span>
                   </motion.div>
                   <motion.div
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-current transform origin-left`}
-                    style={{
-                      backgroundColor: isDarkRealm ? darkRealmAccentColor : lightRealmAccentColor,
-                    }}
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-current transform origin-left ${
+                      isDarkRealm ? 'bg-primary-400' : 'bg-primary-600'
+                    }`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isActive ? 1 : 0 }}
                     whileHover={{ scaleX: 1 }}
-                    transition={{
+                    transition={{ 
                       duration: 0.2,
                       type: "spring",
                       stiffness: 400,
@@ -161,11 +152,11 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
           >
             {isOpen ? (
               <X className={`transition-colors duration-300 ${
-                isDarkRealm ? `text-white hover:text-[${darkRealmAccentColor}]` : `text-black hover:text-[${lightRealmAccentColor}]`
+                isDarkRealm ? "text-white hover:text-primary-400" : "text-black hover:text-primary-600"
               }`} />
             ) : (
               <Menu className={`transition-colors duration-300 ${
-                isDarkRealm ? `text-white hover:text-[${darkRealmAccentColor}]` : `text-black hover:text-[${lightRealmAccentColor}]`
+                isDarkRealm ? "text-white hover:text-primary-400" : "text-black hover:text-primary-600"
               }`} />
             )}
           </motion.button>
@@ -179,11 +170,10 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
         animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -20 }}
         transition={{ duration: 0.2 }}
       >
-        <motion.div
-          className={`px-4 py-2 space-y-1`}
-          style={{
-            backgroundColor: isDarkRealm ? 'rgba(15, 15, 25, 0.95)' : 'rgba(255, 165, 0, 0.15)', // Slightly more opaque than header background
-          }}
+        <motion.div 
+          className={`px-4 py-2 space-y-1 ${
+            isDarkRealm ? 'bg-gray-900' : 'bg-white'
+          }`}
           variants={{
             open: {
               clipPath: "inset(0% 0% 0% 0% round 10px)",
@@ -231,19 +221,19 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     whileHover={{ x: 5, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Music2
-                      size={16}
+                    <Music2 
+                      size={16} 
                       className={`transition-colors duration-300 ${
-                        isDarkRealm
-                          ? isActive ? `text-[${darkRealmAccentColor}]` : 'text-white'
-                          : isActive ? `text-[${lightRealmAccentColor}]` : 'text-black'
-                      }`}
+                        isDarkRealm 
+                          ? isActive ? 'text-primary-400' : 'text-white' 
+                          : isActive ? 'text-primary-600' : 'text-black'
+                      }`} 
                     />
-                    <span
+                    <span 
                       className={`text-sm font-medium transition-colors duration-300 ${
-                        isDarkRealm
-                          ? isActive ? `text-[${darkRealmAccentColor}]` : 'text-white'
-                          : isActive ? `text-[${lightRealmAccentColor}]` : 'text-black'
+                        isDarkRealm 
+                          ? isActive ? 'text-primary-400' : 'text-white' 
+                          : isActive ? 'text-primary-600' : 'text-black'
                       }`}
                     >
                       {item.title}
@@ -256,3 +246,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
         </motion.div>
       </motion.nav>
     </motion.header>
+  );
+};
+
+export default Header;
