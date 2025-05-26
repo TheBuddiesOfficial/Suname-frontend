@@ -1,4 +1,4 @@
-ort React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface BackgroundEffectsProps {
@@ -10,7 +10,9 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
   const [prevMode, setPrevMode] = useState(isDarkRealm);
   const [showBirds, setShowBirds] = useState(false);
   const [modeTransitioning, setModeTransitioning] = useState(false);
-  const [lightningBolt, setLightningBolt] = useState('');
+  // The 'lightningBolt' state variable is declared but not used in the provided snippet.
+  // Consider removing it if it's not needed for other parts of your application.
+  // const [lightningBolt, setLightningBolt] = useState('');
 
   // Generate realistic lightning bolt path
   const generateLightningPath = useMemo(() => {
@@ -19,10 +21,10 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       const startX = 20 + Math.random() * 60;
       const startY = 5 + Math.random() * 20;
       const segments = [];
-      
+
       let currentX = startX;
       let currentY = startY;
-      
+
       // Main bolt
       for (let j = 0; j < 8; j++) {
         const nextX = currentX + (Math.random() - 0.5) * 15;
@@ -31,13 +33,13 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         currentX = nextX;
         currentY = nextY;
       }
-      
+
       // Add branches
       const branchStart = Math.floor(segments.length / 2);
       const branchX = currentX + (Math.random() - 0.5) * 20;
       const branchY = currentY - 20 + Math.random() * 10;
       segments.splice(branchStart, 0, `L ${branchX} ${branchY}`);
-      
+
       paths.push(`M ${startX} ${startY} ${segments.join(' ')}`);
     }
     return paths;
@@ -324,7 +326,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               key={`lightning-bolt-${index}`}
               className="absolute inset-0 w-full h-full"
               initial={{ opacity: 0 }}
-              animate={{ 
+              animate={{
                 opacity: [0, 1, 0.8, 1, 0],
                 filter: [
                   'blur(0px) brightness(1)',
@@ -364,7 +366,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               key={`lightning-flash-${index}`}
               className="fixed inset-0"
               initial={{ opacity: 0 }}
-              animate={{ 
+              animate={{
                 opacity: [0, 0.3, 0.1, 0.4, 0],
                 background: [
                   'rgba(255, 255, 255, 0)',
@@ -390,7 +392,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           <motion.div
             className="fixed inset-0"
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.6, 0.4, 0.7, 0],
               scale: [1, 1.02, 1.01, 1.03, 1]
             }}
@@ -615,6 +617,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                     ease: 'easeInOut',
                   }}
                 />
+              ))}
+            </div>
           ))}
         </div>
       )}
