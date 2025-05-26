@@ -103,21 +103,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   };
 
 
-  // --- MAIN HEADING "SUNAME" - Radiant Pulse / Ocean Wave Effect ---
-  // Dark Realm: Subtle pulsing glow (purple/blue)
-  // Light Realm: Radiant color shift (sunset oranges/reds)
-  const sunameMainColors = {
-    dark: {
-      start: '#B39DDB', // Lighter purple for glow
-      end: '#8B5CF6'    // Main purple
-    },
-    light: {
-      colors: ['#FFC107', '#FF9800', '#F44336', '#FF5722'], // Yellow, Orange, Red-Orange
-    }
-  };
-
+  // --- MAIN HEADING "SUNAME" - Gentle Ripple Glow ---
   const sunameCharReveal = {
-    hidden: { opacity: 0, y: 30, scale: 0.8 },
+    hidden: { opacity: 0, y: 20, scale: 0.9 }, // Softer initial state
     visible: {
       opacity: 1,
       y: 0,
@@ -131,49 +119,53 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
-      ? { // Dark Realm: Pulsing Glow
+      ? { // Dark Realm: Soft Purple Pulse
           textShadow: [
-            `0 0 10px ${sunameMainColors.dark.start}, 0 0 20px ${sunameMainColors.dark.end}, 0 0 30px ${sunameMainColors.dark.start}`,
-            `0 0 15px ${sunameMainColors.dark.end}, 0 0 25px ${sunameMainColors.dark.start}, 0 0 35px ${sunameMainColors.dark.end}`,
-            `0 0 10px ${sunameMainColors.dark.start}, 0 0 20px ${sunameMainColors.dark.end}, 0 0 30px ${sunameMainColors.dark.start}`
+            '0 0 8px rgba(139,92,246,0.7), 0 0 15px rgba(139,92,246,0.5)',
+            '0 0 12px rgba(139,92,246,0.9), 0 0 20px rgba(139,92,246,0.6)',
+            '0 0 8px rgba(139,92,246,0.7), 0 0 15px rgba(139,92,246,0.5)'
           ],
           transition: {
             repeat: Infinity,
-            duration: 3,
+            duration: 3.5,
             ease: "easeInOut",
             repeatType: "mirror"
           }
         }
-      : { // Light Realm: Sunset Color Shift
-          color: sunameMainColors.light.colors,
+      : { // Light Realm: Sunset Ripple Glow (Yellow, Orange, Coral)
           textShadow: [
-            `0 0 5px ${sunameMainColors.light.colors[0]}, 0 0 10px ${sunameMainColors.light.colors[1]}`,
-            `0 0 8px ${sunameMainColors.light.colors[1]}, 0 0 15px ${sunameMainColors.light.colors[2]}`,
-            `0 0 10px ${sunameMainColors.light.colors[2]}, 0 0 20px ${sunameMainColors.light.colors[3]}`,
-            `0 0 5px ${sunameMainColors.light.colors[0]}, 0 0 10px ${sunameMainColors.light.colors[1]}`
+            '0 0 6px rgba(255,209,128,0.8), 0 0 10px rgba(255,160,122,0.6)', // Yellowish-orange
+            '0 0 10px rgba(255,160,122,0.9), 0 0 18px rgba(255,112,67,0.7)', // Orange-coral
+            '0 0 6px rgba(255,209,128,0.8), 0 0 10px rgba(255,160,122,0.6)'
           ],
           transition: {
             repeat: Infinity,
-            duration: 6, // Slower, more flowing color shift
+            duration: 4.5, // Slower, more serene ripple
             ease: "easeInOut",
-            repeatType: "loop",
-            delay: 1.5 // Start after initial reveal
+            repeatType: "mirror"
           }
         }
   };
 
 
-  // --- TAGLINE - Shimmering Reveal / Typewriter Fade ---
-  const taglineColors = {
-    dark: '#B39DDB', // Light purple
-    light: ['#FFCC80', '#FFA726', '#FF7043'] // Light orange, orange, dark orange
+  // --- TAGLINE - Gentle Wave Color Shift ---
+  const taglineActiveTextAnimation = {
+    animate: isDarkRealm
+      ? { // Dark Realm: Subtle wave-like color shift (White to Light Purple)
+          color: ['#FFFFFF', '#B39DDB', '#FFFFFF'],
+          transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Staggered start
+        }
+      : { // Light Realm: Gentle Sunset Color Shift (White to Light Orange/Yellow)
+          color: ['#FFFFFF', 'rgba(255,209,128,0.9)', '#FFFFFF'], // White, light orange, white
+          transition: { repeat: Infinity, duration: 5, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Slower, softer shift
+        }
   };
 
   const taglineWordReveal = {
-    hidden: { opacity: 0, x: -20 },
+    hidden: { opacity: 0, y: 15 }, // Subtle slide up
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
       transition: {
         duration: 0.7,
         ease: [0.2, 0.8, 0.2, 1],
@@ -181,35 +173,40 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  const taglineActiveTextAnimation = {
+
+  // --- QUOTE - Ethereal Fade & Color Breath ---
+  const quoteActiveTextAnimation = {
     animate: isDarkRealm
-      ? { // Dark Realm: Subtle wave-like color shift
-          color: ['#FFFFFF', taglineColors.dark, '#FFFFFF'],
-          transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror" }
+      ? { // Dark Realm: Fading glow with slight color change
+          color: ['#FFFFFF', 'rgba(179,157,219,0.9)', '#FFFFFF'], // White to light purple
+          textShadow: ['0 0 5px rgba(139,92,246,0.3)', '0 0 10px rgba(139,92,246,0.6)', '0 0 5px rgba(139,92,246,0.3)'],
+          transition: {
+            repeat: Infinity,
+            duration: 6,
+            ease: "easeInOut",
+            repeatType: "mirror"
+          }
         }
-      : { // Light Realm: Gentle highlight pulse
-          background: `linear-gradient(90deg, ${taglineColors.light[0]} 0%, ${taglineColors.light[1]} 50%, ${taglineColors.light[2]} 100%)`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundSize: '200% 100%',
-          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-          transition: { repeat: Infinity, duration: 8, ease: "linear" }
+      : { // Light Realm: Warm sunset breath with subtle glow
+          color: ['#FFFFFF', 'rgba(255,165,0,0.9)', 'rgba(255,127,80,0.9)', '#FFFFFF'], // White to orange, then coral, then back
+          textShadow: [
+            '0 0 5px rgba(255,165,0,0.4)', '0 0 8px rgba(255,127,80,0.6)', '0 0 5px rgba(255,165,0,0.4)'
+          ],
+          transition: {
+            repeat: Infinity,
+            duration: 7, // Very gentle and long breath
+            ease: "easeInOut",
+            repeatType: "mirror"
+          }
         }
-  };
-
-
-  // --- QUOTE - Gradient Reveal / Ocean Sweep ---
-  const quoteGradientColors = {
-    dark: ['#8B5CF6', '#42A5F5', '#303F9F'], // Purple, Blue, Dark Blue
-    light: ['#FFC107', '#FFA07A', '#FF7043'] // Yellow, Coral, Orange
   };
 
   const quoteLineReveal = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(5px)' }, // Initial blur
+    hidden: { opacity: 0, y: 30, filter: 'blur(5px)' },
     visible: {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)', // Unblur
+      filter: 'blur(0px)',
       transition: {
         duration: 1.0,
         ease: [0.2, 0.8, 0.2, 1]
@@ -217,12 +214,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Dynamic Text Shadow/Outline for White Text
+  // Dynamic Text Shadow/Outline for White Text - Simplified for clarity
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
     return {
       textShadow: isDark
-        ? '0 0 10px rgba(255,255,255,0.2), 0 0 12px rgba(139,92,246,0.2)' // Softer purple glow
-        : '0 0 8px rgba(255,165,0,0.5), 0 0 10px rgba(255,127,80,0.3)', // Soft orange glow
+        ? '0 0 8px rgba(255,255,255,0.1), 0 0 10px rgba(139,92,246,0.1)' // Very subtle glow for dark
+        : '0 0 6px rgba(0,0,0,0.4), 0 0 8px rgba(0,0,0,0.2)' // Simple, clear dark shadow for light
     };
   };
 
@@ -332,7 +329,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                             ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
-          {/* SUNAME Heading - Character Ripple Reveal with Dynamic Glow */}
+          {/* SUNAME Heading - Character Ripple Reveal with Gentle Glow */}
           <motion.h1
             className={`text-7xl md:text-8xl font-extrabold mb-4 relative text-white leading-none`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
@@ -353,7 +350,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   key={index}
                   className="inline-block"
                   variants={sunameCharReveal}
-                  animate={isMounted ? sunameActiveTextAnimation.animate : undefined} // Apply active animation
+                  animate={isMounted ? sunameActiveTextAnimation.animate : undefined}
                 >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
@@ -362,7 +359,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           </motion.h1>
 
 
-          {/* Tagline - Word by Word Reveal with Shimmer */}
+          {/* Tagline - Word by Word Reveal with Gentle Wave Color Shift */}
           <motion.p
             className={`text-xl md:text-2xl mb-8 text-white max-w-2xl mx-auto`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
@@ -380,7 +377,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={index}
                 className="inline-block mr-2"
                 variants={taglineWordReveal}
-                animate={isMounted ? taglineActiveTextAnimation.animate : undefined} // Apply active animation
+                animate={isMounted ? taglineActiveTextAnimation.animate : undefined}
               >
                 {word}
               </motion.span>
@@ -524,23 +521,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Quote Section - Soft Fade & Slide with Dynamic Gradient */}
+      {/* Quote Section - Ethereal Fade & Color Breath */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
             className={`text-3xl md:text-4xl font-bold italic mb-8 relative text-white`}
-            style={{
-              // Apply dynamic gradient to the quote text itself
-              background: isDarkRealm
-                ? `linear-gradient(90deg, ${quoteGradientColors.dark[0]}, ${quoteGradientColors.dark[1]}, ${quoteGradientColors.dark[2]})`
-                : `linear-gradient(90deg, ${quoteGradientColors.light[0]}, ${quoteGradientColors.light[1]}, ${quoteGradientColors.light[2]})`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              // Add a subtle text shadow that matches the gradient for clear legibility
-              textShadow: isDarkRealm
-                ? '0 0 5px rgba(139,92,246,0.5), 0 0 8px rgba(48,63,159,0.3)'
-                : '0 0 5px rgba(255,165,0,0.6), 0 0 8px rgba(255,127,80,0.4)'
-            }}
             variants={{
                 visible: {
                     transition: {
@@ -555,7 +540,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           >
             <span className={`absolute -top-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}>&ldquo;</span>
             {splitQuote.map((line, index) => (
-                <motion.span key={index} className="block mb-2" variants={quoteLineReveal}>
+                <motion.span
+                  key={index}
+                  className="block mb-2"
+                  variants={quoteLineReveal}
+                  animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
+                >
                     {line}
                     {index < splitQuote.length - 1 && "."}
                 </motion.span>
