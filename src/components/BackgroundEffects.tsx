@@ -6,82 +6,120 @@ interface BackgroundEffectsProps {
 }
 
 const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) => {
+  const [showLightning, setShowLightning] = useState(false);
   const [prevMode, setPrevMode] = useState(isDarkRealm);
 
-  // This effect simply updates the previous mode state.
-  // The lightning effect has been removed as per your request.
   useEffect(() => {
-    setPrevMode(isDarkRealm);
-  }, [isDarkRealm]);
+    // Trigger lightning effect when transitioning between modes
+    if (prevMode !== isDarkRealm) {
+      setShowLightning(true);
+      const timer = setTimeout(() => {
+        setShowLightning(false);
+      }, 1500); // Increased duration for the lightning sequence
+      setPrevMode(isDarkRealm);
+      return () => clearTimeout(timer);
+    }
+  }, [isDarkRealm, prevMode]);
 
   return (
     <>
-      {/* Higher Resolution Background Gradient (Sky/Atmosphere) */}
-      {/* This layer sets the primary sky color and gradient for day and night.
-          Colors are chosen for a more nuanced and vibrant appearance to enhance resolution feel. */}
+      {/* Background Gradient (Sky/Atmosphere) - Enhanced Resolution */}
       <motion.div
-        className="fixed inset-0" // Stays fixed and covers the entire viewport
-        style={{ zIndex: -21 }} // Lowest z-index to be at the very back
+        className="fixed inset-0"
+        style={{ zIndex: -21 }}
         animate={{
           background: isDarkRealm
-            ? 'linear-gradient(180deg, #01030a 0%, #080f1a 20%, #101a28 40%, #1d2b3f 60%, #293a4f 80%, #101a28 100%)' // Deeper, more subtle night blues/grays
-            : 'linear-gradient(180deg, #f78c00 0%, #e06c00 25%, #cc5500 50%, #fbc54c 75%, #fbe76a 100%)', // Richer, more natural warm day colors
+            ? 'linear-gradient(180deg, #010208 0%, #060c14 20%, #0e1724 40%, #1a273b 60%, #25364a 80%, #0e1724 100%)' // Deeper, richer night blues
+            : 'linear-gradient(180deg, #f78c00 0%, #e06c00 25%, #cc5500 50%, #fbc54c 75%, #fbe76a 100%)', // Vibrant, natural day colors
         }}
-        transition={{ duration: 3.5, ease: 'easeInOut' }} // Slightly longer for smoother transition
+        transition={{ duration: 4, ease: 'easeInOut' }} // Smoother transition
       />
 
-      {/* Smoother Atmospheric Haze/Glow Layer */}
-      {/* Adds a subtle, pulsating atmospheric glow based on the realm.
-          Opacities and scales are fine-tuned for a smoother, more realistic feel. */}
+      {/* Atmospheric Haze/Glow Layer - Smoother and Subtler */}
       <motion.div
         className="fixed inset-0"
         style={{
-          zIndex: -20, // Slightly above the main background
+          zIndex: -20,
           background: isDarkRealm
-            ? 'radial-gradient(ellipse at center top, rgba(80, 130, 190, 0.1), rgba(110, 160, 220, 0.06), transparent 80%)' // Finer, cool blue night haze
-            : 'radial-gradient(ellipse at center top, rgba(250, 130, 50, 0.25), rgba(252, 170, 90, 0.15), transparent 90%)', // Subtler, warm day haze
+            ? 'radial-gradient(ellipse at center top, rgba(70, 120, 180, 0.08), rgba(100, 150, 210, 0.04), transparent 85%)' // Finer, cool night haze
+            : 'radial-gradient(ellipse at center top, rgba(250, 120, 40, 0.2), rgba(252, 160, 80, 0.1), transparent 95%)', // Subtler, warm day haze
         }}
         animate={{
-          opacity: [0.35, 0.75, 0.35], // Pulsating opacity for a subtle breathing effect
-          scale: [1, 1.015, 1], // Very gentle scaling for atmospheric movement
+          opacity: [0.3, 0.7, 0.3],
+          scale: [1, 1.01, 1],
         }}
         transition={{
-          duration: 10, // Slow, continuous animation
+          duration: 12,
           repeat: Infinity,
           ease: 'easeInOut'
         }}
       />
 
-      {/* Responsive Sun/Moon Orb - Smaller and Consistent */}
-      {/* This element represents either the sun or the moon, now with responsive and smaller sizing.
-          Colors and shadows are refined for a more realistic appearance. */}
+      {/* Realistic Thunder Effect - More dynamic and varied */}
+      {showLightning && (
+        <>
+          {[...Array(4)].map((_, index) => (
+            <motion.div
+              key={`lightning-flash-${index}`}
+              className="fixed inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.7 + Math.random() * 0.3, 0] }}
+              transition={{
+                duration: 0.08 + Math.random() * 0.15, // Very short, sharp flashes
+                delay: Math.random() * 0.8, // Staggered and random delays
+                ease: "linear",
+              }}
+              style={{
+                background: `radial-gradient(circle at ${20 + Math.random() * 60}% ${10 + Math.random() * 40}%, rgba(255, 255, 255, 0.9), rgba(173, 216, 230, 0.7) 30%, transparent 70%)`,
+                mixBlendMode: 'screen',
+                zIndex: -3,
+                pointerEvents: 'none',
+              }}
+            />
+          ))}
+          {/* Subtle screen darkening for thunder impact */}
+          <motion.div
+            className="fixed inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.15, 0] }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.15)',
+              zIndex: -2,
+              pointerEvents: 'none',
+            }}
+          />
+        </>
+      )}
+
+      {/* Responsive Sun/Moon Orb - Adjusted Size */}
       <motion.div
         className="fixed"
         style={{
-          zIndex: -18, // Above sky, below foreground elements
-          width: 'clamp(30px, 5vw, 50px)', // Smaller and responsive size
-          height: 'clamp(30px, 5vw, 50px)',
-          borderRadius: '50%', // Makes it a perfect circle
+          zIndex: -18,
+          width: 'clamp(40px, 7vw, 70px)', // Increased size, still responsive
+          height: 'clamp(40px, 7vw, 70px)',
+          borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle at 30% 30%, #f0f8ff 15%, #e0f2f7 50%, #b3e5fc 85%, #81d4fa 100%)' // Refined luminous, cool blue moon
-            : 'radial-gradient(circle at 35% 35%, #fffde7 15%, #fff9c4 50%, #fff59d 85%, #ffee58 100%)', // Refined bright, warm sun
-          top: 'clamp(5vh, 7vw, 40px)', // Adjusted top position, responsive
-          right: 'clamp(5vw, 7vw, 40px)', // Adjusted right position, responsive
-          filter: isDarkRealm ? 'blur(0.4px)' : 'blur(0.2px)', // Subtle blur for glow effect
+            ? 'radial-gradient(circle at 30% 30%, #f0f8ff 15%, #e0f2f7 50%, #b3e5fc 85%, #81d4fa 100%)'
+            : 'radial-gradient(circle at 35% 35%, #fffde7 15%, #fff9c4 50%, #fff59d 85%, #ffee58 100%)',
+          top: 'clamp(8vh, 10vw, 60px)', // Adjusted top position
+          right: 'clamp(8vw, 10vw, 60px)', // Adjusted right position
+          filter: isDarkRealm ? 'blur(0.6px)' : 'blur(0.3px)',
           boxShadow: isDarkRealm
-            ? '0 0 clamp(15px, 2vw, 25px) rgba(224, 247, 250, 0.5), inset -2px -2px 8px rgba(179, 229, 252, 0.2)' // Stronger, bluer moon glow
-            : '0 0 clamp(20px, 3vw, 40px) rgba(255, 245, 157, 0.6), 0 0 clamp(30px, 4vw, 60px) rgba(255, 235, 59, 0.3), inset -1px -1px 6px rgba(255, 214, 0, 0.15)', // Intense, warm sun glow
+            ? '0 0 clamp(20px, 3vw, 35px) rgba(224, 247, 250, 0.6), inset -3px -3px 10px rgba(179, 229, 252, 0.25)'
+            : '0 0 clamp(30px, 5vw, 60px) rgba(255, 245, 157, 0.7), 0 0 clamp(50px, 8vw, 100px) rgba(255, 235, 59, 0.4), inset -2px -2px 8px rgba(255, 214, 0, 0.2)',
         }}
         animate={{
-          scale: [1, 1.03, 1], // Gentle pulse effect
-          opacity: [0.92, 1, 0.92], // Subtle opacity fluctuation
-          rotate: isDarkRealm ? [0, 3, 0] : [0, 360], // Moon rocks slightly, sun rotates fully
+          scale: [1, 1.04, 1],
+          opacity: [0.95, 1, 0.95],
+          rotate: isDarkRealm ? [0, 5, 0] : [0, 360],
         }}
         transition={{
-          scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-          opacity: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
+          scale: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
+          opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
           rotate: {
-            duration: isDarkRealm ? 90 : 300, // Different rotation speeds for moon/sun
+            duration: isDarkRealm ? 80 : 250,
             repeat: Infinity,
             ease: isDarkRealm ? 'easeInOut' : 'linear'
           }
@@ -89,117 +127,112 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Smoother Sun/Moon Outer Halo */}
-      {/* A larger, more diffuse halo around the main orb, also responsive. */}
       <motion.div
         className="fixed"
         style={{
-          zIndex: -19, // Below the main orb
-          width: 'clamp(50px, 8vw, 80px)', // Adjusted halo size, responsive
-          height: 'clamp(50px, 8vw, 80px)',
+          zIndex: -19,
+          width: 'clamp(70px, 11vw, 100px)', // Adjusted halo size
+          height: 'clamp(70px, 11vw, 100px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle, transparent 55%, rgba(224, 231, 255, 0.06) 65%, transparent 95%)' // Softer, cool night halo
-            : 'radial-gradient(circle, transparent 45%, rgba(251, 146, 60, 0.15) 60%, rgba(253, 186, 116, 0.08) 80%, transparent 98%)', // Softer, warm day halo
-          top: `calc(clamp(5vh, 7vw, 40px) - clamp(10px, 1.5vw, 15px))`, // Adjust position based on orb
-          right: `calc(clamp(5vw, 7vw, 40px) - clamp(10px, 1.5vw, 15px))`,
+            ? 'radial-gradient(circle, transparent 50%, rgba(224, 231, 255, 0.08) 60%, transparent 90%)'
+            : 'radial-gradient(circle, transparent 40%, rgba(251, 146, 60, 0.18) 55%, rgba(253, 186, 116, 0.09) 75%, transparent 95%)',
+          top: `calc(clamp(8vh, 10vw, 60px) - clamp(15px, 2.5vw, 20px))`, // Adjust position based on orb
+          right: `calc(clamp(8vw, 10vw, 60px) - clamp(15px, 2.5vw, 20px))`,
         }}
         animate={{
-          scale: [1, 1.08, 1], // Larger pulse for halo
-          opacity: [0.35, 0.65, 0.35], // More noticeable opacity fluctuation
+          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.7, 0.4],
         }}
         transition={{
-          duration: 11,
+          duration: 10,
           repeat: Infinity,
           ease: 'easeInOut'
         }}
       />
 
       {/* Seagulls (Day Mode Only) */}
-      {/* Animated seagull emojis for daytime realism. Reduced count for smoother performance. */}
       {!isDarkRealm && (
-        <div className="fixed inset-0" style={{ zIndex: -17 }}> {/* Above horizon, below sun/moon */}
-          {[...Array(3)].map((_, i) => ( // Reduced number for even smoother feel
+        <div className="fixed inset-0" style={{ zIndex: -17 }}>
+          {[...Array(3)].map((_, i) => (
             <motion.div
               key={`seagull-${i}`}
               className="absolute"
               style={{
-                left: Math.random() * 70 + 15 + '%', // Random horizontal starting position
-                top: Math.random() * 40 + 15 + '%', // Random vertical starting position
-                fontSize: 'clamp(8px, 1.8vw, 20px)', // Slightly smaller, responsive size
-                color: 'rgba(0, 0, 0, 0.5)', // Lighter dark gray color
-                transform: 'scaleX(-1)', // Flips the emoji horizontally
+                left: Math.random() * 70 + 15 + '%',
+                top: Math.random() * 40 + 15 + '%',
+                fontSize: 'clamp(8px, 1.8vw, 20px)',
+                color: 'rgba(0, 0, 0, 0.5)',
+                transform: 'scaleX(-1)',
               }}
               animate={{
-                x: [0, 150 + Math.random() * 250, 300 + Math.random() * 350], // Flies across the screen
-                y: [0, -25 + Math.random() * 50, -15 + Math.random() * 30], // Gentle up/down movement
-                opacity: [0, 0.7, 0], // Smoother fade in and out
+                x: [0, 150 + Math.random() * 250, 300 + Math.random() * 350],
+                y: [0, -25 + Math.random() * 50, -15 + Math.random() * 30],
+                opacity: [0, 0.7, 0],
               }}
               transition={{
-                duration: 40 + Math.random() * 25, // Slower, smoother flight
-                repeat: Infinity, // Continuous flight
-                delay: Math.random() * 20, // Staggered start times
-                ease: 'linear' // Consistent speed
+                duration: 40 + Math.random() * 25,
+                repeat: Infinity,
+                delay: Math.random() * 20,
+                ease: 'linear'
               }}
             >
-              ︶ {/* Seagull emoji */}
+              ︶
             </motion.div>
           ))}
         </div>
       )}
 
       {/* Stars and Shooting Stars (Night Mode Only) */}
-      {/* Animated stars and shooting stars for nighttime realism. Reduced count for smoother performance. */}
       {isDarkRealm && (
-        <div className="fixed inset-0" style={{ zIndex: -17 }}> {/* Above horizon, below sun/moon */}
-          {/* Stars */}
-          {[...Array(100)].map((_, i) => ( // Slightly reduced for performance, still dense
+        <div className="fixed inset-0" style={{ zIndex: -17 }}>
+          {[...Array(100)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full"
               style={{
-                width: `clamp(0.8px, ${Math.random() * 0.2 + 0.1}vw, 2.5px)`, // Smaller stars, responsive
+                width: `clamp(0.8px, ${Math.random() * 0.2 + 0.1}vw, 2.5px)`,
                 height: `clamp(0.8px, ${Math.random() * 0.2 + 0.1}vw, 2.5px)`,
-                background: `hsl(${200 + Math.random() * 30}, 70%, ${85 + Math.random() * 10}%)`, // Softer, cool glow
-                left: Math.random() * 100 + '%', // Random horizontal position
-                top: Math.random() * 75 + '%', // Random vertical position (stars slightly lower)
-                boxShadow: '0 0 clamp(1.5px, 0.3vw, 4px) rgba(255, 255, 255, 0.6)', // Softer glow
+                background: `hsl(${200 + Math.random() * 30}, 70%, ${85 + Math.random() * 10}%)`,
+                left: Math.random() * 100 + '%',
+                top: Math.random() * 75 + '%',
+                boxShadow: '0 0 clamp(1.5px, 0.3vw, 4px) rgba(255, 255, 255, 0.6)',
               }}
               animate={{
-                opacity: [0.15, 0.6, 0.15], // Gentler twinkling effect
-                scale: [0.85, 1.15, 0.85], // Subtle size change
+                opacity: [0.15, 0.6, 0.15],
+                scale: [0.85, 1.15, 0.85],
               }}
               transition={{
-                duration: Math.random() * 5 + 4, // Varied, gentler twinkling speed
+                duration: Math.random() * 5 + 4,
                 repeat: Infinity,
-                delay: Math.random() * 6, // Staggered twinkling
+                delay: Math.random() * 6,
                 ease: 'easeInOut'
               }}
             />
           ))}
 
-          {/* Shooting Stars */}
-          {[...Array(1)].map((_, i) => ( // Only one shooting star for less distraction
+          {[...Array(1)].map((_, i) => (
             <motion.div
               key={`shooting-star-${i}`}
               className="absolute rounded-full"
               style={{
-                width: 'clamp(1.2px, 0.25vw, 3px)', // Smaller, responsive
+                width: 'clamp(1.2px, 0.25vw, 3px)',
                 height: 'clamp(1.2px, 0.25vw, 3px)',
-                background: 'rgba(255, 255, 255, 0.7)', // Less intense white
-                left: '-5%', // Starts off-screen left
-                top: `${10 + i * 40}%`, // Staggered vertical starting positions
-                boxShadow: '0 0 clamp(8px, 1.2vw, 12px) rgba(255, 255, 255, 0.4), 1px 0 clamp(12px, 1.8vw, 18px) rgba(255, 255, 255, 0.2)', // Softer tail effect
+                background: 'rgba(255, 255, 255, 0.7)',
+                left: '-5%',
+                top: `${10 + i * 40}%`,
+                boxShadow: '0 0 clamp(8px, 1.2vw, 12px) rgba(255, 255, 255, 0.4), 1px 0 clamp(12px, 1.8vw, 18px) rgba(255, 255, 255, 0.2)',
               }}
               animate={{
-                x: ['-5%', '105%'], // Travels across the screen
-                y: [`${10 + i * 40}%`, `${30 + i * 40}%`], // Descends slightly
-                opacity: [0, 0.6, 0.6, 0], // Smoother appearance and disappearance
+                x: ['-5%', '105%'],
+                y: [`${10 + i * 40}%`, `${30 + i * 40}%`],
+                opacity: [0, 0.6, 0.6, 0],
               }}
               transition={{
-                duration: 4, // Slightly longer travel time
+                duration: 4,
                 repeat: Infinity,
-                repeatDelay: 30 + Math.random() * 20, // Longer delay between appearances
-                delay: i * 15, // Staggered start
+                repeatDelay: 30 + Math.random() * 20,
+                delay: i * 15,
                 ease: 'easeOut'
               }}
             />
@@ -208,21 +241,20 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       )}
 
       {/* Smoother Horizon Line / Distant Ocean Glow */}
-      {/* Creates a subtle line at the horizon, mimicking light reflection on distant water. */}
       <motion.div
         className="fixed left-0 right-0"
         style={{
-          zIndex: -16, // Above water layers, below sun/moon
-          height: 'clamp(0.8px, 0.1vw, 1.5px)', // Even thinner line, responsive
+          zIndex: -16,
+          height: 'clamp(0.8px, 0.1vw, 1.5px)',
           background: isDarkRealm
-            ? 'linear-gradient(90deg, transparent 0%, rgba(160, 200, 230, 0.4) 20%, rgba(200, 230, 250, 0.6) 50%, rgba(160, 200, 230, 0.4) 80%, transparent 100%)' // Subtler, cool blue night horizon
-            : 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 245, 0.6) 20%, rgba(255, 240, 220, 0.7) 50%, rgba(255, 255, 245, 0.6) 80%, transparent 100%)', // Subtler, warm day horizon
-          top: `calc(100% - clamp(22vh, 28vh, 32vh))`, // Slightly higher, positioned relative to bottom elements
-          filter: 'blur(clamp(0.3px, 0.08vw, 1px))', // Finer blur
+            ? 'linear-gradient(90deg, transparent 0%, rgba(160, 200, 230, 0.4) 20%, rgba(200, 230, 250, 0.6) 50%, rgba(160, 200, 230, 0.4) 80%, transparent 100%)'
+            : 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 245, 0.6) 20%, rgba(255, 240, 220, 0.7) 50%, rgba(255, 255, 245, 0.6) 80%, transparent 100%)',
+          top: `calc(100% - clamp(22vh, 28vh, 32vh))`,
+          filter: 'blur(clamp(0.3px, 0.08vw, 1px))',
         }}
         animate={{
-          opacity: [0.4, 0.7, 0.4], // Pulsating opacity
-          scaleX: [1, 1.02, 1], // Subtle horizontal stretch
+          opacity: [0.4, 0.7, 0.4],
+          scaleX: [1, 1.02, 1],
         }}
         transition={{
           duration: 8,
@@ -232,12 +264,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Realistic Ocean/Water - Smoother and Higher Detail */}
-      {/* This is the deepest layer of the water, defining its primary color and depth. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -15, // Above background, below horizon and other water layers
-          height: 'clamp(22vh, 28vh, 32vh)', // Covers a significant portion of the bottom screen
+          zIndex: -15,
+          height: 'clamp(22vh, 28vh, 32vh)',
           background: isDarkRealm
             ? `
               linear-gradient(to top,
@@ -249,7 +280,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(70, 100, 160, 0.3) 95%,
                 transparent 100%
               )
-            ` // Deeper, more nuanced night blues/purples for water
+            `
             : `
               linear-gradient(to top,
                 rgba(160, 60, 5, 0.75) 0%,
@@ -260,25 +291,24 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(255, 160, 60, 0.15) 95%,
                 transparent 100%
               )
-            `, // Warmer, more vibrant oranges/yellows for day water
+            `,
         }}
         animate={{
-          opacity: [0.9, 1, 0.9], // Subtle opacity pulse
+          opacity: [0.9, 1, 0.9],
         }}
         transition={{
-          duration: 12, // Slow, continuous animation
+          duration: 12,
           repeat: Infinity,
           ease: 'easeInOut'
         }}
       />
 
       {/* Smoother Water Wave Patterns - First Layer */}
-      {/* Adds horizontal wave patterns that move to simulate water flow. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -14, // Above the main water body
-          height: 'clamp(16vh, 22vh, 26vh)', // Responsive height
+          zIndex: -14,
+          height: 'clamp(16vh, 22vh, 26vh)',
           background: isDarkRealm
             ? `
               repeating-linear-gradient(90deg,
@@ -289,7 +319,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 transparent clamp(80px, 12vw, 140px),
                 transparent clamp(120px, 18vw, 220px)
               )
-            ` // Subtle, cool night ripples
+            `
             : `
               repeating-linear-gradient(90deg,
                 transparent,
@@ -297,26 +327,25 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(255, 120, 50, 0.18) clamp(45px, 7vw, 90px),
                 rgba(255, 120, 50, 0.18) clamp(90px, 14vw, 180px)
               )
-            `, // Subtle, warm day ripples
+            `,
         }}
         animate={{
-          x: [0, -150, 0], // Slightly reduced movement for more smoothness
-          opacity: [0.55, 0.85, 0.55], // Pulsating opacity
+          x: [0, -150, 0],
+          opacity: [0.55, 0.85, 0.55],
         }}
         transition={{
-          duration: 18, // Slower movement for larger waves
+          duration: 18,
           repeat: Infinity,
           ease: 'easeInOut'
         }}
       />
 
       {/* Smoother Additional Wave Layer */}
-      {/* Adds diagonal wave patterns for a more complex water surface. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -13, // Above previous wave layer
-          height: 'clamp(12vh, 16vh, 20vh)', // Responsive height
+          zIndex: -13,
+          height: 'clamp(12vh, 16vh, 20vh)',
           background: isDarkRealm
             ? `
               repeating-linear-gradient(45deg,
@@ -325,7 +354,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(60, 90, 150, 0.15) clamp(18px, 2.5vw, 40px),
                 rgba(60, 90, 150, 0.15) clamp(45px, 6.5vw, 90px)
               )
-            ` // Finer, cool night ripples
+            `
             : `
               repeating-linear-gradient(45deg,
                 transparent,
@@ -333,27 +362,26 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(255, 150, 70, 0.1) clamp(22px, 3.5vw, 50px),
                 rgba(255, 150, 70, 0.1) clamp(50px, 7.5vw, 110px)
               )
-            `, // Finer, warm day ripples
+            `,
         }}
         animate={{
-          x: [70, -70, 70], // Slightly reduced movement
-          opacity: [0.3, 0.6, 0.3], // Pulsating opacity
+          x: [70, -70, 70],
+          opacity: [0.3, 0.6, 0.3],
         }}
         transition={{
-          duration: 22, // Slower movement
+          duration: 22,
           repeat: Infinity,
           ease: 'easeInOut'
         }}
       />
 
       {/* Smoother Moonlight/Sunlight Reflection on Water */}
-      {/* A vertical column of light reflecting the moon/sun on the water surface. */}
       <motion.div
         className="fixed"
         style={{
-          zIndex: -12, // Above water layers
-          width: 'clamp(20px, 3vw, 30px)', // Smaller reflection, responsive
-          height: 'clamp(60px, 10vh, 100px)', // Responsive height
+          zIndex: -12,
+          width: 'clamp(20px, 3vw, 30px)',
+          height: 'clamp(60px, 10vh, 100px)',
           background: isDarkRealm
             ? `
               linear-gradient(to bottom,
@@ -364,7 +392,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(147, 197, 253, 0.2) 70%,
                 transparent 100%
               )
-            ` // Subtle, cool moon reflection
+            `
             : `
               linear-gradient(to bottom,
                 transparent 0%,
@@ -373,15 +401,15 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(255, 200, 100, 0.1) 80%,
                 transparent 100%
               )
-            `, // Subtle, warm sun reflection
-          right: 'clamp(5vw, 7vw, 40px)', // Align with smaller orb, responsive
+            `,
+          right: 'clamp(5vw, 7vw, 40px)',
           bottom: '0',
-          filter: 'blur(clamp(0.6px, 0.3vw, 1.5px))', // Finer blur for a soft glow
+          filter: 'blur(clamp(0.6px, 0.3vw, 1.5px))',
         }}
         animate={{
-          opacity: [0.4, 0.7, 0.4], // Pulsating opacity
-          scaleY: [1, 1.08, 1], // Vertical stretching
-          scaleX: [1, 1.03, 1], // Subtle horizontal stretching
+          opacity: [0.4, 0.7, 0.4],
+          scaleY: [1, 1.08, 1],
+          scaleX: [1, 1.03, 1],
         }}
         transition={{
           duration: 12,
@@ -391,12 +419,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Beach Sand - Smoother Gradients */}
-      {/* This forms the base layer of the beach/land, with refined gradients. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -11, // Above water reflections
-          height: 'clamp(14vh, 18vh, 22vh)', // Height of the visible land, responsive
+          zIndex: -11,
+          height: 'clamp(14vh, 18vh, 22vh)',
           background: isDarkRealm
             ? `
               linear-gradient(to top,
@@ -406,7 +433,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(105, 115, 125, 0.45) 90%,
                 transparent 100%
               )
-            ` // Darker, more nuanced night sand
+            `
             : `
               linear-gradient(to top,
                 rgba(140, 70, 5, 0.8) 0%,
@@ -415,17 +442,16 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 rgba(200, 130, 30, 0.5) 90%,
                 transparent 100%
               )
-            `, // Warmer, earthy tones for day sand
+            `,
         }}
       />
 
       {/* Beach Sand Texture - Finer Dots */}
-      {/* Adds a subtle granular texture to the beach surface with smaller, finer dots. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -10, // Above main sand layer
-          height: 'clamp(12vh, 16vh, 20vh)', // Slightly shorter than main sand layer, responsive
+          zIndex: -10,
+          height: 'clamp(12vh, 16vh, 20vh)',
           background: isDarkRealm
             ? `
               radial-gradient(circle at 25% 30%, rgba(200, 210, 220, 0.25) 0.6px, transparent 0.6px),
@@ -433,14 +459,14 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               radial-gradient(circle at 50% 50%, rgba(180, 190, 200, 0.2) 0.6px, transparent 0.6px),
               radial-gradient(circle at 30% 80%, rgba(170, 180, 190, 0.15) 0.6px, transparent 0.6px),
               radial-gradient(circle at 80% 20%, rgba(200, 210, 220, 0.2) 0.6px, transparent 0.6px)
-            ` // Finer, cool night texture
+            `
             : `
               radial-gradient(circle at 25% 30%, rgba(180, 100, 20, 0.3) 0.6px, transparent 0.6px),
               radial-gradient(circle at 75% 70%, rgba(200, 120, 30, 0.2) 0.6px, transparent 0.6px),
               radial-gradient(circle at 50% 50%, rgba(220, 140, 40, 0.25) 0.6px, transparent 0.6px),
               radial-gradient(circle at 30% 80%, rgba(230, 150, 50, 0.2) 0.6px, transparent 0.6px),
               radial-gradient(circle at 80% 20%, rgba(240, 160, 60, 0.2) 0.6px, transparent 0.6px)
-            `, // Finer, warm day texture
+            `,
           backgroundSize: `
             clamp(15px, 3vw, 30px) clamp(15px, 3vw, 30px),
             clamp(25px, 4vw, 40px) clamp(25px, 4vw, 40px),
@@ -450,7 +476,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           `,
         }}
         animate={{
-          opacity: [0.6, 0.8, 0.6], // Subtle opacity pulse
+          opacity: [0.6, 0.8, 0.6],
         }}
         transition={{
           duration: 15,
@@ -460,21 +486,20 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Smoother Wet Sand Edge */}
-      {/* Simulates the wet edge of the sand where water meets land, now with a finer blur. */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -9, // Above texture layer
-          height: 'clamp(0.5px, 0.1vw, 2px)', // Even thinner line, responsive
+          zIndex: -9,
+          height: 'clamp(0.5px, 0.1vw, 2px)',
           background: isDarkRealm
             ? 'linear-gradient(90deg, transparent 0%, rgba(220, 230, 240, 0.6) 15%, rgba(230, 240, 250, 0.7) 35%, rgba(240, 250, 255, 0.65) 50%, rgba(230, 240, 250, 0.7) 65%, rgba(220, 230, 240, 0.6) 85%, transparent 100%)'
             : 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 240, 0.65) 15%, rgba(255, 240, 220, 0.6) 35%, rgba(255, 255, 250, 0.65) 50%, rgba(255, 240, 220, 0.6) 65%, rgba(255, 255, 240, 0.65) 85%, transparent 100%)',
-          top: `calc(100% - clamp(14vh, 18vh, 22vh))`, // Positioned at the top edge of the main sand layer
-          filter: 'blur(clamp(0.2px, 0.05vw, 0.5px))', // Very fine blur for a subtle glow
+          top: `calc(100% - clamp(14vh, 18vh, 22vh))`,
+          filter: 'blur(clamp(0.2px, 0.05vw, 0.5px))',
         }}
         animate={{
-          opacity: [0.5, 0.7, 0.5], // Pulsating opacity
-          scaleX: [1, 1.01, 1], // Very subtle horizontal stretch
+          opacity: [0.5, 0.7, 0.5],
+          scaleX: [1, 1.01, 1],
         }}
         transition={{
           duration: 9,
@@ -484,59 +509,58 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Beach Details - Footprints and Shells */}
-      {/* Adds small, animated elements to the foreground beach. Reduced count for smoother look. */}
-      <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(12vh, 16vh, 20vh)', zIndex: -8 }}> {/* Above wet sand line */}
+      <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(12vh, 16vh, 20vh)', zIndex: -8 }}>
         {/* Footprints */}
-        {[...Array(8)].map((_, i) => ( // Reduced footprints for smoother look
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={`footprint-${i}`}
             className="absolute rounded-full"
             style={{
-              width: `clamp(4px, 0.7vw, 10px)`, // Smaller, responsive
+              width: `clamp(4px, 0.7vw, 10px)`,
               height: `clamp(2px, 0.3vw, 5px)`,
               background: isDarkRealm
-                ? 'rgba(50, 60, 70, 0.3)' // Darker, very subtle footprints for night
-                : 'rgba(160, 80, 10, 0.25)', // Warm, very subtle footprints for day
-              left: Math.random() * 90 + '%', // Random horizontal position
-              top: Math.random() * 85 + 5 + '%', // Random vertical position within the beach area
-              filter: 'blur(clamp(0.1px, 0.05vw, 0.3px))', // Very slight blur for depth
-              transform: `rotate(${Math.random() * 15 - 7.5}deg)`, // Random rotation
+                ? 'rgba(50, 60, 70, 0.3)'
+                : 'rgba(160, 80, 10, 0.25)',
+              left: Math.random() * 90 + '%',
+              top: Math.random() * 85 + 5 + '%',
+              filter: 'blur(clamp(0.1px, 0.05vw, 0.3px))',
+              transform: `rotate(${Math.random() * 15 - 7.5}deg)`,
             }}
             animate={{
-              opacity: [0.2, 0.5, 0.2], // Fading in and out
+              opacity: [0.2, 0.5, 0.2],
             }}
             transition={{
-              duration: 18, // Slow, subtle animation
+              duration: 18,
               repeat: Infinity,
-              delay: Math.random() * 12, // Staggered start
+              delay: Math.random() * 12,
               ease: 'easeInOut'
             }}
           />
         ))}
 
         {/* Shells */}
-        {[...Array(4)].map((_, i) => ( // Reduced shells
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={`shell-${i}`}
             className="absolute rounded-full"
             style={{
-              width: `clamp(1.5px, 0.4vw, 6px)`, // Smaller, responsive
+              width: `clamp(1.5px, 0.4vw, 6px)`,
               height: `clamp(1px, 0.2vw, 4px)`,
               background: isDarkRealm
-                ? `hsl(${200 + Math.random() * 15}, 10%, ${65 + Math.random() * 10}%)` // Lighter, desaturated colors for night shells
-                : `hsl(${20 + Math.random() * 8}, ${30 + Math.random() * 15}%, ${55 + Math.random() * 10}%)`, // Warmer, more saturated colors for day shells
-              left: Math.random() * 95 + '%', // Random horizontal position
-              top: Math.random() * 75 + 10 + '%', // Random vertical position within the beach area
-              borderRadius: Math.random() > 0.5 ? '50%' : '30% 70% 70% 30% / 30% 30% 70% 70%', // Random shapes (circle or irregular)
+                ? `hsl(${200 + Math.random() * 15}, 10%, ${65 + Math.random() * 10}%)`
+                : `hsl(${20 + Math.random() * 8}, ${30 + Math.random() * 15}%, ${55 + Math.random() * 10}%)`,
+              left: Math.random() * 95 + '%',
+              top: Math.random() * 75 + 10 + '%',
+              borderRadius: Math.random() > 0.5 ? '50%' : '30% 70% 70% 30% / 30% 30% 70% 70%',
             }}
             animate={{
-              opacity: [0.4, 0.7, 0.4], // Fading in and out
-              scale: [0.95, 1.02, 0.95], // Very subtle size change
+              opacity: [0.4, 0.7, 0.4],
+              scale: [0.95, 1.02, 0.95],
             }}
             transition={{
-              duration: 12, // Slow, subtle animation
+              duration: 12,
               repeat: Infinity,
-              delay: Math.random() * 8, // Staggered start
+              delay: Math.random() * 8,
               ease: 'easeInOut'
             }}
           />
@@ -544,64 +568,62 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       </div>
 
       {/* Dunes/Hills - More defined and layered */}
-      {/* These form the background land masses behind the main beach. Reduced count for smoother look. */}
-      {[...Array(3)].map((_, i) => ( // Still 3 dunes
+      {[...Array(3)].map((_, i) => (
         <motion.div
           key={`dune-${i}`}
           className="fixed bottom-0"
           style={{
-            zIndex: -6, // Above beach details, below wet sand line
-            width: `clamp(70px, ${12 + Math.random() * 6}vw, 150px)`, // Responsive width, slightly smaller
-            height: `clamp(15px, ${2.5 + Math.random() * 1.5}vh, 35px)`, // Responsive height, slightly smaller
-            borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%', // Rounded top for hill shape
+            zIndex: -6,
+            width: `clamp(70px, ${12 + Math.random() * 6}vw, 150px)`,
+            height: `clamp(15px, ${2.5 + Math.random() * 1.5}vh, 35px)`,
+            borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
             background: isDarkRealm
-              ? `linear-gradient(to top, rgba(40, 50, 60, 0.75) 0%, rgba(55, 65, 75, 0.65) 50%, transparent 100%)` // Darker, more subtle silhouette for night
-              : `linear-gradient(to top, rgba(150, 70, 5, 0.75) 0%, rgba(180, 100, 15, 0.65) 50%, transparent 100%)`, // Warmer, earthy tones for day
-            left: `${i * 30 + (Math.random() * 6 - 3)}vw`, // Distributed horizontally with slight randomness
-            transform: `translateX(-50%)`, // Centers the dune horizontally
-            bottom: `clamp(14vh, 18vh, 22vh)`, // Positioned above the main beach layer
-            filter: 'blur(clamp(0.3px, 0.1vw, 1px))', // Subtle blur for depth
+              ? `linear-gradient(to top, rgba(40, 50, 60, 0.75) 0%, rgba(55, 65, 75, 0.65) 50%, transparent 100%)`
+              : `linear-gradient(to top, rgba(150, 70, 5, 0.75) 0%, rgba(180, 100, 15, 0.65) 50%, transparent 100%)`,
+            left: `${i * 30 + (Math.random() * 6 - 3)}vw`,
+            transform: `translateX(-50%)`,
+            bottom: `clamp(14vh, 18vh, 22vh)`,
+            filter: 'blur(clamp(0.3px, 0.1vw, 1px))',
           }}
           animate={{
-            y: [0, -3, 0], // Gentle bobbing motion
-            opacity: [0.5, 0.8, 0.5], // Pulsating opacity
+            y: [0, -3, 0],
+            opacity: [0.5, 0.8, 0.5],
           }}
           transition={{
-            duration: 15 + Math.random() * 10, // Varied, slow animation
+            duration: 15 + Math.random() * 10,
             repeat: Infinity,
-            delay: i * 4, // Staggered start
+            delay: i * 4,
             ease: 'easeInOut'
           }}
         />
       ))}
 
       {/* Beach Sparkles/Glints */}
-      {/* Adds small, flickering light points on the beach surface. Reduced count for smoother performance. */}
-      <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(16vh, 22vh, 26vh)', zIndex: -5 }}> {/* Above dunes */}
-        {[...Array(20)].map((_, i) => ( // Reduced sparkles
+      <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(16vh, 22vh, 26vh)', zIndex: -5 }}>
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={`beach-sparkle-${i}`}
             className="absolute rounded-full"
             style={{
-              width: `clamp(0.6px, ${Math.random() * 0.25 + 0.1}vw, 3px)`, // Smaller, responsive
+              width: `clamp(0.6px, ${Math.random() * 0.25 + 0.1}vw, 3px)`,
               height: `clamp(0.6px, ${Math.random() * 0.25 + 0.1}vw, 3px)`,
               background: isDarkRealm
-                ? `hsl(${190 + Math.random() * 30}, ${25 + Math.random() * 25}%, ${75 + Math.random() * 15}%)` // Cooler, brighter for night luminescence
-                : `hsl(${25 + Math.random() * 15}, ${40 + Math.random() * 25}%, ${80 + Math.random() * 10}%)`, // Warmer, brighter for day glints
-              left: Math.random() * 100 + '%', // Random horizontal position
-              top: Math.random() * 90 + '%', // Random vertical position within the beach area
+                ? `hsl(${190 + Math.random() * 30}, ${25 + Math.random() * 25}%, ${75 + Math.random() * 15}%)`
+                : `hsl(${25 + Math.random() * 15}, ${40 + Math.random() * 25}%, ${80 + Math.random() * 10}%)`,
+              left: Math.random() * 100 + '%',
+              top: Math.random() * 90 + '%',
               boxShadow: isDarkRealm
-                ? `0 0 clamp(3px, 0.8vw, 8px) rgba(200, 210, 220, 0.65)` // Softer, bluer glow
-                : `0 0 clamp(5px, 1vw, 10px) rgba(250, 150, 50, 0.75)`, // Stronger, warm glow
+                ? `0 0 clamp(3px, 0.8vw, 8px) rgba(200, 210, 220, 0.65)`
+                : `0 0 clamp(5px, 1vw, 10px) rgba(250, 150, 50, 0.75)`,
             }}
             animate={{
-              opacity: [0.25, 0.85, 0.25], // Flickering effect
-              scale: [0.8, 1.2, 0.8], // Subtle size change
+              opacity: [0.25, 0.85, 0.25],
+              scale: [0.8, 1.2, 0.8],
             }}
             transition={{
-              duration: Math.random() * 5 + 4, // Varied, slow animation
+              duration: Math.random() * 5 + 4,
               repeat: Infinity,
-              delay: Math.random() * 6, // Staggered start
+              delay: Math.random() * 6,
               ease: 'easeInOut'
             }}
           />
