@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
@@ -15,6 +15,32 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Animation variants for initial load
+  const initialFadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, ease: [0.6, -0.05, 0.01, 0.99] },
+  };
+
+  // Animation variants for sections
+  const sectionFadeIn = {
+    initial: { opacity: 0, y: 40 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] },
+  };
+
+  // Animation variant for social icons
+  const iconBounce = {
+    whileHover: { scale: 1.1, y: -5, transition: { duration: 0.2 } },
+    whileTap: { scale: 0.9 },
+  };
 
   const mixes = [
     {
@@ -42,26 +68,28 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4">
         <motion.div
           className="container mx-auto text-center relative z-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          variants={initialFadeIn}
+          initial="initial"
+          animate={isMounted ? "animate" : "initial"}
         >
-          {/* Logo - No longer rotating */}
+          {/* Logo - Subtle pulse animation on load */}
           <motion.img
             src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
             alt="SUNAME"
             className="w-48 h-48 mx-auto mb-8 object-contain"
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.6, -0.05, 0.01, 0.99] }}
+            whileHover={{ scale: 1.05 }}
           />
 
-          {/* Artist Photo with Border Animation */}
+          {/* Artist Photo with Border Animation - Subtle zoom on hover */}
           <motion.div
-            className="relative w-72 h-72 mx-auto mb-10"
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="relative w-72 h-72 mx-auto mb-10 cursor-pointer"
+            initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
+            whileHover={{ scale: 1.02 }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -88,28 +116,31 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           <motion.h1
             className={`text-6xl font-bold mb-4 ${isDarkRealm ? 'text-white' : 'text-gray-900'}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            variants={initialFadeIn}
+            initial="initial"
+            animate={isMounted ? "animate" : "initial"}
+            transition={{ ...initialFadeIn.transition, delay: 0.2 }}
           >
             SUNAME
           </motion.h1>
 
           <motion.p
             className={`text-xl mb-8 ${isDarkRealm ? 'text-gray-300' : 'text-gray-700'}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
+            variants={initialFadeIn}
+            initial="initial"
+            animate={isMounted ? "animate" : "initial"}
+            transition={{ ...initialFadeIn.transition, delay: 0.4 }}
           >
             {biography.tagline}
           </motion.p>
 
-          {/* Social Icons */}
+          {/* Social Icons - Bounce on hover */}
           <motion.div
             className="flex justify-center space-x-6 mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            variants={initialFadeIn}
+            initial="initial"
+            animate={isMounted ? "animate" : "initial"}
+            transition={{ ...initialFadeIn.transition, delay: 0.6 }}
           >
             {[
               { icon: FaSoundcloud, url: biography.socials.soundcloud },
@@ -126,8 +157,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-3xl ${isDarkRealm ? 'text-white' : 'text-gray-900'} hover:text-primary-500 transition-colors`}
-                whileHover={{ scale: 1.2, rotate: 360 }}
-                transition={{ duration: 0.3 }}
+                variants={iconBounce}
               >
                 <Icon />
               </motion.a>
@@ -136,35 +166,46 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </motion.div>
       </section>
 
-      {/* Latest Mixes Section */}
+      {/* Latest Mixes Section - Fade in on scroll */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className={`text-4xl font-bold mb-12 text-center ${isDarkRealm ? 'text-white' : 'text-gray-900'}`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={sectionFadeIn}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={sectionFadeIn.viewport}
           >
             Latest Mixes
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={{
+              initial: { opacity: 0 },
+              whileInView: { opacity: 1, transition: { staggerChildren: 0.2 } },
+            }}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true }}
+          >
             {mixes.map((mix, index) => (
-              <MusicCard
-                key={index}
-                title={mix.title}
-                imageUrl={mix.image}
-                link={mix.url}
-                isPlaying={activeMix === index}
-                onTogglePlay={() => setActiveMix(activeMix === index ? null : index)}
-              />
+              <motion.div key={index} variants={sectionFadeIn}>
+                <MusicCard
+                  title={mix.title}
+                  imageUrl={mix.image}
+                  link={mix.url}
+                  isPlaying={activeMix === index}
+                  onTogglePlay={() => setActiveMix(activeMix === index ? null : index)}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Artist Photos Section */}
-      <section className="py-20 px-4 relative">
+      {/* Artist Photos Section - Slide in from sides on scroll */}
+      <section className="py-20 px-4 relative overflow-hidden">
         <motion.div
           className="absolute inset-0 -z-10"
           animate={{
@@ -180,21 +221,37 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className={`text-4xl font-bold mb-12 text-center ${isDarkRealm ? 'text-white' : 'text-gray-900'}`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={{
+              initial: { opacity: 0, y: 60 },
+              whileInView: { opacity: 1, y: 0 },
+            }}
+            initial="initial"
+            whileInView="whileInView"
             viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.6, -0.05, 0.01, 0.99] }}
           >
             Gallery
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            variants={{
+              initial: { opacity: 0 },
+              whileInView: { opacity: 1, transition: { staggerChildren: 0.3 } },
+            }}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true }}
+          >
             {[1, 2, 3].map((_, index) => (
               <motion.div
                 key={index}
                 className="relative aspect-square rounded-xl overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                variants={{
+                  initial: { x: index % 2 === 0 ? -50 : 50, opacity: 0 },
+                  whileInView: { x: 0, opacity: 1 },
+                }}
+                transition={{ duration: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
                 whileHover={{ scale: 1.05 }}
               >
                 <img
@@ -208,43 +265,62 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Quote Section */}
+      {/* Quote Section - Fade in with a slight delay */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
             className={`text-3xl font-bold italic mb-8 ${isDarkRealm ? 'text-primary-400' : 'text-primary-600'}`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={{
+              initial: { opacity: 0, y: 40 },
+              whileInView: { opacity: 1, y: 0 },
+            }}
+            initial="initial"
+            whileInView="whileInView"
             viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.6, -0.05, 0.01, 0.99] }}
           >
             "{biography.motto}"
           </motion.blockquote>
 
-          <AudioVisualizer
-            height={60}
-            barCount={24}
-            color={isDarkRealm ? 'rgb(139, 92, 246)' : 'rgb(109, 40, 217)'}
-          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
+            viewport={{ once: true }}
+          >
+            <AudioVisualizer
+              height={60}
+              barCount={24}
+              color={isDarkRealm ? 'rgb(139, 92, 246)' : 'rgb(109, 40, 217)'}
+            />
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - Subtle fade in */}
       <footer className="py-8 text-center">
-        <p className={`text-sm ${isDarkRealm ? 'text-gray-400' : 'text-gray-600'}`}>
+        <motion.p
+          className={`text-sm ${isDarkRealm ? 'text-gray-400' : 'text-gray-600'}`}
+          initial={{ opacity: 0, y: 10 }}
+          animate={isMounted ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 1 }}
+        >
           Artwork & Website by{' '}
-          <a
+          <motion.a
             href={biography.designer.twitter}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
           >
             {biography.designer.name}
-          </a>
-        </p>
+          </motion.a>
+        </motion.p>
       </footer>
     </div>
   );
