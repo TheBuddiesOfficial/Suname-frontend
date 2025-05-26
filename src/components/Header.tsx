@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Menu, X, Music2 } from 'lucide-react';
+import { Menu, X } from 'lucide-react'; // Removed Music2 as it's no longer used
 
 interface HeaderProps {
   isDarkRealm: boolean;
@@ -102,15 +102,15 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     className="flex items-center space-x-2"
                     whileHover={{ x: 5 }}
                   >
+                    {/* REPLACE MUSIC2 ICON WITH IMG FOR DESKTOP NAV */}
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     >
-                      <Music2
-                        size={16}
-                        className={`opacity-0 group-hover:opacity-100 transition-opacity ${
-                          isDarkRealm ? 'text-primary-400' : 'text-primary-600'
-                        }`}
+                      <img
+                        src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
+                        alt="SUNAME Icon"
+                        className={`w-5 h-5 rounded-full object-cover transition-transform duration-300 opacity-0 group-hover:opacity-100`}
                       />
                     </motion.div>
                     <motion.span
@@ -221,6 +221,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     whileHover={{ x: 5, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
+                    {/* THIS WAS ALREADY MODIFIED FOR MOBILE NAV */}
                     <img
                       src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
                       alt="SUNAME Icon"
