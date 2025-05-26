@@ -408,10 +408,16 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               >
                 <motion.span
                   className="inline-block"
-                  style={{ color: '#FFFFFF', filter: 'none' }} // Set initial color to white, no filter (no glow)
+                  // Default state based on isDarkRealm
+                  style={{
+                    color: '#FFFFFF',
+                    filter: isDarkRealm
+                      ? 'drop-shadow(0px 0px 5px rgba(139,92,246,0.6)) drop-shadow(0px 0px 10px rgba(139,92,246,0.4))'
+                      : 'drop-shadow(0px 0px 5px rgba(255,165,0,0.6)) drop-shadow(0px 0px 10px rgba(255,165,0,0.4))',
+                  }}
                   whileHover={{
                     scale: 1.2,
-                    color: isDarkRealm ? '#8B5CF6' : '#FF7043',
+                    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Hover color (matching the current glow color)
                     filter: isDarkRealm
                       ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
                       : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
