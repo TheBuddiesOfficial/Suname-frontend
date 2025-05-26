@@ -102,11 +102,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
       ? {
-          color: ['#E0BBE4', '#FFFFFF', '#E0BBE4'],
-          textShadow: [
-            '0 0 10px rgba(139,92,246,0.8), 0 0 20px rgba(139,92,246,0.6), 0 0 30px rgba(139,92,246,0.4)',
-            '0 0 15px rgba(139,92,246,1), 0 0 25px rgba(139,92,246,0.8), 0 0 35px rgba(139,92,246,0.6)',
-            '0 0 10px rgba(139,92,246,0.8), 0 0 20px rgba(139,92,246,0.6), 0 0 30px rgba(139,92,246,0.4)'
+          color: ['#F0F0FF', '#FFFFFF', '#F0F0FF'], // Softer light violet/white pulse
+          textShadow: [ // Reduced glow for dark realm
+            '0 0 2px rgba(139,92,246,0.5), 0 0 5px rgba(139,92,246,0.3)',
+            '0 0 4px rgba(139,92,246,0.7), 0 0 8px rgba(139,92,246,0.4)',
+            '0 0 2px rgba(139,92,246,0.5), 0 0 5px rgba(139,92,246,0.3)'
           ],
           transition: {
             repeat: Infinity,
@@ -116,11 +116,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           }
         }
       : {
-          color: ['#FFDDC1', '#FFFFFF', '#FFDDC1'],
-          textShadow: [
-            '0 0 12px rgba(255,165,0,0.9), 0 0 22px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.5)',
-            '0 0 18px rgba(255,165,0,1), 0 0 28px rgba(255,165,0,0.8), 0 0 38px rgba(255,165,0,0.6)',
-            '0 0 12px rgba(255,165,0,0.9), 0 0 22px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.5)'
+          color: ['#FFF8F0', '#FFFFFF', '#FFF8F0'], // Softer light orange/white pulse
+          textShadow: [ // Reduced glow for light realm
+            '0 0 2px rgba(255,165,0,0.5), 0 0 5px rgba(255,165,0,0.3)',
+            '0 0 4px rgba(255,165,0,0.7), 0 0 8px rgba(255,165,0,0.4)',
+            '0 0 2px rgba(255,165,0,0.5), 0 0 5px rgba(255,165,0,0.3)'
           ],
           transition: {
             repeat: Infinity,
@@ -135,20 +135,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     animate: isDarkRealm
       ? {
           color: ['#FFFFFF', '#B39DDB', '#FFFFFF'],
-          textShadow: [
-            '0 0 4px rgba(179,157,219,0.5)',
-            '0 0 8px rgba(179,157,219,0.8)',
-            '0 0 4px rgba(179,157,219,0.5)'
-          ],
+          // Removed textShadow for professional look
           transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 }
         }
       : {
           color: ['#FFC074', '#FFAA66', '#FFC074'],
-          textShadow: [
-            '0 0 5px rgba(255,165,0,0.4)',
-            '0 0 10px rgba(255,165,0,0.6)',
-            '0 0 5px rgba(255,165,0,0.4)'
-          ],
+          // Removed textShadow for professional look
           transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 }
         }
   };
@@ -169,7 +161,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     animate: isDarkRealm
       ? {
           color: ['#FFFFFF', 'rgba(179,157,219,0.9)', '#FFFFFF'],
-          textShadow: ['0 0 5px rgba(139,92,246,0.3)', '0 0 10px rgba(139,92,246,0.6)', '0 0 5px rgba(139,92,246,0.3)'],
+          // Removed textShadow for professional look
           transition: {
             repeat: Infinity,
             duration: 6,
@@ -179,9 +171,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         }
       : {
           color: ['#3A404F', '#2A2E3D', '#3A404F'],
-          textShadow: [
-            '0 0 2px rgba(0,0,0,0.1)', '0 0 4px rgba(0,0,0,0.2)', '0 0 2px rgba(0,0,0,0.1)'
-          ],
+          // Removed textShadow for professional look
           transition: {
             repeat: Infinity,
             duration: 6,
@@ -205,10 +195,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   };
 
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
+    // Keep a very subtle shadow here for readability on images if needed
     return {
       textShadow: isDark
-        ? '0 0 8px rgba(255,255,255,0.1), 0 0 10px rgba(139,92,246,0.1)'
-        : '0 0 5px rgba(255,165,0,0.4), 0 0 8px rgba(255,165,0,0.2)'
+        ? '0 0 3px rgba(255,255,255,0.05), 0 0 5px rgba(139,92,246,0.05)'
+        : '0 0 2px rgba(255,165,0,0.1), 0 0 3px rgba(255,165,0,0.05)'
     };
   };
 
@@ -243,7 +234,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     <div className="min-h-screen overflow-hidden relative">
       <ParticleSystem
         isDarkRealm={isDarkRealm}
-        customColors={isDarkRealm ? ['#303F9F', '#42A5F5', '#8B5CF6'] : ['#FFD180', '#FFA07A', '#FF7043']}
+        // Softer, more sophisticated custom colors for ParticleSystem
+        customColors={isDarkRealm ? ['#4A4A8A', '#6B8EAD', '#8B5CF6'] : ['#FFBF69', '#FFD8A3', '#FF9A6A']}
       />
 
       <motion.svg
@@ -254,7 +246,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2.5, delay: 1 }}
         style={{
-          fill: isDarkRealm ? 'rgba(48,63,159,0.4)' : 'rgba(255,165,0,0.2)'
+          // Muted fill colors for the SVG wave
+          fill: isDarkRealm ? 'rgba(74,74,138,0.3)' : 'rgba(255,191,105,0.2)'
         }}
       >
         <motion.path
@@ -295,34 +288,22 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               ease: "linear",
             }}
           >
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{
-                background: isDarkRealm
-                  ? ['linear-gradient(0deg, rgba(48,63,159,0.6), transparent)',
-                      'linear-gradient(90deg, rgba(48,63,159,0.6), transparent)',
-                      'linear-gradient(180deg, rgba(48,63,159,0.6), transparent)',
-                      'linear-gradient(270deg, rgba(48,63,159,0.6), transparent)']
-                    : ['linear-gradient(0deg, rgba(255,165,0,0.6), transparent)',
-                      'linear-gradient(90deg, rgba(255,165,0,0.6), transparent)',
-                      'linear-gradient(180deg, rgba(255,165,0,0.6), transparent)',
-                      'linear-gradient(270deg, rgba(255,165,0,0.6), transparent)']
-              }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            />
+            {/* Removed the extra motion.div for background gradient as it was very strong */}
             <motion.img
               src="/images/artist_main.jpg"
               alt="SUNAME"
               className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300"
               style={{
-                borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
+                // Softer border colors for the artist image
+                borderColor: isDarkRealm ? 'rgba(74,74,138,0.6)' : 'rgba(255,191,105,0.6)'
               }}
             />
-            <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300 ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
+            {/* Removed the blur-xl opacity-0 div completely for a cleaner look */}
           </motion.div>
 
           <motion.h1
-            className={`text-7xl md:text-8xl font-extrabold mb-4 relative leading-none text-white`}
+            // Changed font-extrabold to font-bold for slightly less weight
+            className={`text-7xl md:text-8xl font-bold mb-4 relative leading-none text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
           >
             <motion.span
@@ -366,12 +347,40 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={index}
                 className="inline-block mr-2"
                 variants={taglineWordReveal}
+                // Tagline text shadow removed in taglineActiveTextAnimation
                 animate={isMounted ? taglineActiveTextAnimation.animate : undefined}
               >
                 {word}
               </motion.span>
             ))}
           </motion.p>
+
+          {/* New Call to Action Button - positioned before social icons */}
+          <motion.div
+            className="mb-8" // Add some margin below the button
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1], delay: 1.8 }}
+          >
+            <Link to="/dark-realm" className="inline-block">
+              <motion.button
+                className={`flex items-center justify-center px-8 py-3 rounded-full text-lg font-semibold transition-colors duration-300
+                  ${isDarkRealm ? 'bg-primary-600 text-white shadow-lg shadow-primary-700/50 hover:bg-primary-700' : 'bg-orange-500 text-white shadow-lg shadow-orange-600/50 hover:bg-orange-600'}`
+                }
+                whileHover={{ scale: 1.05, boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.5)' : '0px 0px 20px rgba(255,165,0,0.5)' }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  scale: [1, 1.02, 1], // Subtle pulse animation
+                  boxShadow: isDarkRealm ? ['0 0 10px rgba(139,92,246,0.3)', '0 0 15px rgba(139,92,246,0.5)', '0 0 10px rgba(139,92,246,0.3)'] : ['0 0 10px rgba(255,165,0,0.3)', '0 0 15px rgba(255,165,0,0.5)', '0 0 10px rgba(255,165,0,0.3)']
+                }}
+                transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", repeatType: "mirror" }}
+              >
+                Enter the Realm
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </motion.button>
+            </Link>
+          </motion.div>
+
 
           <motion.div
             className="flex justify-center space-x-8 mb-12"
@@ -408,19 +417,18 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               >
                 <motion.span
                   className="inline-block"
-                  // Default state based on isDarkRealm
                   style={{
                     color: '#FFFFFF',
-                    filter: isDarkRealm
-                      ? 'drop-shadow(0px 0px 5px rgba(139,92,246,0.6)) drop-shadow(0px 0px 10px rgba(139,92,246,0.4))'
-                      : 'drop-shadow(0px 0px 5px rgba(255,165,0,0.6)) drop-shadow(0px 0px 10px rgba(255,165,0,0.4))',
+                    filter: isDarkRealm // Reduced initial glow for icons
+                      ? 'drop-shadow(0px 0px 1px rgba(139,92,246,0.2)) drop-shadow(0px 0px 2px rgba(139,92,246,0.1))'
+                      : 'drop-shadow(0px 0px 1px rgba(255,165,0,0.2)) drop-shadow(0px 0px 2px rgba(255,165,0,0.1))',
                   }}
                   whileHover={{
                     scale: 1.2,
                     color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Hover color (matching the current glow color)
-                    filter: isDarkRealm
-                      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
-                      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
+                    filter: isDarkRealm // Slightly reduced hover glow intensity
+                      ? 'drop-shadow(0px 0px 6px rgba(139,92,246,0.7)) drop-shadow(0px 0px 10px rgba(139,92,246,0.5)) drop-shadow(0px 0px 15px rgba(139,92,246,0.3))'
+                      : 'drop-shadow(0px 0px 6px rgba(255,165,0,0.7)) drop-shadow(0px 0px 10px rgba(255,165,0,0.5)) drop-shadow(0px 0px 15px rgba(255,165,0,0.3))',
                   }}
                   transition={{
                     filter: { duration: 0.4, ease: "easeOut" },
@@ -504,7 +512,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   },
                 }}
                 whileHover={{ scale: 1.05, z: 10,
-                  boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.5)' : '0px 0px 20px rgba(255,127,80,0.6)'
+                  boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.3)' : '0px 0px 20px rgba(255,127,80,0.3)'
                 }}
               >
                 <img
@@ -555,6 +563,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   key={index}
                   className="inline-block mx-0.5"
                   variants={quoteLineReveal}
+                  // Quote text shadow removed in quoteActiveTextAnimation
                   animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
                   style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
                 >
@@ -603,8 +612,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             href={biography.designer.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary-500 hover:text-primary-400 font-semibold"
-            whileHover={{ scale: 1.03, textShadow: isDarkRealm ? '0px 0px 5px rgba(139, 92, 246, 0.5)' : '0px 0px 5px rgba(0,0,0,0.5)' }}
+            className={`font-semibold ${isDarkRealm ? 'text-primary-400 hover:text-primary-300' : 'text-orange-600 hover:text-orange-700'}`}
+            whileHover={{ scale: 1.03, textShadow: isDarkRealm ? '0px 0px 5px rgba(139, 92, 246, 0.2)' : '0px 0px 5px rgba(0,0,0,0.2)' }}
             transition={{ duration: 0.15 }}
           >
             JimmyDesigns
