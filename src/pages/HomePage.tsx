@@ -99,6 +99,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
+  // Modified sunameActiveTextAnimation for glow
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
       ? {
@@ -300,13 +301,13 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               animate={{
                 background: isDarkRealm
                   ? ['linear-gradient(0deg, rgba(48,63,159,0.6), transparent)',
-                     'linear-gradient(90deg, rgba(48,63,159,0.6), transparent)',
-                     'linear-gradient(180deg, rgba(48,63,159,0.6), transparent)',
-                     'linear-gradient(270deg, rgba(48,63,159,0.6), transparent)']
-                  : ['linear-gradient(0deg, rgba(255,165,0,0.6), transparent)',
-                     'linear-gradient(90deg, rgba(255,165,0,0.6), transparent)',
-                     'linear-gradient(180deg, rgba(255,165,0,0.6), transparent)',
-                     'linear-gradient(270deg, rgba(255,165,0,0.6), transparent)']
+                      'linear-gradient(90deg, rgba(48,63,159,0.6), transparent)',
+                      'linear-gradient(180deg, rgba(48,63,159,0.6), transparent)',
+                      'linear-gradient(270deg, rgba(48,63,159,0.6), transparent)']
+                    : ['linear-gradient(0deg, rgba(255,165,0,0.6), transparent)',
+                      'linear-gradient(90deg, rgba(255,165,0,0.6), transparent)',
+                      'linear-gradient(180deg, rgba(255,165,0,0.6), transparent)',
+                      'linear-gradient(270deg, rgba(255,165,0,0.6), transparent)']
               }}
               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
             />
@@ -341,6 +342,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   key={index}
                   className="inline-block"
                   variants={sunameCharReveal}
+                  // Apply active text animation here
                   animate={isMounted ? sunameActiveTextAnimation.animate : undefined}
                 >
                   {char === " " ? "\u00A0" : char}
@@ -408,7 +410,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               >
                 <motion.span
                   className="inline-block"
-                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set initial color without glow
+                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
                   whileHover={{
                     scale: 1.2,
                     color: isDarkRealm ? '#8B5CF6' : '#FF7043',
@@ -416,17 +418,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                       ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
                       : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
                   }}
-                  onHoverEnd={() => {
-                    return {
-                      scale: 1,
-                      color: isDarkRealm ? '#FFFFFF' : '#1A202C',
-                      filter: 'none'
-                    };
-                  }}
+                  // Changed transition for `onHoverEnd` to match the smoothness.
                   transition={{
-                    filter: { duration: 0.001, ease: "easeOut" },
-                    color: { duration: 0.001, ease: "easeOut" },
-                    scale: { type: "spring", stiffness: 400, damping: 30, duration: 0.15 }
+                    filter: { duration: 0.4, ease: "easeOut" }, // Smooth transition for filter
+                    color: { duration: 0.4, ease: "easeOut" },  // Smooth transition for color
+                    scale: { type: "spring", stiffness: 400, damping: 30 } // Keep spring for scale
                   }}
                 >
                   <Icon />
