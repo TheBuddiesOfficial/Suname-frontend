@@ -54,7 +54,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{ zIndex: -20 }}
         animate={{
           background: isDarkRealm
-            ? 'linear-gradient(180deg, #000208 0%, #050a15 20%, #0a1425 40%, #101e30 60%, #182c40 80%, #0a1425 100%)'
+            ? 'linear-gradient(180deg, #00000a 0%, #030815 20%, #061020 40%, #0a1828 60%, #0f2235 80%, #061020 100%)' // Darker, deeper night sky
             : 'linear-gradient(180deg, #4a0030 0%, #ff5733 25%, #ff8c1a 50%, #ffc300 75%, #ffe100 100%)',
         }}
         transition={{ duration: 3, ease: 'easeInOut' }}
@@ -65,7 +65,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         style={{
           zIndex: -19,
           background: isDarkRealm
-            ? 'radial-gradient(ellipse at center top, rgba(59, 130, 246, 0.18), rgba(147, 197, 253, 0.12), transparent 70%)'
+            ? 'radial-gradient(ellipse at center top, rgba(50, 100, 200, 0.2), rgba(100, 150, 250, 0.15), transparent 70%)' // Subtle blue night glow
             : 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.25), rgba(255, 69, 0, 0.2), transparent 80%)',
         }}
         animate={{
@@ -88,13 +88,13 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(80px, 15vw, 200px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle at 40% 40%, #c0c0c0 0%, #808080 30%, #404040 60%, #202020 100%)' // Moon: Grey tones for craters/texture
+            ? 'radial-gradient(circle at 40% 40%, #e0e8f0 0%, #c0d0e0 30%, #a0b0c0 60%, #8090a0 100%)' // Luminous, slightly bluish moon
             : 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ffd23f 20%, #ff6b35 60%, #ee4035 100%)',
           top: 'clamp(10vh, 15vh, 20vh)',
           right: 'clamp(15vw, 20vw, 25vw)',
-          filter: isDarkRealm ? 'blur(0.5px)' : 'blur(0.5px)', // Slightly less blur for moon
+          filter: 'blur(0.5px)',
           boxShadow: isDarkRealm
-            ? '0 0 clamp(30px, 6vw, 60px) rgba(180, 200, 220, 0.7), inset -5px -5px 15px rgba(50, 60, 70, 0.4)' // Moon glow: softer, cooler
+            ? '0 0 clamp(40px, 8vw, 80px) rgba(180, 200, 220, 0.8), inset -8px -8px 20px rgba(100, 120, 140, 0.5)' // Stronger, cooler moon glow
             : '0 0 clamp(80px, 15vw, 200px) rgba(255, 107, 53, 0.8), 0 0 clamp(150px, 25vw, 400px) rgba(238, 64, 53, 0.5), inset -5px -5px 15px rgba(238, 64, 53, 0.3)',
         }}
         animate={{
@@ -122,7 +122,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(120px, 22vw, 280px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle, transparent 40%, rgba(150, 180, 220, 0.15) 50%, transparent 80%)' // Moon halo: subtle blue glow
+            ? 'radial-gradient(circle, transparent 40%, rgba(150, 180, 220, 0.2) 50%, transparent 80%)' // More visible moon halo
             : 'radial-gradient(circle, transparent 30%, rgba(255, 107, 53, 0.3) 45%, rgba(238, 64, 53, 0.2) 70%, transparent 90%)',
           top: 'clamp(8vh, 12vh, 17vh)',
           right: 'clamp(12vw, 17vw, 22vw)',
@@ -231,11 +231,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           zIndex: -16,
           height: 'clamp(1px, 0.2vw, 3px)',
           background: isDarkRealm
-            ? 'linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.6) 20%, rgba(203, 213, 225, 0.8) 50%, rgba(148, 163, 184, 0.6) 80%, transparent 100%)'
+            ? 'linear-gradient(90deg, transparent 0%, rgba(100, 130, 160, 0.6) 20%, rgba(150, 180, 210, 0.8) 50%, rgba(100, 130, 160, 0.6) 80%, transparent 100%)' // Cooler, subtle horizon for night
             : 'linear-gradient(90deg, transparent 0%, rgba(255, 100, 0, 0.6) 20%, rgba(255, 140, 0, 0.8) 50%, rgba(255, 100, 0, 0.6) 80%, transparent 100%)',
           top: 'clamp(65%, 68%, 70%)',
           boxShadow: isDarkRealm
-            ? '0 0 clamp(8px, 2vw, 15px) rgba(148, 163, 184, 0.4)'
+            ? '0 0 clamp(8px, 2vw, 15px) rgba(100, 130, 160, 0.4)' // Cooler horizon glow
             : '0 0 clamp(10px, 2vw, 20px) rgba(255, 140, 0, 0.5)',
         }}
         animate={{
@@ -256,13 +256,13 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           background: isDarkRealm
             ? `
               linear-gradient(to top,
-                rgba(5, 15, 35, 0.98) 0%,
-                rgba(10, 25, 55, 0.9) 15%,
-                rgba(20, 40, 80, 0.8) 30%,
-                rgba(30, 60, 120, 0.7) 45%,
-                rgba(40, 80, 160, 0.6) 60%,
-                rgba(60, 100, 180, 0.5) 75%,
-                rgba(80, 120, 200, 0.3) 90%,
+                rgba(0, 5, 15, 0.98) 0%, // Very dark, deep ocean
+                rgba(3, 10, 25, 0.9) 15%,
+                rgba(8, 20, 45, 0.8) 30%,
+                rgba(15, 30, 60, 0.7) 45%,
+                rgba(25, 45, 80, 0.6) 60%,
+                rgba(40, 65, 100, 0.5) 75%,
+                rgba(60, 90, 130, 0.3) 90%, // Lighter, more transparent near horizon
                 transparent 100%
               )
             `
@@ -297,8 +297,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(90deg,
                 transparent,
                 transparent clamp(30px, 6vw, 80px),
-                rgba(40, 80, 160, 0.4) clamp(30px, 6vw, 80px),
-                rgba(40, 80, 160, 0.4) clamp(70px, 14vw, 160px),
+                rgba(20, 40, 70, 0.4) clamp(30px, 6vw, 80px), // Subtle dark blue waves
+                rgba(20, 40, 70, 0.4) clamp(70px, 14vw, 160px),
                 transparent clamp(70px, 14vw, 160px),
                 transparent clamp(110px, 22vw, 240px)
               )
@@ -333,8 +333,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(45deg,
                 transparent,
                 transparent clamp(15px, 3vw, 50px),
-                rgba(60, 100, 180, 0.3) clamp(15px, 3vw, 50px),
-                rgba(60, 100, 180, 0.3) clamp(35px, 7vw, 100px)
+                rgba(30, 50, 90, 0.3) clamp(15px, 3vw, 50px), // Deeper dark blue waves
+                rgba(30, 50, 90, 0.3) clamp(35px, 7vw, 100px)
               )
             `
             : `
@@ -367,10 +367,10 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             ? `
               linear-gradient(to bottom,
                 transparent 0%,
-                rgba(248, 250, 252, 0.6) 10%,
-                rgba(226, 232, 240, 0.8) 30%,
-                rgba(203, 213, 225, 0.7) 50%,
-                rgba(148, 163, 184, 0.6) 70%,
+                rgba(200, 220, 240, 0.7) 10%, // Brighter, cooler moon reflection
+                rgba(180, 200, 220, 0.8) 30%,
+                rgba(160, 180, 200, 0.7) 50%,
+                rgba(120, 140, 160, 0.6) 70%,
                 transparent 100%
               )
             `
@@ -407,11 +407,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           background: isDarkRealm
             ? `
               linear-gradient(to top,
-                rgba(50, 60, 70, 0.98) 0%,
-                rgba(70, 80, 90, 0.9) 20%,
-                rgba(100, 110, 120, 0.8) 40%,
-                rgba(130, 140, 150, 0.7) 60%,
-                rgba(160, 170, 180, 0.5) 80%,
+                rgba(30, 40, 50, 0.98) 0%, // Darker, desaturated sand for night
+                rgba(45, 55, 65, 0.9) 20%,
+                rgba(60, 70, 80, 0.8) 40%,
+                rgba(80, 90, 100, 0.7) 60%,
+                rgba(100, 110, 120, 0.5) 80%,
                 transparent 100%
               )
             `
@@ -436,11 +436,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(16vh, 22vh, 28vh)',
           background: isDarkRealm
             ? `
-              radial-gradient(circle at 25% 30%, rgba(130, 140, 150, 0.4) 1px, transparent 1px),
-              radial-gradient(circle at 75% 70%, rgba(100, 110, 120, 0.3) 1px, transparent 1px),
-              radial-gradient(circle at 50% 50%, rgba(160, 170, 180, 0.35) 1px, transparent 1px),
-              radial-gradient(circle at 30% 80%, rgba(110, 120, 130, 0.25) 1px, transparent 1px),
-              radial-gradient(circle at 80% 20%, rgba(140, 150, 160, 0.3) 1px, transparent 1px)
+              radial-gradient(circle at 25% 30%, rgba(80, 90, 100, 0.4) 1px, transparent 1px),
+              radial-gradient(circle at 75% 70%, rgba(60, 70, 80, 0.3) 1px, transparent 1px),
+              radial-gradient(circle at 50% 50%, rgba(100, 110, 120, 0.35) 1px, transparent 1px),
+              radial-gradient(circle at 30% 80%, rgba(70, 80, 90, 0.25) 1px, transparent 1px),
+              radial-gradient(circle at 80% 20%, rgba(90, 100, 110, 0.3) 1px, transparent 1px)
             `
             : `
               radial-gradient(circle at 25% 30%, rgba(100, 50, 10, 0.5) 1px, transparent 1px),
@@ -473,7 +473,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           zIndex: -7,
           height: 'clamp(2px, 0.5vw, 4px)',
           background: isDarkRealm
-            ? 'linear-gradient(90deg, transparent 0%, rgba(241, 245, 249, 0.9) 15%, rgba(248, 250, 252, 1) 35%, rgba(255, 255, 255, 0.95) 50%, rgba(248, 250, 252, 1) 65%, rgba(241, 245, 249, 0.9) 85%, transparent 100%)'
+            ? 'linear-gradient(90deg, transparent 0%, rgba(200, 220, 240, 0.9) 15%, rgba(220, 240, 255, 1) 35%, rgba(240, 250, 255, 0.95) 50%, rgba(220, 240, 255, 1) 65%, rgba(200, 220, 240, 0.9) 85%, transparent 100%)' // Subtle cool white for night wet sand
             : 'linear-gradient(90deg, transparent 0%, rgba(255, 180, 0, 0.7) 15%, rgba(255, 200, 50, 0.8) 35%, rgba(255, 220, 100, 0.9) 50%, rgba(255, 200, 50, 0.8) 65%, rgba(255, 180, 0, 0.7) 85%, transparent 100%)',
           top: `calc(100% - clamp(18vh, 25vh, 30vh))`,
           filter: 'blur(clamp(0.5px, 0.2vw, 2px))',
@@ -498,7 +498,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(6px, 1.2vw, 18px)`,
               height: `clamp(3px, 0.6vw, 10px)`,
               background: isDarkRealm
-                ? 'rgba(60, 70, 80, 0.6)'
+                ? 'rgba(40, 50, 60, 0.7)' // Darker, more distinct footprints for night
                 : 'rgba(80, 50, 20, 0.6)',
               left: Math.random() * 85 + 5 + '%',
               top: Math.random() * 70 + 15 + '%',
@@ -525,7 +525,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(3px, 0.8vw, 12px)`,
               height: `clamp(2px, 0.6vw, 8px)`,
               background: isDarkRealm
-                ? `hsl(${210 + Math.random() * 30}, 10%, ${60 + Math.random() * 20}%)`
+                ? `hsl(${210 + Math.random() * 30}, 15%, ${50 + Math.random() * 20}%)` // Muted, slightly darker cool colors for night shells
                 : `hsl(${30 + Math.random() * 20}, ${30 + Math.random() * 30}%, ${50 + Math.random() * 25}%)`,
               left: Math.random() * 90 + 5 + '%',
               top: Math.random() * 60 + 20 + '%',
@@ -555,7 +555,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             height: `clamp(20px, ${4 + Math.random() * 3}vh, 50px)`,
             borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
             background: isDarkRealm
-              ? `linear-gradient(to top, rgba(40, 50, 60, 0.9) 0%, rgba(60, 70, 80, 0.8) 50%, transparent 100%)`
+              ? `linear-gradient(to top, rgba(20, 30, 40, 0.9) 0%, rgba(30, 45, 55, 0.8) 50%, transparent 100%)` // Darker, more defined dunes for night
               : `linear-gradient(to top, #45250a 0%, #6a3a15 50%, transparent 100%)`,
             left: `${i * 25 + (Math.random() * 10 - 5)}vw`,
             transform: `translateX(-50%)`,
@@ -584,12 +584,12 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 5px)`,
               height: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 5px)`,
               background: isDarkRealm
-                ? `hsl(${200 + Math.random() * 40}, ${30 + Math.random() * 40}%, ${80 + Math.random() * 15}%)`
+                ? `hsl(${200 + Math.random() * 40}, ${40 + Math.random() * 30}%, ${85 + Math.random() * 10}%)` // Brighter, cooler white sparkles for night beach
                 : `hsl(${40 + Math.random() * 20}, ${70 + Math.random() * 20}%, ${90 + Math.random() * 5}%)`,
               left: Math.random() * 100 + '%',
               top: Math.random() * 85 + 5 + '%',
               boxShadow: isDarkRealm
-                ? `0 0 clamp(4px, 1vw, 10px) rgba(226, 232, 240, 0.8)`
+                ? `0 0 clamp(4px, 1vw, 10px) rgba(220, 240, 255, 0.9)` // Stronger cool glow
                 : `0 0 clamp(6px, 1.2vw, 12px) rgba(255, 190, 0, 0.9)`,
             }}
             animate={{
