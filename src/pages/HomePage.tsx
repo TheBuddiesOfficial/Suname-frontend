@@ -34,7 +34,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
-    y.set(event.clientY - rect.top - rect.height / 2);
+    y.set(event.top - rect.top - rect.height / 2); // Corrected to use event.top for Y
   }
 
   function handleMouseLeave() {
@@ -86,19 +86,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  const sunameCharReveal = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.2, 0.8, 0.2, 1],
-      },
-    },
-  };
-
+  // "SUNAME" Active Text Animation - Persistent Glow
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
       ? {
@@ -129,6 +117,20 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             repeatType: "mirror"
           }
         }
+  };
+
+  // SUNAME character reveal (re-added as sunameCharReveal was missing its variants)
+  const sunameCharReveal = {
+    hidden: { opacity: 0, y: 20, scale: 0.9 }, // Softer initial state for individual characters
+    visible: {
+      opacity: 1, // Visible state
+      y: 0, // Reset Y position
+      scale: 1, // Reset scale
+      transition: {
+        duration: 0.8, // Animation duration
+        ease: [0.2, 0.8, 0.2, 1], // Custom easing curve
+      },
+    },
   };
 
   const taglineActiveTextAnimation = {
@@ -165,11 +167,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
+  // QUOTE - Ethereal Fade & Color Breath (NO TRANSPARENCY)
   const quoteActiveTextAnimation = {
     animate: isDarkRealm
       ? {
-          color: ['#FFFFFF', 'rgba(179,157,219,0.9)', '#FFFFFF'],
-          textShadow: ['0 0 5px rgba(139,92,246,0.3)', '0 0 10px rgba(139,92,246,0.6)', '0 0 5px rgba(139,92,246,0.3)'],
+          color: ['#FFFFFF', 'rgba(179,157,219,0.9)', '#FFFFFF'], // White to light purple color animation
+          textShadow: ['0 0 5px rgba(139,92,246,0.3)', '0 0 10px rgba(139,92,246,0.6)', '0 0 5px rgba(139,92,246,0.3)'], // Subtle glow effect
           transition: {
             repeat: Infinity,
             duration: 6,
@@ -178,9 +181,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           }
         }
       : {
-          color: ['#3A404F', '#2A2E3D', '#3A404F'],
+          color: ['#3A404F', '#2A2E3D', '#3A404F'], // Darker tones for contrast, but with movement
           textShadow: [
-            '0 0 2px rgba(0,0,0,0.1)', '0 0 4px rgba(0,0,0,0.2)', '0 0 2px rgba(0,0,0,0.1)'
+            '0 0 2px rgba(0,0,0,0.1)', '0 0 4px rgba(0,0,0,0.2)', '0 0 2px rgba(0,0,0,0.1)' // Very subtle dark shadow
           ],
           transition: {
             repeat: Infinity,
@@ -239,6 +242,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const splitTagline = biography.tagline.split(" ");
   const quoteTagline = "WITHIN EVERY DARK REALM, THERE IS LIGHT – SUNAME";
 
+
   return (
     <div className="min-h-screen overflow-hidden relative">
       <ParticleSystem
@@ -275,6 +279,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           }}
         />
       </motion.svg>
+
 
       <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10 overflow-hidden perspective-1000">
         <motion.div
@@ -321,6 +326,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300 ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
+          {/* SUNAME Heading - Character Ripple Reveal with Persistent Neon Glow */}
           <motion.h1
             className={`text-7xl md:text-8xl font-extrabold mb-4 relative leading-none text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
@@ -340,8 +346,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 <motion.span
                   key={index}
                   className="inline-block"
+                  // Apply sunameCharReveal for initial entrance
                   variants={sunameCharReveal}
-                  animate={isMounted ? sunameActiveTextAnimation.animate : undefined}
+                  // Apply persistent glow animation
+                  animate={sunameActiveTextAnimation.animate}
                 >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
@@ -373,6 +381,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
+          {/* Social Icons - Transition like SUNAME on hover */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -408,26 +417,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               >
                 <motion.span
                   className="inline-block"
-                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set initial color without glow
-                  whileHover={{
-                    scale: 1.2,
-                    color: isDarkRealm ? '#8B5CF6' : '#FF7043',
-                    filter: isDarkRealm
-                      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
-                      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
-                  }}
-                  onHoverEnd={() => {
-                    return {
-                      scale: 1,
-                      color: isDarkRealm ? '#FFFFFF' : '#1A202C',
-                      filter: 'none'
-                    };
-                  }}
-                  transition={{
-                    filter: { duration: 0.001, ease: "easeOut" },
-                    color: { duration: 0.001, ease: "easeOut" },
-                    scale: { type: "spring", stiffness: 400, damping: 30, duration: 0.15 }
-                  }}
+                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
+                  whileHover={isDarkRealm ? sunameActiveTextAnimation.animate : sunameActiveTextAnimation.animate}
+                  // Note: Removed onHoverEnd to maintain the SUNAME-like transition on hover
+                  // This means the glow will persist for the duration of the 'animate' transition on hover
                 >
                   <Icon />
                 </motion.span>
@@ -527,6 +520,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
+      {/* Quote Section - Ethereal Fade & Color Breath (NO TRANSPARENCY) */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
@@ -543,10 +537,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.6 }}
           >
+            {/* Animated opening quote mark - removed opacity transition to make it always visible */}
             <motion.span
               className={`absolute -top-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.2 }}
+              initial={{ scale: 0 }} // Only scale animation on initial
+              animate={{ scale: 1 }} // Only scale animation on animate
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
             >
               &ldquo;
@@ -562,10 +557,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   {word}
                 </motion.span>
             ))}
+            {/* Animated closing quote mark - removed opacity transition to make it always visible */}
             <motion.span
               className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.2 }}
+              initial={{ scale: 0 }} // Only scale animation on initial
+              animate={{ scale: 1 }} // Only scale animation on animate
               transition={{ duration: 0.8, ease: "easeOut", delay: quoteTagline.split(" ").length * 0.05 + 0.3 }}
             >
               &rdquo;
