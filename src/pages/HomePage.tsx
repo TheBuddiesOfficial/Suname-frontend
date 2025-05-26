@@ -245,7 +245,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
-  // **FIX: Defined splitTagline here at the top with other variable declarations**
+  // Defined tagline here at the top
   const splitTagline = biography.tagline.split(" ");
   // The new tagline text for the quote section
   const quoteTagline = "WITHIN EVERY DARK REALM, THERE IS LIGHT – SUNAME";
@@ -393,7 +393,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
-          {/* Social Icons - Hover Effect (FIXED) */}
+          {/* Social Icons - Hover Effect (Refined for crisp off-glow) */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -429,15 +429,17 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               >
                 <motion.span
                   className="inline-block" // Ensure it's inline-block to apply transform correctly
-                  style={{ color: 'white' }} // Explicitly set initial color to white
+                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Explicitly set initial color based on theme
                   whileHover={{ // Define hover effects directly here for dynamic `isDarkRealm` access
                     scale: 1.2,
                     color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Dynamic color change
                     filter: isDarkRealm
                       ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
                       : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
-                    transition: { type: "spring", stiffness: 400, damping: 25 }
+                    transition: { type: "spring", stiffness: 400, damping: 25, duration: 0.1 } // Very fast transition on hover
                   }}
+                  // Add explicit transition to return to default state smoothly
+                  transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.15 }} // Slightly longer return transition for smoothness
                 >
                   <Icon />
                 </motion.span>
