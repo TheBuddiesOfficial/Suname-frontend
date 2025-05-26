@@ -93,7 +93,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect - Subtle Scale & Glow
+  // Social Icon Hover Effect (kept for consistency in other contexts, though not used for the pulse here)
   const iconHover = {
     scale: 1.15,
     textShadow: isDarkRealm
@@ -294,14 +294,19 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           animate={isMounted ? "visible" : "hidden"}
           variants={heroReveal}
         >
-          {/* Artist Photo with Border Animation & Subtle 3D Tilt */}
+          {/* Artist Photo with Border Animation & Subtle 3D Tilt (No Hover) */}
           <motion.div
-            className="relative w-80 h-80 mx-auto mb-10 cursor-grab active:cursor-grabbing group rounded-full overflow-hidden"
+            className="relative w-80 h-80 mx-auto mb-10 cursor-grab active:cursor-grabbing rounded-full overflow-hidden"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ rotateX, rotateY, y: heroImageY, scale: 1 }}
-            whileHover={{ scale: 1.05, boxShadow: isDarkRealm ? '0px 0px 25px rgba(139,92,246,0.6)' : '0px 0px 25px rgba(255,165,0,0.7)' }}
-            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            // Removed whileHover from here
+            animate={{ rotate: [0, 10, -10, 5, -5, 0] }} // Subtle continuous rotation
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear",
+            }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -326,7 +331,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
               }}
             />
-            <div className={`absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300
+            {/* Kept this div for consistency, but its 'group-hover' class won't do anything without group-hover on parent */}
+            <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300
                              ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
@@ -387,7 +393,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
-          {/* Social Icons */}
+          {/* Social Icons - Pulsing Animation */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -420,17 +426,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 style={{
                   textShadow: !isDarkRealm ? '0 0 10px rgba(0,0,0,0.6)' : 'none'
                 }}
-                whileHover={iconHover}
-                // Enhanced initial state for icons
-                initial={{ opacity: 0, y: 50, scale: 0.8, rotate: -15 }}
-                // Animate to visible, normal scale, no rotation
-                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-                transition={{ // Adjust transition for slightly bouncy entry
-                  duration: 0.8,
-                  delay: index * 0.08,
-                  type: "spring", // Use spring for a subtle bounce
-                  stiffness: 150,
-                  damping: 10
+                // Removed whileHover
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: [1, 1.1, 1] }} // Gentle pulse
+                transition={{
+                  delay: 1.5 + index * 0.1, // Staggered entry
+                  duration: 2, // Duration of one pulse cycle
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
               >
                 <Icon />
@@ -615,8 +618,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400 font-semibold"
-            whileHover={{ scale: 1.05, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(0,0,0,0.5)' }}
-            transition={{ duration: 0.2 }}
+            // Slightly smoother hover for the designer link
+            whileHover={{ scale: 1.03, textShadow: isDarkRealm ? '0px 0px 5px rgba(139, 92, 246, 0.5)' : '0px 0px 5px rgba(0,0,0,0.5)' }}
+            transition={{ duration: 0.15 }}
           >
             JimmyDesigns
           </motion.a>
