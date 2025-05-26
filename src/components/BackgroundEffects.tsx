@@ -8,7 +8,8 @@ interface BackgroundEffectsProps {
 const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) => {
   const [showLightning, setShowLightning] = useState(false);
   const [prevMode, setPrevMode] = useState(isDarkRealm);
-  const [showBirds, setShowBirds] = useState(false); // New state for bird visibility
+  const [showBirds, setShowBirds] = useState(false); // State for bird visibility
+  const [modeTransitioning, setModeTransitioning] = useState(false); // State to manage transition delay
 
   // Memoize static styles and configurations that don't depend on state or props
   const backgroundGradients = useMemo(
@@ -228,25 +229,31 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       const timer = setTimeout(() => {
         setShowLightning(false);
       }, 1200);
-      setPrevMode(isDarkRealm);
       return () => clearTimeout(timer);
     }
   }, [isDarkRealm, prevMode]);
 
   useEffect(() => {
     // Bird appearance logic
-    if (!isDarkRealm && prevMode === true) { // Switched from dark to light
-      setShowBirds(true);
+    if (prevMode !== isDarkRealm) {
+      setModeTransitioning(true); // Start of transition
+      setShowBirds(false); // Hide birds immediately on mode change
+
       const timer = setTimeout(() => {
-        setShowBirds(false); // Hide after a delay to allow for reappearance
-      }, 100); // Short delay
-    } else if (isDarkRealm && prevMode === false) { // Switched from light to dark
-        setShowBirds(false); // Hide immediately if switching to dark
-    } else if (!isDarkRealm && !showBirds) { // Ensure birds are visible in light mode if not already
-        setShowBirds(true);
+        setModeTransitioning(false); // End of transition delay
+        // Show birds if transitioning to light mode
+        if (!isDarkRealm) {
+          setShowBirds(true);
+        }
+      }, 200); // Adjust this delay as needed for the visual effect
+
+      setPrevMode(isDarkRealm);
+      return () => clearTimeout(timer);
+    } else if (!isDarkRealm && !modeTransitioning && !showBirds) {
+      // Ensure birds are visible in light mode if not transitioning and not already shown
+      setShowBirds(true);
     }
-    setPrevMode(isDarkRealm);
-  }, [isDarkRealm, prevMode, showBirds]);
+  }, [isDarkRealm, prevMode, modeTransitioning]);
 
 
   return (
