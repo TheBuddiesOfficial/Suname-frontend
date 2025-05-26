@@ -93,15 +93,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (CRITICAL FIX: Using filter: drop-shadow for SVG icons)
-  const socialIconHover = {
-    scale: 1.2, // Slightly larger scale on hover
-    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Change icon color to glow color on hover
-    filter: isDarkRealm
-      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))' // Dark purple glow
-      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))', // Orange glow
-    transition: { type: "spring", stiffness: 400, damping: 25 } // Fast spring transition
-  };
+  // Social Icon Hover Effect (CRITICAL FIX: Inline whileHover for dynamic glow)
+  // This variant is now defined inline within the map to ensure `isDarkRealm` is always fresh.
+  // We'll remove the `socialIconHover` constant from here as it's no longer needed globally.
 
 
   // --- MAIN HEADING "SUNAME" - Gentle Ripple Glow (FIXED NEON) ---
@@ -118,6 +112,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
+  // NEW: "SUNAME" Active Text Animation - Enhanced with dynamic neon and pulse
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
       ? { // Dark Realm: Vibrant Purple Neon Pulse
@@ -134,16 +129,16 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             repeatType: "mirror"
           }
         }
-      : { // Light Realm: Vibrant Orange Neon Pulse
+      : { // Light Realm: Vibrant Orange Neon Pulse (Enhanced)
           color: ['#FFDDC1', '#FFFFFF', '#FFDDC1'], // Light orange to white pulse
           textShadow: [
-            '0 0 10px rgba(255,165,0,0.8), 0 0 20px rgba(255,127,80,0.6), 0 0 30px rgba(255,127,80,0.4)',
-            '0 0 15px rgba(255,165,0,1), 0 0 25px rgba(255,127,80,0.8), 0 0 35px rgba(255,127,80,0.6)',
-            '0 0 10px rgba(255,165,0,0.8), 0 0 20px rgba(255,127,80,0.6), 0 0 30px rgba(255,127,80,0.4)'
+            '0 0 12px rgba(255,165,0,0.9), 0 0 22px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.5)', // Stronger, clearer glow
+            '0 0 18px rgba(255,165,0,1), 0 0 28px rgba(255,165,0,0.8), 0 0 38px rgba(255,165,0,0.6)',
+            '0 0 12px rgba(255,165,0,0.9), 0 0 22px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.5)'
           ],
           transition: {
             repeat: Infinity,
-            duration: 4.5,
+            duration: 4, // Slightly faster pulse
             ease: "easeInOut",
             repeatType: "mirror"
           }
@@ -163,14 +158,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           ],
           transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Staggered start
         }
-      : { // Light Realm: Gentle Light Color Shift (Off-white to light gray) + subtle glow
-          color: ['#F8F8F8', '#E0E0E0', '#F8F8F8'],
+      : { // Light Realm: ENHANCED: Gentle Light Color Shift (Orange-tinted light to light gray) + subtle glow
+          color: ['#FFC074', '#FFAA66', '#FFC074'], // More vibrant light orange colors
           textShadow: [
-            '0 0 4px rgba(255,165,0,0.3)',
-            '0 0 8px rgba(255,165,0,0.5)',
-            '0 0 4px rgba(255,165,0,0.3)'
+            '0 0 5px rgba(255,165,0,0.4)', // Slightly stronger glow for readability
+            '0 0 10px rgba(255,165,0,0.6)',
+            '0 0 5px rgba(255,165,0,0.4)'
           ],
-          transition: { repeat: Infinity, duration: 5, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Slower, softer shift
+          transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 } // Slightly faster and more noticeable
         }
   };
 
@@ -200,14 +195,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             repeatType: "mirror"
           }
         }
-      : { // Light Realm: Dark breath with subtle glow (ensuring contrast)
-          color: ['#1A202C', '#4A5568', '#1A202C'], // Darker colors for quote text
+      : { // Light Realm: ENHANCED: Dynamic color shift with a subtle shadow for depth
+          color: ['#3A404F', '#2A2E3D', '#3A404F'], // Darker tones for contrast, but with movement
           textShadow: [
-            '0 0 3px rgba(0,0,0,0.2)', '0 0 5px rgba(0,0,0,0.4)', '0 0 3px rgba(0,0,0,0.2)' // Subtle dark shadow
+            '0 0 2px rgba(0,0,0,0.1)', '0 0 4px rgba(0,0,0,0.2)', '0 0 2px rgba(0,0,0,0.1)' // Very subtle dark shadow
           ],
           transition: {
             repeat: Infinity,
-            duration: 7, // Very gentle and long breath
+            duration: 6, // Maintain a gentle breath
             ease: "easeInOut",
             repeatType: "mirror"
           }
@@ -233,7 +228,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       // Adjusted text shadow for light mode for better visibility
       textShadow: isDark
         ? '0 0 8px rgba(255,255,255,0.1), 0 0 10px rgba(139,92,246,0.1)'
-        : '0 0 5px rgba(0,0,0,0.4), 0 0 8px rgba(0,0,0,0.2)'
+        : '0 0 5px rgba(255,165,0,0.4), 0 0 8px rgba(255,165,0,0.2)' // Added subtle orange glow for light mode
     };
   };
 
@@ -255,8 +250,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
-  const splitTagline = biography.tagline.split(" ");
-  const splitQuote = "WE ARE NOT RAVERS, WE ARE WAVERS. WE FLOOD CITIES THEN BRING PURE SUNLIGHT - SUNAME".split(". ");
+  // The new tagline text for the quote section
+  const quoteTagline = "WITHIN EVERY DARK REALM, THERE IS LIGHT – SUNAME";
+  const splitQuote = quoteTagline.split(". "); // Keeping splitQuote for the previous quote, adjust if this is replacing it.
+                                            // If the user meant this to replace the *main* tagline, we'll adjust that.
 
 
   return (
@@ -438,7 +435,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 <motion.span
                   className="inline-block" // Ensure it's inline-block to apply transform correctly
                   style={{ color: 'white' }} // Explicitly set initial color to white
-                  whileHover={socialIconHover} // Apply hover effects here
+                  whileHover={{ // Define hover effects directly here for dynamic `isDarkRealm` access
+                    scale: 1.2,
+                    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Dynamic color change
+                    filter: isDarkRealm
+                      ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
+                      : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
+                    transition: { type: "spring", stiffness: 400, damping: 25 }
+                  }}
                 >
                   <Icon />
                 </motion.span>
@@ -566,16 +570,16 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             >
                 &ldquo;
             </motion.span>
-            {splitQuote.map((line, index) => (
+            {/* Use the new quoteTagline for this section */}
+            {quoteTagline.split(" ").map((word, index) => (
                 <motion.span
                   key={index}
-                  className="block mb-2"
-                  variants={quoteLineReveal}
+                  className="inline-block mx-0.5" // Adjust spacing as needed
+                  variants={quoteLineReveal} // Can reuse this, or create a new word-by-word reveal
                   animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
                   style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
                 >
-                    {line}
-                    {index < splitQuote.length - 1 && "."}
+                    {word}
                 </motion.span>
             ))}
             {/* Animated closing quote mark */}
@@ -583,7 +587,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 0.2 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: splitQuote.length * 0.1 + 0.3 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: quoteTagline.split(" ").length * 0.05 + 0.3 }} // Adjust delay based on word count
             >
                 &rdquo;
             </motion.span>
