@@ -93,14 +93,13 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (FIXED)
+  // Social Icon Hover Effect (REFINED for Glow)
   const socialIconHover = {
     scale: 1.2, // Slightly larger scale on hover
-    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Direct color change on hover
     textShadow: isDarkRealm
-      ? '0px 0px 20px rgba(139,92,246,0.8)' // Stronger purple glow for dark realm
-      : '0px 0px 20px rgba(255,165,0,0.8)', // Stronger orange glow for light realm
-    transition: { type: "spring", stiffness: 300, damping: 20 } // Smooth spring transition
+      ? '0px 0px 15px rgba(139,92,246,0.9), 0px 0px 25px rgba(139,92,246,0.7), 0px 0px 35px rgba(139,92,246,0.5)' // Dark purple glow
+      : '0px 0px 15px rgba(255,165,0,0.9), 0px 0px 25px rgba(255,165,0,0.7), 0px 0px 35px rgba(255,165,0,0.5)', // Orange glow
+    transition: { type: "spring", stiffness: 400, damping: 25 } // Faster spring transition
   };
 
 
@@ -401,7 +400,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
-          {/* Social Icons - Hover Effect (FIXED - Hover & Glow ONLY) */}
+          {/* Social Icons - Hover Effect (REFINED - Glow ONLY) */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -430,7 +429,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl text-white`} // Added text-white here
+                className={`text-4xl md:text-5xl text-white`} // Ensures icons are initially white
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
