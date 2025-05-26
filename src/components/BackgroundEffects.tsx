@@ -11,51 +11,51 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
   const [showBirds, setShowBirds] = useState(false);
   const [modeTransitioning, setModeTransitioning] = useState(false);
 
-  // Much darker, more realistic gradients
+  // Professional, realistic gradients
   const backgroundGradients = useMemo(
     () => ({
-      dark: 'linear-gradient(180deg, #000510 0%, #001122 15%, #001a33 25%, #002244 35%, #003366 45%, #002244 60%, #001122 80%, #000510 100%)',
-      light: 'linear-gradient(180deg, #ff8c00 0%, #ff6f00 25%, #ff4f00 50%, #ff2a00 75%, #ff0000 100%)',
+      dark: 'linear-gradient(180deg, #000000 0%, #0a0a0f 10%, #0f0f1a 20%, #141428 30%, #1a1a35 40%, #202040 50%, #1a1a35 60%, #141428 70%, #0f0f1a 80%, #0a0a0f 90%, #000000 100%)',
+      light: 'linear-gradient(180deg, #87ceeb 0%, #b4d4f1 20%, #e6f3ff 40%, #fff8dc 60%, #ffe4b5 80%, #ffd700 100%)',
     }),
     []
   );
 
   const atmosphericHazeGradients = useMemo(
     () => ({
-      dark: 'radial-gradient(ellipse at center top, rgba(30, 50, 80, 0.4), rgba(20, 40, 70, 0.3), rgba(10, 20, 40, 0.2), transparent 85%)',
-      light: 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.4), rgba(255, 140, 0, 0.3), transparent 85%)',
+      dark: 'radial-gradient(ellipse at center top, rgba(15, 25, 40, 0.6), rgba(10, 20, 35, 0.4), rgba(5, 15, 30, 0.2), transparent 70%)',
+      light: 'radial-gradient(ellipse at center top, rgba(255, 255, 255, 0.4), rgba(255, 248, 220, 0.3), transparent 70%)',
     }),
     []
   );
 
   const sunMoonGradients = useMemo(
     () => ({
-      dark: 'radial-gradient(circle at 30% 30%, #c0d0e0 5%, #a0b5d0 25%, #8090b0 50%, #607090 75%, #405070 100%)',
-      light: 'radial-gradient(circle at 35% 35%, #fffbe6 0%, #fff0b3 20%, #ffd700 60%, #ffa500 100%)',
+      dark: 'radial-gradient(circle at 35% 35%, #d6e5f5 0%, #b8d0e8 30%, #9abbd8 60%, #7ca6c8 80%, #5e91b8 100%)',
+      light: 'radial-gradient(circle at 35% 35%, #fffef7 0%, #fff9e6 20%, #ffeb3b 50%, #ffc107 80%, #ff9800 100%)',
     }),
     []
   );
 
   const sunMoonShadows = useMemo(
     () => ({
-      dark: '0 0 clamp(20px, 4vw, 40px) rgba(160, 180, 200, 0.3), inset -5px -5px 12px rgba(100, 120, 150, 0.4)',
-      light: '0 0 clamp(70px, 14vw, 180px) rgba(255, 215, 0, 0.9), 0 0 clamp(120px, 20vw, 300px) rgba(255, 165, 0, 0.6), inset -5px -5px 12px rgba(255, 165, 0, 0.4)',
+      dark: '0 0 20px rgba(214, 229, 245, 0.3), inset -3px -3px 8px rgba(158, 187, 216, 0.2)',
+      light: '0 0 60px rgba(255, 235, 59, 0.8), 0 0 120px rgba(255, 193, 7, 0.5)',
     }),
     []
   );
 
   const sunMoonHaloGradients = useMemo(
     () => ({
-      dark: 'radial-gradient(circle, transparent 45%, rgba(120, 140, 170, 0.08) 55%, transparent 85%)',
-      light: 'radial-gradient(circle, transparent 30%, rgba(255, 140, 0, 0.35) 45%, rgba(255, 165, 0, 0.25) 70%, transparent 90%)',
+      dark: 'radial-gradient(circle, transparent 50%, rgba(100, 120, 150, 0.08) 60%, transparent 90%)',
+      light: 'radial-gradient(circle, transparent 35%, rgba(255, 235, 59, 0.3) 50%, rgba(255, 193, 7, 0.2) 75%, transparent 95%)',
     }),
     []
   );
 
   const horizonLineGradients = useMemo(
     () => ({
-      dark: 'linear-gradient(90deg, transparent 0%, rgba(80, 100, 120, 0.6) 20%, rgba(100, 120, 140, 0.8) 50%, rgba(80, 100, 120, 0.6) 80%, transparent 100%)',
-      light: 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 245, 0.95) 20%, rgba(255, 240, 220, 1) 50%, rgba(255, 250, 245, 0.95) 80%, transparent 100%)',
+      dark: 'linear-gradient(90deg, transparent 0%, rgba(40, 60, 80, 0.8) 20%, rgba(60, 80, 100, 1) 50%, rgba(40, 60, 80, 0.8) 80%, transparent 100%)',
+      light: 'linear-gradient(90deg, transparent 0%, rgba(255, 248, 220, 0.9) 20%, rgba(255, 235, 205, 1) 50%, rgba(255, 248, 220, 0.9) 80%, transparent 100%)',
     }),
     []
   );
@@ -64,24 +64,24 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
     () => ({
       dark: `
         linear-gradient(to top,
-          rgba(5, 15, 25, 0.98) 0%,
-          rgba(10, 25, 40, 0.95) 15%,
-          rgba(15, 35, 55, 0.9) 30%,
-          rgba(20, 45, 70, 0.85) 45%,
-          rgba(25, 55, 85, 0.8) 60%,
-          rgba(30, 65, 100, 0.7) 75%,
-          rgba(40, 80, 120, 0.5) 90%,
-          transparent 100%
+          #000508 0%,
+          #0a1520 15%,
+          #142435 30%,
+          #1e3348 45%,
+          #28425c 60%,
+          #325170 75%,
+          #3c6084 90%,
+          rgba(60, 96, 132, 0.8) 100%
         )
       `,
       light: `
         linear-gradient(to top,
-          rgba(200, 70, 10, 0.9) 0%,
-          rgba(220, 100, 20, 0.8) 25%,
-          rgba(240, 140, 50, 0.7) 50%,
-          rgba(255, 180, 80, 0.6) 75%,
-          rgba(255, 220, 110, 0.4) 90%,
-          transparent 100%
+          #006994 0%,
+          #1e88e5 25%,
+          #42a5f5 50%,
+          #64b5f6 75%,
+          #90caf9 90%,
+          rgba(144, 202, 249, 0.8) 100%
         )
       `,
     }),
@@ -93,19 +93,19 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       dark: `
         repeating-linear-gradient(90deg,
           transparent,
-          transparent clamp(40px, 8vw, 100px),
-          rgba(25, 45, 70, 0.6) clamp(40px, 8vw, 100px),
-          rgba(25, 45, 70, 0.6) clamp(80px, 16vw, 200px),
-          transparent clamp(80px, 16vw, 200px),
-          transparent clamp(120px, 24vw, 300px)
+          transparent 60px,
+          rgba(40, 60, 85, 0.4) 60px,
+          rgba(40, 60, 85, 0.4) 120px,
+          transparent 120px,
+          transparent 180px
         )
       `,
       light: `
         repeating-linear-gradient(90deg,
           transparent,
-          transparent clamp(40px, 8vw, 100px),
-          rgba(255, 100, 30, 0.35) clamp(40px, 8vw, 100px),
-          rgba(255, 100, 30, 0.35) clamp(80px, 16vw, 200px)
+          transparent 60px,
+          rgba(255, 255, 255, 0.3) 60px,
+          rgba(255, 255, 255, 0.3) 120px
         )
       `,
     }),
@@ -117,17 +117,17 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       dark: `
         repeating-linear-gradient(45deg,
           transparent,
-          transparent clamp(20px, 4vw, 60px),
-          rgba(35, 60, 90, 0.4) clamp(20px, 4vw, 60px),
-          rgba(35, 60, 90, 0.4) clamp(45px, 9vw, 120px)
+          transparent 40px,
+          rgba(50, 75, 100, 0.3) 40px,
+          rgba(50, 75, 100, 0.3) 80px
         )
       `,
       light: `
         repeating-linear-gradient(45deg,
           transparent,
-          transparent clamp(20px, 4vw, 60px),
-          rgba(255, 150, 60, 0.3) clamp(20px, 4vw, 60px),
-          rgba(255, 150, 60, 0.3) clamp(40px, 8vw, 120px)
+          transparent 40px,
+          rgba(255, 255, 255, 0.25) 40px,
+          rgba(255, 255, 255, 0.25) 80px
         )
       `,
     }),
@@ -139,19 +139,19 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       dark: `
         linear-gradient(to bottom,
           transparent 0%,
-          rgba(120, 140, 170, 0.3) 15%,
-          rgba(100, 120, 150, 0.4) 35%,
-          rgba(80, 100, 130, 0.35) 55%,
-          rgba(60, 80, 110, 0.3) 75%,
+          rgba(60, 80, 110, 0.2) 20%,
+          rgba(80, 100, 130, 0.3) 40%,
+          rgba(100, 120, 150, 0.25) 60%,
+          rgba(80, 100, 130, 0.2) 80%,
           transparent 100%
         )
       `,
       light: `
         linear-gradient(to bottom,
           transparent 0%,
-          rgba(255, 150, 60, 0.65) 20%,
-          rgba(255, 170, 80, 0.55) 50%,
-          rgba(255, 200, 100, 0.45) 80%,
+          rgba(255, 248, 220, 0.4) 25%,
+          rgba(255, 235, 205, 0.5) 50%,
+          rgba(255, 193, 7, 0.3) 75%,
           transparent 100%
         )
       `,
@@ -163,23 +163,22 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
     () => ({
       dark: `
         linear-gradient(to top,
-          rgba(20, 25, 35, 0.98) 0%,
-          rgba(30, 40, 50, 0.95) 20%,
-          rgba(45, 55, 70, 0.9) 40%,
-          rgba(60, 70, 85, 0.8) 60%,
-          rgba(80, 90, 105, 0.65) 80%,
-          transparent 100%
+          #0f1419 0%,
+          #1a252e 20%,
+          #253542 40%,
+          #304556 60%,
+          #3b556a 80%,
+          rgba(59, 85, 106, 0.8) 100%
         )
       `,
       light: `
         linear-gradient(to top,
-          rgba(160, 80, 0, 1) 0%,
-          rgba(190, 110, 30, 0.92) 15%,
-          rgba(220, 140, 70, 0.84) 30%,
-          rgba(250, 170, 100, 0.72) 50%,
-          rgba(255, 200, 140, 0.6) 70%,
-          rgba(255, 230, 190, 0.45) 85%,
-          transparent 100%
+          #8d6e63 0%,
+          #a1887f 20%,
+          #bcaaa4 40%,
+          #d7ccc8 60%,
+          #efebe9 80%,
+          rgba(239, 235, 233, 0.8) 100%
         )
       `,
     }),
@@ -189,18 +188,14 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
   const sandTextureGradients = useMemo(
     () => ({
       dark: `
-        radial-gradient(circle at 25% 30%, rgba(80, 90, 105, 0.3) 1px, transparent 1px),
-        radial-gradient(circle at 75% 70%, rgba(60, 70, 85, 0.25) 1px, transparent 1px),
-        radial-gradient(circle at 50% 50%, rgba(70, 80, 95, 0.28) 1px, transparent 1px),
-        radial-gradient(circle at 30% 80%, rgba(65, 75, 90, 0.22) 1px, transparent 1px),
-        radial-gradient(circle at 80% 20%, rgba(75, 85, 100, 0.26) 1px, transparent 1px)
+        radial-gradient(circle at 25% 30%, rgba(60, 80, 100, 0.2) 1px, transparent 1px),
+        radial-gradient(circle at 75% 70%, rgba(50, 70, 90, 0.15) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(55, 75, 95, 0.18) 1px, transparent 1px)
       `,
       light: `
-        radial-gradient(circle at 25% 30%, rgba(220, 140, 70, 0.6) 1.2px, transparent 1.2px),
-        radial-gradient(circle at 75% 70%, rgba(250, 170, 100, 0.5) 1.2px, transparent 1.2px),
-        radial-gradient(circle at 50% 50%, rgba(255, 200, 140, 0.55) 1.2px, transparent 1.2px),
-        radial-gradient(circle at 30% 80%, rgba(255, 210, 160, 0.5) 1.2px, transparent 1.2px),
-        radial-gradient(circle at 80% 20%, rgba(255, 230, 190, 0.45) 1.2px, transparent 1.2px)
+        radial-gradient(circle at 25% 30%, rgba(139, 110, 99, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 75% 70%, rgba(161, 136, 127, 0.25) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(188, 170, 164, 0.2) 1px, transparent 1px)
       `,
     }),
     []
@@ -208,28 +203,28 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
 
   const wetSandEdgeGradients = useMemo(
     () => ({
-      dark: 'linear-gradient(90deg, transparent 0%, rgba(100, 120, 140, 0.7) 15%, rgba(120, 140, 160, 0.85) 35%, rgba(140, 160, 180, 0.9) 50%, rgba(120, 140, 160, 0.85) 65%, rgba(100, 120, 140, 0.7) 85%, transparent 100%)',
-      light: 'linear-gradient(90deg, transparent 0%, rgba(255, 250, 240, 0.98) 15%, rgba(255, 235, 200, 0.95) 35%, rgba(255, 255, 255, 1) 50%, rgba(255, 235, 200, 0.95) 65%, rgba(255, 250, 240, 0.98) 85%, transparent 100%)',
+      dark: 'linear-gradient(90deg, transparent 0%, rgba(70, 90, 110, 0.6) 20%, rgba(90, 110, 130, 0.8) 50%, rgba(70, 90, 110, 0.6) 80%, transparent 100%)',
+      light: 'linear-gradient(90deg, transparent 0%, rgba(188, 170, 164, 0.8) 20%, rgba(215, 204, 200, 0.9) 50%, rgba(188, 170, 164, 0.8) 80%, transparent 100%)',
     }),
     []
   );
 
   const duneGradients = useMemo(
     () => ({
-      dark: `linear-gradient(to top, rgba(25, 35, 45, 0.95) 0%, rgba(35, 45, 60, 0.9) 50%, transparent 100%)`,
-      light: `linear-gradient(to top, rgba(140, 70, 0, 0.95) 0%, rgba(180, 110, 20, 0.9) 50%, transparent 100%)`,
+      dark: `linear-gradient(to top, rgba(20, 30, 40, 0.9) 0%, rgba(30, 45, 60, 0.8) 50%, transparent 100%)`,
+      light: `linear-gradient(to top, rgba(141, 110, 99, 0.9) 0%, rgba(161, 136, 127, 0.8) 50%, transparent 100%)`,
     }),
     []
   );
 
-  // Storm clouds for dark mode
+  // Professional storm clouds for dark mode
   const stormCloudGradients = useMemo(
     () => ({
       dark: `
-        radial-gradient(ellipse at 20% 30%, rgba(15, 25, 40, 0.8) 20%, transparent 60%),
-        radial-gradient(ellipse at 80% 25%, rgba(10, 20, 35, 0.7) 25%, transparent 65%),
-        radial-gradient(ellipse at 50% 20%, rgba(20, 30, 45, 0.6) 30%, transparent 70%),
-        radial-gradient(ellipse at 30% 15%, rgba(25, 35, 50, 0.5) 35%, transparent 75%)
+        radial-gradient(ellipse at 25% 30%, rgba(10, 15, 22, 0.9) 30%, transparent 70%),
+        radial-gradient(ellipse at 75% 25%, rgba(8, 12, 18, 0.8) 35%, transparent 75%),
+        radial-gradient(ellipse at 50% 20%, rgba(12, 18, 25, 0.7) 40%, transparent 80%),
+        radial-gradient(ellipse at 30% 15%, rgba(15, 22, 30, 0.6) 25%, transparent 65%)
       `,
     }),
     []
@@ -266,38 +261,38 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
 
   return (
     <>
-      {/* Background Gradient - Much darker and more realistic */}
+      {/* Professional Background Gradient */}
       <motion.div
         className="fixed inset-0"
         style={{ zIndex: -21 }}
         animate={{
           background: isDarkRealm ? backgroundGradients.dark : backgroundGradients.light,
         }}
-        transition={{ duration: 4, ease: 'easeInOut' }}
+        transition={{ duration: 3, ease: 'easeInOut' }}
       />
 
-      {/* Storm Clouds - Dark mode only */}
+      {/* Professional Storm Clouds - Dark mode only */}
       {isDarkRealm && (
         <motion.div
           className="fixed inset-0"
           style={{
             zIndex: -20,
             background: stormCloudGradients.dark,
-            backgroundSize: '200% 100%, 180% 120%, 220% 110%, 190% 130%',
+            backgroundSize: '150% 80%, 140% 90%, 160% 85%, 130% 95%',
           }}
           animate={{
-            backgroundPosition: ['0% 0%, 100% 0%, 50% 0%, 25% 0%', '20% 5%, 80% 10%, 70% 5%, 45% 8%', '0% 0%, 100% 0%, 50% 0%, 25% 0%'],
-            opacity: [0.8, 1, 0.8],
+            backgroundPosition: ['0% 0%, 100% 0%, 50% 0%, 25% 0%', '15% 3%, 85% 7%, 65% 3%, 40% 5%', '0% 0%, 100% 0%, 50% 0%, 25% 0%'],
+            opacity: [0.9, 1, 0.9],
           }}
           transition={{
-            duration: 25,
+            duration: 20,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
         />
       )}
 
-      {/* Atmospheric Haze - Reduced for dark mode */}
+      {/* Professional Atmospheric Haze */}
       <motion.div
         className="fixed inset-0"
         style={{
@@ -305,35 +300,35 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           background: isDarkRealm ? atmosphericHazeGradients.dark : atmosphericHazeGradients.light,
         }}
         animate={{
-          opacity: isDarkRealm ? [0.3, 0.5, 0.3] : [0.6, 0.95, 0.6],
-          scale: [1, 1.03, 1],
+          opacity: isDarkRealm ? [0.4, 0.6, 0.4] : [0.5, 0.8, 0.5],
+          scale: [1, 1.02, 1],
         }}
         transition={{
-          duration: 12,
+          duration: 15,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Enhanced Lightning Effect for dark mode */}
-      {showLightning && (
+      {/* Professional Lightning Effect for dark mode */}
+      {showLightning && isDarkRealm && (
         <>
-          {[...Array(5)].map((_, index) => (
+          {[...Array(3)].map((_, index) => (
             <motion.div
               key={`lightning-main-${index}`}
               className="fixed inset-0"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.8, 0] }}
+              animate={{ opacity: [0, 0.9, 0] }}
               transition={{
-                duration: 0.03 + Math.random() * 0.05,
-                delay: Math.random() * 0.4,
+                duration: 0.05 + Math.random() * 0.03,
+                delay: Math.random() * 0.3,
                 ease: 'linear',
               }}
               style={{
                 background: `
-                  radial-gradient(at ${Math.random() * 100}% ${Math.random() * 30}%, rgba(200, 220, 255, 0.9) 3%, transparent 12%),
-                  radial-gradient(at ${Math.random() * 100}% ${Math.random() * 30}%, rgba(180, 200, 240, 0.7) 4%, transparent 15%),
-                  linear-gradient(${Math.random() * 360}deg, rgba(255, 255, 255, 0.6) 1px, transparent 3px)
+                  radial-gradient(at ${Math.random() * 100}% ${Math.random() * 30}%, rgba(180, 200, 255, 0.8) 2%, transparent 8%),
+                  radial-gradient(at ${Math.random() * 100}% ${Math.random() * 30}%, rgba(160, 180, 240, 0.6) 3%, transparent 12%),
+                  linear-gradient(${Math.random() * 360}deg, rgba(220, 230, 255, 0.7) 1px, transparent 2px)
                 `,
                 mixBlendMode: 'screen',
                 zIndex: -2,
@@ -341,48 +336,32 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               }}
             />
           ))}
-          
-          {/* Thunder rumble effect */}
-          <motion.div
-            className="fixed inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.4, 0] }}
-            transition={{ duration: 2, ease: 'easeOut' }}
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: -1,
-              pointerEvents: 'none',
-            }}
-          />
         </>
       )}
 
-      {/* Moon - Much more subdued */}
+      {/* Professional Moon - Dark mode */}
       {isDarkRealm && (
         <>
           <motion.div
             className="fixed"
             style={{
               zIndex: -18,
-              width: 'clamp(50px, 8vw, 100px)',
-              height: 'clamp(50px, 8vw, 100px)',
+              width: 'clamp(60px, 10vw, 120px)',
+              height: 'clamp(60px, 10vw, 120px)',
               borderRadius: '50%',
               background: sunMoonGradients.dark,
-              top: 'clamp(12vh, 16vh, 20vh)',
-              right: 'clamp(16vw, 20vw, 24vw)',
-              filter: 'blur(1px)',
+              top: 'clamp(8vh, 12vh, 16vh)',
+              right: 'clamp(15vw, 20vw, 25vw)',
               boxShadow: sunMoonShadows.dark,
-              opacity: 0.6,
+              opacity: 0.85,
             }}
             animate={{
-              scale: [1, 1.02, 1],
-              opacity: [0.5, 0.7, 0.5],
-              rotate: [0, 2, 0],
+              scale: [1, 1.01, 1],
+              opacity: [0.8, 0.9, 0.8],
             }}
             transition={{
-              scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-              opacity: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 80, repeat: Infinity, ease: 'easeInOut' },
+              scale: { duration: 12, repeat: Infinity, ease: 'easeInOut' },
+              opacity: { duration: 10, repeat: Infinity, ease: 'easeInOut' },
             }}
           />
 
@@ -390,17 +369,68 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             className="fixed"
             style={{
               zIndex: -19,
-              width: 'clamp(80px, 14vw, 140px)',
-              height: 'clamp(80px, 14vw, 140px)',
+              width: 'clamp(100px, 16vw, 180px)',
+              height: 'clamp(100px, 16vw, 180px)',
               borderRadius: '50%',
               background: sunMoonHaloGradients.dark,
-              top: 'clamp(10vh, 14vh, 18vh)',
-              right: 'clamp(13vw, 17vw, 21vw)',
-              opacity: 0.4,
+              top: 'clamp(6vh, 10vh, 14vh)',
+              right: 'clamp(12vw, 17vw, 22vw)',
+              opacity: 0.3,
             }}
             animate={{
-              scale: [1, 1.08, 1],
-              opacity: [0.3, 0.5, 0.3],
+              scale: [1, 1.05, 1],
+              opacity: [0.25, 0.35, 0.25],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        </>
+      )}
+
+      {/* Professional Sun - Light mode */}
+      {!isDarkRealm && (
+        <>
+          <motion.div
+            className="fixed"
+            style={{
+              zIndex: -18,
+              width: 'clamp(80px, 14vw, 160px)',
+              height: 'clamp(80px, 14vw, 160px)',
+              borderRadius: '50%',
+              background: sunMoonGradients.light,
+              top: 'clamp(8vh, 12vh, 16vh)',
+              right: 'clamp(15vw, 20vw, 25vw)',
+              boxShadow: sunMoonShadows.light,
+            }}
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.95, 1, 0.95],
+              rotate: [0, 360],
+            }}
+            transition={{
+              scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
+              opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+              rotate: { duration: 120, repeat: Infinity, ease: 'linear' },
+            }}
+          />
+
+          <motion.div
+            className="fixed"
+            style={{
+              zIndex: -19,
+              width: 'clamp(120px, 20vw, 240px)',
+              height: 'clamp(120px, 20vw, 240px)',
+              borderRadius: '50%',
+              background: sunMoonHaloGradients.light,
+              top: 'clamp(6vh, 10vh, 14vh)',
+              right: 'clamp(12vw, 17vw, 22vw)',
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.7, 0.9, 0.7],
             }}
             transition={{
               duration: 10,
@@ -411,173 +441,111 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         </>
       )}
 
-      {/* Sun - Light mode only */}
-      {!isDarkRealm && (
-        <>
-          <motion.div
-            className="fixed"
-            style={{
-              zIndex: -18,
-              width: 'clamp(70px, 12vw, 150px)',
-              height: 'clamp(70px, 12vw, 150px)',
-              borderRadius: '50%',
-              background: sunMoonGradients.light,
-              top: 'clamp(10vh, 14vh, 18vh)',
-              right: 'clamp(14vw, 18vw, 22vw)',
-              filter: 'blur(0.3px)',
-              boxShadow: sunMoonShadows.light,
-            }}
-            animate={{
-              scale: [1, 1.07, 1],
-              opacity: [0.9, 1, 0.9],
-              rotate: [0, 360],
-            }}
-            transition={{
-              scale: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-              opacity: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 200, repeat: Infinity, ease: 'linear' },
-            }}
-          />
-
-          <motion.div
-            className="fixed"
-            style={{
-              zIndex: -19,
-              width: 'clamp(100px, 18vw, 220px)',
-              height: 'clamp(100px, 18vw, 220px)',
-              borderRadius: '50%',
-              background: sunMoonHaloGradients.light,
-              top: 'clamp(8vh, 12vh, 16vh)',
-              right: 'clamp(11vw, 15vw, 19vw)',
-            }}
-            animate={{
-              scale: [1, 1.15, 1],
-              opacity: [0.6, 0.9, 0.6],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-        </>
-      )}
-
-      {/* Seagulls (Day only) */}
+      {/* Professional Seagulls (Day only) */}
       {!isDarkRealm && showBirds && (
         <div className="fixed inset-0" style={{ zIndex: -17 }}>
-          {[...Array(6)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <motion.div
               key={`seagull-${i}`}
               className="absolute"
               style={{
-                left: Math.random() * 70 + 5 + '%',
-                top: Math.random() * 40 + 15 + '%',
-                fontSize: 'clamp(12px, 2.5vw, 30px)',
-                color: 'rgba(0, 0, 0, 0.7)',
-                filter: 'drop-shadow(1px 1px 1px rgba(0,0,0,0.2))',
+                left: Math.random() * 60 + 10 + '%',
+                top: Math.random() * 30 + 20 + '%',
+                fontSize: 'clamp(10px, 2vw, 24px)',
+                color: 'rgba(60, 60, 60, 0.8)',
+                filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
                 transform: `scaleX(${Math.random() > 0.5 ? 1 : -1})`,
               }}
               initial={{ opacity: 0 }}
               animate={{
-                x: [0, 200 + Math.random() * 300, 400 + Math.random() * 400],
-                y: [0, -40 + Math.random() * 80, -30 + Math.random() * 60],
-                opacity: [0, 1, 0],
+                x: [0, 150 + Math.random() * 200, 300 + Math.random() * 300],
+                y: [0, -30 + Math.random() * 60, -20 + Math.random() * 40],
+                opacity: [0, 0.8, 0],
               }}
               transition={{
-                duration: 25 + Math.random() * 15,
+                duration: 30 + Math.random() * 20,
                 repeat: Infinity,
-                delay: Math.random() * 12,
+                delay: Math.random() * 15,
                 ease: 'linear',
               }}
             >
               <svg
-                width="clamp(12px, 2.5vw, 30px)"
-                height="clamp(8px, 1.5vw, 20px)"
+                width="clamp(10px, 2vw, 24px)"
+                height="clamp(6px, 1.2vw, 16px)"
                 viewBox="0 0 100 60"
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M0 30 C 20 0, 40 0, 50 30 C 60 0, 80 0, 100 30 C 80 45, 60 45, 50 30 C 40 45, 20 45, 0 30 Z" />
+                <path d="M0 30 C 20 5, 35 5, 50 30 C 65 5, 80 5, 100 30 C 80 40, 65 40, 50 30 C 35 40, 20 40, 0 30 Z" />
               </svg>
             </motion.div>
           ))}
         </div>
       )}
 
-      {/* Stars (Night only) - Fewer and dimmer */}
+      {/* Professional Stars (Night only) */}
       {isDarkRealm && (
         <div className="fixed inset-0" style={{ zIndex: -17 }}>
-          {[...Array(60)].map((_, i) => (
+          {[...Array(40)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full"
               style={{
-                width: `clamp(1px, ${Math.random() * 0.2 + 0.1}vw, 2px)`,
-                height: `clamp(1px, ${Math.random() * 0.2 + 0.1}vw, 2px)`,
-                background: `hsl(${210 + Math.random() * 30}, 60%, ${70 + Math.random() * 15}%)`,
+                width: `clamp(1px, ${Math.random() * 0.15 + 0.05}vw, 2px)`,
+                height: `clamp(1px, ${Math.random() * 0.15 + 0.05}vw, 2px)`,
+                background: `hsl(${200 + Math.random() * 40}, 70%, ${80 + Math.random() * 20}%)`,
                 left: Math.random() * 100 + '%',
-                top: Math.random() * 50 + '%',
-                boxShadow: '0 0 clamp(2px, 0.5vw, 5px) rgba(200, 220, 240, 0.4)',
-                opacity: 0.6,
+                top: Math.random() * 40 + '%',
+                boxShadow: '0 0 clamp(1px, 0.3vw, 3px) rgba(200, 220, 255, 0.5)',
+                opacity: 0.7,
               }}
               animate={{
-                opacity: [0.3, 0.8, 0.3],
-                scale: [0.8, 1.2, 0.8],
+                opacity: [0.4, 0.9, 0.4],
+                scale: [0.8, 1.1, 0.8],
               }}
               transition={{
-                duration: Math.random() * 4 + 3,
+                duration: Math.random() * 3 + 2,
                 repeat: Infinity,
-                delay: Math.random() * 5,
+                delay: Math.random() * 4,
                 ease: 'easeInOut',
-              }}
-            />
-          ))}
-
-          {/* Fewer shooting stars */}
-          {[...Array(2)].map((_, i) => (
-            <motion.div
-              key={`shooting-star-${i}`}
-              className="absolute rounded-full"
-              style={{
-                width: 'clamp(1px, 0.2vw, 3px)',
-                height: 'clamp(1px, 0.2vw, 3px)',
-                background: 'rgba(255, 255, 255, 0.8)',
-                left: '-10%',
-                top: `${15 + i * 35}%`,
-                boxShadow: '0 0 clamp(8px, 1.5vw, 15px) rgba(255, 255, 255, 0.6), 1px 0 clamp(15px, 2.5vw, 25px) rgba(255, 255, 255, 0.4)',
-              }}
-              animate={{
-                x: ['-10%', '110%'],
-                y: [`${15 + i * 35}%`, `${30 + i * 35}%`],
-                opacity: [0, 0.8, 0.8, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatDelay: 20 + Math.random() * 15,
-                delay: i * 10,
-                ease: 'easeOut',
               }}
             />
           ))}
         </div>
       )}
 
-      {/* Horizon Line - More subdued for dark mode */}
+      {/* Professional Horizon Line */}
       <motion.div
         className="fixed left-0 right-0"
         style={{
           zIndex: -16,
-          height: 'clamp(1px, 0.2vw, 2px)',
+          height: 'clamp(1px, 0.15vw, 2px)',
           background: isDarkRealm ? horizonLineGradients.dark : horizonLineGradients.light,
-          top: `calc(100% - clamp(25vh, 32vh, 35vh))`,
-          filter: 'blur(clamp(0.5px, 0.15vw, 1.5px))',
-          opacity: isDarkRealm ? 0.6 : 1,
+          top: `calc(100% - clamp(30vh, 35vh, 40vh))`,
+          filter: 'blur(clamp(0.3px, 0.1vw, 1px))',
+          opacity: isDarkRealm ? 0.8 : 1,
         }}
         animate={{
-          opacity: isDarkRealm ? [0.4, 0.7, 0.4] : [0.7, 1, 0.7],
-          scaleX: [1, 1.03, 1],
+          opacity: isDarkRealm ? [0.7, 0.9, 0.7] : [0.9, 1, 0.9],
+          scaleX: [1, 1.02, 1],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* Professional Ocean */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0"
+        style={{
+          zIndex: -15,
+          height: 'clamp(30vh, 35vh, 40vh)',
+          background: isDarkRealm ? oceanGradients.dark : oceanGradients.light,
+        }}
+        animate={{
+          opacity: [0.98, 1, 0.98],
         }}
         transition={{
           duration: 8,
@@ -586,39 +554,20 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Ocean - Much darker and more ominous */}
-      <motion.div
-        className="fixed bottom-0 left-0 right-0"
-        style={{
-          zIndex: -15,
-          height: 'clamp(25vh, 32vh, 35vh)',
-          background: isDarkRealm ? oceanGradients.dark : oceanGradients.light,
-        }}
-        animate={{
-          opacity: [0.95, 1, 0.95],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-
-      {/* Water wave patterns - More dramatic for dark mode */}
+      {/* Professional Water wave patterns */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -14,
-          height: 'clamp(20vh, 28vh, 32vh)',
+          height: 'clamp(25vh, 30vh, 35vh)',
           background: isDarkRealm ? waterWaveGradients1.dark : waterWaveGradients1.light,
-          backgroundSize: '100% 100%',
         }}
         animate={{
-          x: [0, -300, 0],
-          opacity: isDarkRealm ? [0.7, 0.9, 0.7] : [0.8, 1, 0.8],
+          x: [0, -200, 0],
+          opacity: isDarkRealm ? [0.6, 0.8, 0.6] : [0.7, 0.9, 0.7],
         }}
         transition={{
-          duration: 20,
+          duration: 18,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
@@ -628,117 +577,115 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -13,
-          height: 'clamp(15vh, 22vh, 28vh)',
-          background: isDarkRealm ? waterWaveGradients2.dark : waterWaveGradients2.light, // Completed this line
-          backgroundSize: '100% 100%',
-          transform: 'rotateY(180deg)', // Subtle flip for more dynamic waves
+          height: 'clamp(20vh, 25vh, 30vh)',
+          background: isDarkRealm ? waterWaveGradients2.dark : waterWaveGradients2.light,
         }}
         animate={{
-          x: [0, 300, 0],
-          opacity: isDarkRealm ? [0.5, 0.7, 0.5] : [0.6, 0.8, 0.6],
+          x: [0, 200, 0],
+          opacity: isDarkRealm ? [0.4, 0.6, 0.4] : [0.5, 0.7, 0.5],
         }}
         transition={{
-          duration: 25,
+          duration: 22,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Reflection effect on the water */}
+      {/* Professional Reflection effect */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -12,
-          height: 'clamp(10vh, 18vh, 20vh)',
+          height: 'clamp(15vh, 20vh, 25vh)',
           background: isDarkRealm ? reflectionGradients.dark : reflectionGradients.light,
-          mixBlendMode: isDarkRealm ? 'soft-light' : 'overlay', // Adjust blend mode for better effect
+          mixBlendMode: isDarkRealm ? 'soft-light' : 'overlay',
         }}
         animate={{
-          opacity: isDarkRealm ? [0.4, 0.6, 0.4] : [0.5, 0.7, 0.5],
-          scaleY: [1, 1.05, 1],
+          opacity: isDarkRealm ? [0.3, 0.5, 0.3] : [0.4, 0.6, 0.4],
+          scaleY: [1, 1.03, 1],
         }}
         transition={{
-          duration: 15,
+          duration: 12,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Beach Sand */}
+      {/* Professional Beach Sand */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -10,
-          height: 'clamp(10vh, 12vh, 14vh)',
+          height: 'clamp(12vh, 15vh, 18vh)',
           background: isDarkRealm ? beachSandGradients.dark : beachSandGradients.light,
         }}
         animate={{
           opacity: [1, 0.98, 1],
         }}
         transition={{
-          duration: 10,
+          duration: 8,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Sand Texture - Subtle for dark mode, more prominent for light */}
+      {/* Professional Sand Texture */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -9,
-          height: 'clamp(10vh, 12vh, 14vh)',
+          height: 'clamp(12vh, 15vh, 18vh)',
           background: isDarkRealm ? sandTextureGradients.dark : sandTextureGradients.light,
-          backgroundSize: 'clamp(30px, 6vw, 80px) clamp(30px, 6vw, 80px)',
-          opacity: isDarkRealm ? 0.4 : 0.8, // Reduced opacity for dark mode
+          backgroundSize: 'clamp(40px, 8vw, 100px) clamp(40px, 8vw, 100px)',
+          opacity: isDarkRealm ? 0.3 : 0.6,
         }}
         animate={{
-          backgroundPosition: ['0% 0%', '5% 5%', '0% 0%'],
-          opacity: isDarkRealm ? [0.3, 0.5, 0.3] : [0.7, 0.9, 0.7],
+          backgroundPosition: ['0% 0%', '3% 3%', '0% 0%'],
+          opacity: isDarkRealm ? [0.25, 0.35, 0.25] : [0.5, 0.7, 0.5],
         }}
         transition={{
-          duration: 30,
+          duration: 25,
           repeat: Infinity,
           ease: 'linear',
         }}
       />
 
-      {/* Wet Sand Edge */}
+      {/* Professional Wet Sand Edge */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
-          zIndex: -11, // Placed between ocean and sand to create wet look
-          height: 'clamp(1.5vh, 2.5vh, 3vh)',
+          zIndex: -11,
+          height: 'clamp(2vh, 3vh, 4vh)',
           background: isDarkRealm ? wetSandEdgeGradients.dark : wetSandEdgeGradients.light,
-          top: `calc(100% - clamp(14vh, 17vh, 19vh))`,
-          filter: 'blur(clamp(0.5px, 0.1vw, 1px))',
-          opacity: isDarkRealm ? 0.7 : 1,
+          top: `calc(100% - clamp(16vh, 20vh, 24vh))`,
+          filter: 'blur(clamp(0.3px, 0.08vw, 0.8px))',
+          opacity: isDarkRealm ? 0.6 : 0.9,
         }}
         animate={{
-          opacity: isDarkRealm ? [0.6, 0.8, 0.6] : [0.9, 1, 0.9],
-          scaleX: [1, 1.01, 1],
+          opacity: isDarkRealm ? [0.5, 0.7, 0.5] : [0.8, 1, 0.8],
+          scaleX: [1, 1.005, 1],
         }}
         transition={{
-          duration: 10,
+          duration: 12,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Dunes/Hills (subtle) */}
+      {/* Professional Dunes/Hills */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
           zIndex: -8,
-          height: 'clamp(8vh, 10vh, 12vh)',
+          height: 'clamp(10vh, 12vh, 15vh)',
           background: isDarkRealm ? duneGradients.dark : duneGradients.light,
-          top: `calc(100% - clamp(22vh, 27vh, 30vh))`, // Adjusted for cartoonish hills
+          top: `calc(100% - clamp(28vh, 32vh, 36vh))`,
           maskImage: `
-            radial-gradient(ellipse at 15% 100%, black 50%, transparent 50%),
-            radial-gradient(ellipse at 40% 100%, black 50%, transparent 50%),
-            radial-gradient(ellipse at 70% 100%, black 50%, transparent 50%)
+            radial-gradient(ellipse at 20% 100%, black 45%, transparent 45%),
+            radial-gradient(ellipse at 50% 100%, black 45%, transparent 45%),
+            radial-gradient(ellipse at 80% 100%, black 45%, transparent 45%)
           `,
-          maskSize: '30% 100%, 40% 100%, 35% 100%',
+          maskSize: '35% 100%, 40% 100%, 35% 100%',
           maskRepeat: 'no-repeat',
           maskPosition: '0% 0%, 30% 0%, 65% 0%',
           opacity: isDarkRealm ? 0.7 : 1,
