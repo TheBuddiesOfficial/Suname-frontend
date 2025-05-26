@@ -93,22 +93,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Continuous Pulse Animation
-  const socialIconPulse = (delay: number) => ({
-    animate: {
-      scale: [1, 1.08, 1], // Scale slightly up and back down
-      textShadow: isDarkRealm
-        ? ['0px 0px 10px rgba(139,92,246,0.5)', '0px 0px 20px rgba(139,92,246,0.8)', '0px 0px 10px rgba(139,92,246,0.5)']
-        : ['0px 0px 10px rgba(0,0,0,0.5)', '0px 0px 20px rgba(0,0,0,0.8)', '0px 0px 10px rgba(0,0,0,0.5)'],
-    },
-    transition: {
-      duration: 2.5, // Length of one pulse cycle
-      repeat: Infinity,
-      ease: "easeInOut",
-      repeatType: "mirror",
-      delay: delay // Staggered start for each icon
-    }
-  });
+  // Social Icon Hover Effect (UPDATED)
+  const socialIconHover = {
+    scale: 1.2, // Slightly larger scale on hover
+    textShadow: isDarkRealm
+      ? '0px 0px 20px rgba(139,92,246,0.8)' // Stronger purple glow for dark realm
+      : '0px 0px 20px rgba(0,0,0,0.8)', // Stronger dark glow for light realm
+    transition: { type: "spring", stiffness: 300, damping: 20 } // Smooth spring transition
+  };
 
 
   // --- MAIN HEADING "SUNAME" - Gentle Ripple Glow ---
@@ -399,7 +391,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ))}
           </motion.p>
 
-          {/* Social Icons - Pulsing Animation */}
+          {/* Social Icons - Hover Effect */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -429,11 +421,13 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-4xl md:text-5xl text-white`}
-                // Apply initial entry animation
-                initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                // Apply continuous pulse animation
-                animate={isMounted ? socialIconPulse(index * 0.1).animate : { opacity: 1, y: 0, scale: 1 }}
-                transition={isMounted ? socialIconPulse(index * 0.1).transition : { duration: 0.8, type: "spring", stiffness: 150, damping: 10, delay: 1.5 + index * 0.1 }}
+                // Initial state (no animation)
+                initial={{ opacity: 0, y: 50 }}
+                // Animate to visible state on mount
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, type: "spring", stiffness: 150, damping: 10, delay: 1.5 + index * 0.1 }}
+                // Hover effect
+                whileHover={socialIconHover}
               >
                 <Icon />
               </motion.a>
