@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Play, Pause } from 'lucide-react';
-import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
-import { biography } from '../data/biography';
-import AudioVisualizer from '../components/AudioVisualizer';
-import ParticleSystem from '../components/ParticleSystem';
-import MusicCard from '../components/MusicCard'; // Assuming MusicCard is a separate component
+ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
+ import { Link } from 'react-router-dom';
+ import { ArrowRight, Play, Pause } from 'lucide-react';
+ import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
+ import { biography } from '../data/biography';
+ import AudioVisualizer from '../components/AudioVisualizer';
+ import ParticleSystem from '../components/ParticleSystem';
+ import MusicCard from '../components/MusicCard'; // Assuming MusicCard is a separate component
 
-interface HomePageProps {
+ interface HomePageProps {
   isDarkRealm: boolean;
-}
+ }
 
-const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
+ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false); // To trigger animations after mount
   const heroRef = useRef<HTMLElement>(null);
@@ -436,10 +436,22 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                     filter: isDarkRealm
                       ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
                       : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
-                    transition: { type: "spring", stiffness: 400, damping: 25, duration: 0.1 } // Very fast transition on hover
                   }}
-                  // Add explicit transition to return to default state smoothly
-                  transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.15 }} // Slightly longer return transition for smoothness
+                  onHoverEnd={() => {
+                    // Instantly remove glow and reset color when hover ends
+                    const target = {
+                      color: isDarkRealm ? '#FFFFFF' : '#1A202C',
+                      filter: 'none',
+                      scale: 1
+                    };
+                    return target;
+                  }}
+                  transition={{
+                    // Apply a very quick transition for filter and color to ensure immediate stop
+                    filter: { duration: 0.05, ease: "easeOut" },
+                    color: { duration: 0.05, ease: "easeOut" },
+                    scale: { type: "spring", stiffness: 400, damping: 30, duration: 0.15 } // Keep spring for scale
+                  }}
                 >
                   <Icon />
                 </motion.span>
@@ -633,6 +645,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       </footer>
     </div>
   );
-};
+ };
 
-export default HomePage;
+ export default HomePage;
