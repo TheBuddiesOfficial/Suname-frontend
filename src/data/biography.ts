@@ -46,22 +46,22 @@ Key Highlights:
   ],
   photos: {
     light: [
-      "https://images.pexels.com/photos/1694900/pexels-photo-1694900.jpeg",
-      "https://images.pexels.com/photos/3721941/pexels-photo-3721941.jpeg",
-      "https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg"
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg"
     ],
     dark: [
-      "https://images.pexels.com/photos/2240766/pexels-photo-2240766.jpeg",
-      "https://images.pexels.com/photos/1913923/pexels-photo-1913923.jpeg",
-      "https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg"
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg"
     ]
   },
   artistPhotos: {
-    main: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg",
+    main: "/images/artist_main.jpg",
     additional: [
-      "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg",
-      "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg",
-      "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg",
+      "/images/artist_main.jpg"
     ]
   },
   designer: {
