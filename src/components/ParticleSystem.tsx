@@ -26,46 +26,11 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({
   }, []);
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-      {[...Array(particleCount)].map((_, index) => {
-        const size = 10 + (index % 20);
-        const left = `${(index * 5) % 100}%`;
-        const top = `${(index * 7) % 100}%`;
-        const duration = 15 + (index % 10) * 2;
-        const delay = index * 0.5;
-
-        const IconComponent = getRandomIcon(index);
-
-        return (
-          <motion.div
-            key={index}
-            className="absolute text-primary-400 opacity-10"
-            style={{
-              left,
-              top,
-              width: size,
-              height: size,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.sin(index) * 50, 0],
-              rotate: [0, 360, 0],
-              opacity: [0.1, 0.2, 0.1],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration,
-              repeat: Infinity,
-              ease: 'linear',
-              delay,
-              times: [0, 0.5, 1],
-            }}
-          >
-            <IconComponent size={size} />
-          </motion.div>
-        );
-      })}
-    </div>
+    // <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}> // Option 1: Comment out the entire return content
+    //   ...
+    // </div>
+    // Option 2: Return null
+    null
   );
 };
 
