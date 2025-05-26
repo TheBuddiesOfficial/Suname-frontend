@@ -417,21 +417,20 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             }}
           >
             {[
-              { icon: FaSoundcloud, url: biography.socials.soundcloud },
-              { icon: FaInstagram, url: biography.socials.instagram },
-              { icon: FaTwitter, url: biography.socials.twitter },
-              { icon: FaTiktok, url: biography.socials.tiktok },
-              { icon: FaYoutube, url: biography.socials.youtube },
-              { icon: FaSpotify, url: biography.socials.spotify },
-              { icon: FaApple, url: biography.socials.appleMusic }
-            ].map(({ icon: Icon, url }, index) => (
+              { icon: FaSoundcloud, url: biography.socials.soundcloud, color: isDarkRealm ? 'text-orange-500' : 'text-orange-600' },
+              { icon: FaInstagram, url: biography.socials.instagram, color: 'text-pink-500' },
+              { icon: FaTwitter, url: biography.socials.twitter, color: 'text-blue-400' },
+              { icon: FaTiktok, url: biography.socials.tiktok, color: 'text-black' }, // Or adjust for light mode visibility
+              { icon: FaYoutube, url: biography.socials.youtube, color: 'text-red-600' },
+              { icon: FaSpotify, url: biography.socials.spotify, color: 'text-green-500' },
+              { icon: FaApple, url: biography.socials.appleMusic, color: 'text-gray-400' }
+            ].map(({ icon: Icon, url, color }, index) => (
               <motion.a
                 key={url}
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl`}
-                style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set base icon color
+                className={`text-4xl md:text-5xl ${color}`} // Applied dynamic color via className
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
