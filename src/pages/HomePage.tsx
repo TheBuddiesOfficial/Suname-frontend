@@ -93,12 +93,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (UPDATED)
+  // Social Icon Hover Effect (UPDATED FOR SPECIFIC GLOW)
   const socialIconHover = {
     scale: 1.2, // Slightly larger scale on hover
     textShadow: isDarkRealm
       ? '0px 0px 20px rgba(139,92,246,0.8)' // Stronger purple glow for dark realm
-      : '0px 0px 20px rgba(0,0,0,0.8)', // Stronger dark glow for light realm
+      : '0px 0px 20px rgba(255,165,0,0.8)', // Stronger orange glow for light realm
     transition: { type: "spring", stiffness: 300, damping: 20 } // Smooth spring transition
   };
 
@@ -421,11 +421,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-4xl md:text-5xl text-white`}
-                // Initial state (no animation)
-                initial={{ opacity: 0, y: 50 }}
+                // Initial state (no glow, slightly scaled down for a subtle 'pop' on entry)
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 // Animate to visible state on mount
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, type: "spring", stiffness: 150, damping: 10, delay: 1.5 + index * 0.1 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
                 // Hover effect
                 whileHover={socialIconHover}
               >
