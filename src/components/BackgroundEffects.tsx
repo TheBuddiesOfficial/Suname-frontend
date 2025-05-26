@@ -282,24 +282,157 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Beach/Shore */}
+      {/* Enhanced Beach/Shore - Base layer */}
       <motion.div
         className="fixed bottom-0 left-0 right-0 -z-15"
         style={{
-          height: '15vh',
+          height: '22vh',
           background: isDarkRealm
-            ? 'linear-gradient(to top, rgba(71, 85, 105, 0.6) 0%, rgba(100, 116, 139, 0.4) 60%, transparent 100%)'
-            : 'linear-gradient(to top, rgba(245, 158, 11, 0.8) 0%, rgba(251, 191, 36, 0.6) 40%, rgba(254, 215, 170, 0.4) 80%, transparent 100%)',
+            ? 'linear-gradient(to top, rgba(92, 84, 112, 0.9) 0%, rgba(120, 113, 108, 0.7) 30%, rgba(148, 163, 184, 0.5) 60%, rgba(203, 213, 225, 0.3) 85%, transparent 100%)'
+            : 'linear-gradient(to top, rgba(194, 146, 91, 1) 0%, rgba(217, 177, 130, 0.95) 25%, rgba(244, 206, 167, 0.85) 50%, rgba(254, 235, 200, 0.7) 75%, rgba(255, 251, 235, 0.4) 90%, transparent 100%)',
+        }}
+      />
+
+      {/* Beach sand texture pattern */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 -z-14"
+        style={{
+          height: '20vh',
+          background: isDarkRealm
+            ? `
+              radial-gradient(circle at 20% 40%, rgba(156, 163, 175, 0.3) 1px, transparent 1px),
+              radial-gradient(circle at 80% 60%, rgba(203, 213, 225, 0.2) 1px, transparent 1px),
+              radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.25) 1px, transparent 1px),
+              radial-gradient(circle at 60% 20%, rgba(156, 163, 175, 0.2) 1px, transparent 1px)
+            `
+            : `
+              radial-gradient(circle at 20% 40%, rgba(180, 83, 9, 0.4) 1px, transparent 1px),
+              radial-gradient(circle at 80% 60%, rgba(217, 119, 6, 0.3) 1px, transparent 1px),
+              radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.35) 1px, transparent 1px),
+              radial-gradient(circle at 60% 20%, rgba(251, 191, 36, 0.3) 1px, transparent 1px)
+            `,
+          backgroundSize: '40px 40px, 60px 60px, 35px 35px, 50px 50px',
         }}
         animate={{
-          opacity: [0.8, 1, 0.8],
+          opacity: [0.7, 1, 0.7],
         }}
         transition={{
-          duration: 9,
+          duration: 12,
           repeat: Infinity,
           ease: "easeInOut"
         }}
       />
+
+      {/* Beach wave foam line */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 -z-13"
+        style={{
+          height: '2px',
+          background: isDarkRealm
+            ? 'linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.8) 20%, rgba(241, 245, 249, 0.9) 50%, rgba(226, 232, 240, 0.8) 80%, transparent 100%)'
+            : 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 20%, rgba(254, 249, 195, 0.8) 50%, rgba(255, 255, 255, 0.9) 80%, transparent 100%)',
+          top: 'calc(100% - 22vh)',
+          filter: 'blur(1px)',
+        }}
+        animate={{
+          opacity: [0.6, 1, 0.6],
+          scaleX: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Beach footprints/texture details */}
+      <div className="fixed bottom-0 left-0 right-0 -z-12" style={{ height: '20vh' }}>
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`footprint-${i}`}
+            className="absolute"
+            style={{
+              width: 'clamp(8px, 1.5vw, 20px)',
+              height: 'clamp(4px, 0.8vw, 12px)',
+              borderRadius: '50%',
+              background: isDarkRealm
+                ? 'rgba(71, 85, 105, 0.4)'
+                : 'rgba(180, 83, 9, 0.3)',
+              left: Math.random() * 80 + 10 + '%',
+              top: Math.random() * 60 + 20 + '%',
+              filter: 'blur(0.5px)',
+            }}
+            animate={{
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              delay: Math.random() * 4,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Enhanced beach sparkles/sand particles */}
+      <div className="fixed bottom-0 left-0 right-0 -z-10" style={{ height: '25vh' }}>
+        {[...Array(25)].map((_, i) => (
+          <motion.div
+            key={`beach-sparkle-${i}`}
+            className="absolute rounded-full"
+            style={{
+              width: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 4px)`,
+              height: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 4px)`,
+              background: isDarkRealm 
+                ? `hsl(${210 + Math.random() * 20}, 20%, ${80 + Math.random() * 15}%)`
+                : `hsl(${35 + Math.random() * 25}, ${60 + Math.random() * 30}%, ${85 + Math.random() * 10}%)`,
+              left: Math.random() * 100 + '%',
+              top: Math.random() * 80 + 10 + '%',
+              boxShadow: isDarkRealm
+                ? '0 0 6px rgba(226, 232, 240, 0.6)'
+                : '0 0 8px rgba(251, 191, 36, 0.7)',
+            }}
+            animate={{
+              opacity: [0.2, 0.8, 0.2],
+              scale: [0.6, 1.2, 0.6],
+            }}
+            transition={{
+              duration: Math.random() * 3 + 2,
+              repeat: Infinity,
+              delay: Math.random() * 4,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Beach dunes/mounds */}
+      {[...Array(3)].map((_, i) => (
+        <motion.div
+          key={`dune-${i}`}
+          className="fixed bottom-0 -z-16"
+          style={{
+            width: `${120 + Math.random() * 80}px`,
+            height: `${30 + Math.random() * 20}px`,
+            borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
+            background: isDarkRealm
+              ? 'linear-gradient(to top, rgba(100, 116, 139, 0.6), rgba(148, 163, 184, 0.4))'
+              : 'linear-gradient(to top, rgba(217, 177, 130, 0.8), rgba(244, 206, 167, 0.6))',
+            left: Math.random() * 60 + 20 + '%',
+            filter: 'blur(1px)',
+          }}
+          animate={{
+            opacity: [0.6, 0.9, 0.6],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
 
       {/* Floating particles/sparkles */}
       <div className="fixed inset-0 -z-10">
@@ -330,36 +463,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               duration: Math.random() * 8 + 6,
               repeat: Infinity,
               delay: Math.random() * 5,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Beach sparkles/sand particles */}
-      <div className="fixed bottom-0 left-0 right-0 -z-10" style={{ height: '25vh' }}>
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={`beach-sparkle-${i}`}
-            className="absolute rounded-full"
-            style={{
-              width: 'clamp(1px, 0.25vw, 3px)',
-              height: 'clamp(1px, 0.25vw, 3px)',
-              background: isDarkRealm ? '#e2e8f0' : '#fff7ed',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 80 + 10 + '%',
-              boxShadow: isDarkRealm
-                ? '0 0 8px rgba(226, 232, 240, 0.7)'
-                : '0 0 10px rgba(255, 247, 237, 0.9)',
-            }}
-            animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [0.6, 1.4, 0.6],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: Math.random() * 4,
               ease: "easeInOut"
             }}
           />
