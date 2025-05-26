@@ -10,20 +10,18 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
   const [prevMode, setPrevMode] = useState(isDarkRealm);
 
   useEffect(() => {
-    // Trigger lightning only when switching from light to dark mode
     if (!prevMode && isDarkRealm) {
       setShowLightning(true);
       const timer = setTimeout(() => {
         setShowLightning(false);
-      }, 1200); // Duration of lightning animation
+      }, 1200);
       return () => clearTimeout(timer);
     }
-    setPrevMode(isDarkRealm); // Update prevMode for the next comparison
+    setPrevMode(isDarkRealm);
   }, [isDarkRealm, prevMode]);
 
   return (
     <>
-      {/* Lightning transition effect */}
       {showLightning && (
         <>
           <motion.div
@@ -51,26 +49,24 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         </>
       )}
 
-      {/* Main Background Sky/Deep Space */}
       <motion.div
         className="fixed inset-0"
         style={{ zIndex: -20 }}
         animate={{
           background: isDarkRealm
-            ? 'linear-gradient(180deg, #02040a 0%, #080f1d 20%, #101c30 40%, #1a2a40 60%, #253a50 80%, #101c30 100%)' // Dark realm: deeper, richer blues for night sky
-            : 'linear-gradient(180deg, #4a0030 0%, #ff5733 25%, #ff8c1a 50%, #ffc300 75%, #ffe100 100%)', // Sunset: more vibrant and deep reds/oranges
+            ? 'linear-gradient(180deg, #000208 0%, #050a15 20%, #0a1425 40%, #101e30 60%, #182c40 80%, #0a1425 100%)'
+            : 'linear-gradient(180deg, #4a0030 0%, #ff5733 25%, #ff8c1a 50%, #ffc300 75%, #ffe100 100%)',
         }}
         transition={{ duration: 3, ease: 'easeInOut' }}
       />
 
-      {/* Atmospheric/Planetary Glow */}
       <motion.div
         className="fixed inset-0"
         style={{
           zIndex: -19,
           background: isDarkRealm
-            ? 'radial-gradient(ellipse at center top, rgba(59, 130, 246, 0.18), rgba(147, 197, 253, 0.12), transparent 70%)' // Dark realm: slightly stronger blue glow
-            : 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.25), rgba(255, 69, 0, 0.2), transparent 80%)', // Sunset: brighter, more defined glow
+            ? 'radial-gradient(ellipse at center top, rgba(59, 130, 246, 0.18), rgba(147, 197, 253, 0.12), transparent 70%)'
+            : 'radial-gradient(ellipse at center top, rgba(255, 165, 0, 0.25), rgba(255, 69, 0, 0.2), transparent 80%)',
         }}
         animate={{
           opacity: [0.6, 0.9, 0.6],
@@ -83,7 +79,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Sun/Moon Orb */}
       <motion.div
         className="fixed"
         style={{
@@ -92,14 +87,14 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(80px, 15vw, 200px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle at 30% 30%, #f0f4f8 5%, #d9e2ec 25%, #bcccdc 50%, #9fb3c8 75%, #829ab1 100%)' // Moon: slightly more textured grey/blue
-            : 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ffd23f 20%, #ff6b35 60%, #ee4035 100%)', // Sun: vibrant
+            ? 'radial-gradient(circle at 30% 30%, #f9fbfd 5%, #e6f0ff 25%, #d0e0f0 50%, #a8c0e0 75%, #829ab1 100%)'
+            : 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ffd23f 20%, #ff6b35 60%, #ee4035 100%)',
           top: 'clamp(10vh, 15vh, 20vh)',
           right: 'clamp(15vw, 20vw, 25vw)',
           filter: isDarkRealm ? 'blur(1px)' : 'blur(0.5px)',
           boxShadow: isDarkRealm
-            ? '0 0 clamp(40px, 8vw, 80px) rgba(248, 250, 252, 0.6), inset -8px -8px 20px rgba(148, 163, 184, 0.4)' // Moon glow
-            : '0 0 clamp(80px, 15vw, 200px) rgba(255, 107, 53, 0.8), 0 0 clamp(150px, 25vw, 400px) rgba(238, 64, 53, 0.5), inset -5px -5px 15px rgba(238, 64, 53, 0.3)', // Sun glow
+            ? '0 0 clamp(40px, 8vw, 80px) rgba(248, 250, 252, 0.6), inset -8px -8px 20px rgba(148, 163, 184, 0.4)'
+            : '0 0 clamp(80px, 15vw, 200px) rgba(255, 107, 53, 0.8), 0 0 clamp(150px, 25vw, 400px) rgba(238, 64, 53, 0.5), inset -5px -5px 15px rgba(238, 64, 53, 0.3)',
         }}
         animate={{
           scale: [1, 1.08, 1],
@@ -117,7 +112,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Outer Halo of Sun/Moon */}
       <motion.div
         className="fixed"
         style={{
@@ -126,8 +120,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(120px, 22vw, 280px)',
           borderRadius: '50%',
           background: isDarkRealm
-            ? 'radial-gradient(circle, transparent 40%, rgba(248, 250, 252, 0.1) 50%, transparent 80%)' // Moon halo: slightly more visible
-            : 'radial-gradient(circle, transparent 30%, rgba(255, 107, 53, 0.3) 45%, rgba(238, 64, 53, 0.2) 70%, transparent 90%)', // Sun halo: slightly stronger
+            ? 'radial-gradient(circle, transparent 40%, rgba(248, 250, 252, 0.15) 50%, transparent 80%)'
+            : 'radial-gradient(circle, transparent 30%, rgba(255, 107, 53, 0.3) 45%, rgba(238, 64, 53, 0.2) 70%, transparent 90%)',
           top: 'clamp(8vh, 12vh, 17vh)',
           right: 'clamp(12vw, 17vw, 22vw)',
         }}
@@ -142,7 +136,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Seagulls (Light Realm) */}
       {!isDarkRealm && (
         <div className="fixed inset-0" style={{ zIndex: -16 }}>
           {[...Array(5)].map((_, i) => (
@@ -174,10 +167,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         </div>
       )}
 
-      {/* Stars & Shooting Stars (Dark Realm) */}
       {isDarkRealm && (
         <div className="fixed inset-0" style={{ zIndex: -16 }}>
-          {/* Stars */}
           {[...Array(120)].map((_, i) => (
             <motion.div
               key={i}
@@ -203,7 +194,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             />
           ))}
 
-          {/* Shooting Stars */}
           {[...Array(2)].map((_, i) => (
             <motion.div
               key={`shooting-star-${i}`}
@@ -233,7 +223,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         </div>
       )}
 
-      {/* Horizon Line / Distant Glow */}
       <motion.div
         className="fixed left-0 right-0"
         style={{
@@ -241,11 +230,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(1px, 0.2vw, 3px)',
           background: isDarkRealm
             ? 'linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.6) 20%, rgba(203, 213, 225, 0.8) 50%, rgba(148, 163, 184, 0.6) 80%, transparent 100%)'
-            : 'linear-gradient(90deg, transparent 0%, rgba(255, 100, 0, 0.6) 20%, rgba(255, 140, 0, 0.8) 50%, rgba(255, 100, 0, 0.6) 80%, transparent 100%)', // Sunset horizon: slightly more opaque
+            : 'linear-gradient(90deg, transparent 0%, rgba(255, 100, 0, 0.6) 20%, rgba(255, 140, 0, 0.8) 50%, rgba(255, 100, 0, 0.6) 80%, transparent 100%)',
           top: 'clamp(65%, 68%, 70%)',
           boxShadow: isDarkRealm
             ? '0 0 clamp(8px, 2vw, 15px) rgba(148, 163, 184, 0.4)'
-            : '0 0 clamp(10px, 2vw, 20px) rgba(255, 140, 0, 0.5)', // Sunset glow shadow: slightly stronger
+            : '0 0 clamp(10px, 2vw, 20px) rgba(255, 140, 0, 0.5)',
         }}
         animate={{
           opacity: [0.6, 1, 0.6],
@@ -257,7 +246,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Realistic Ocean/Water - Main body with clearer gradients */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -266,23 +254,23 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           background: isDarkRealm
             ? `
               linear-gradient(to top,
-                rgba(5, 15, 35, 0.98) 0%, /* Deeper, darker blue at bottom */
+                rgba(5, 15, 35, 0.98) 0%,
                 rgba(10, 25, 55, 0.9) 15%,
                 rgba(20, 40, 80, 0.8) 30%,
                 rgba(30, 60, 120, 0.7) 45%,
                 rgba(40, 80, 160, 0.6) 60%,
                 rgba(60, 100, 180, 0.5) 75%,
-                rgba(80, 120, 200, 0.3) 90%, /* Lighter, more transparent near horizon */
+                rgba(80, 120, 200, 0.3) 90%,
                 transparent 100%
               )
             `
             : `
               linear-gradient(to top,
-                rgba(180, 50, 0, 0.95) 0%, /* Deepest, most saturated red/orange */
+                rgba(180, 50, 0, 0.95) 0%,
                 rgba(220, 100, 0, 0.9) 25%,
                 rgba(255, 150, 0, 0.8) 50%,
                 rgba(255, 190, 0, 0.7) 75%,
-                rgba(255, 230, 0, 0.4) 90%, /* Fading yellow near horizon */
+                rgba(255, 230, 0, 0.4) 90%,
                 transparent 100%
               )
             `,
@@ -297,7 +285,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Realistic water wave patterns - First layer, more distinct */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -308,7 +295,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(90deg,
                 transparent,
                 transparent clamp(30px, 6vw, 80px),
-                rgba(40, 80, 160, 0.4) clamp(30px, 6vw, 80px), /* Darker blue waves */
+                rgba(40, 80, 160, 0.4) clamp(30px, 6vw, 80px),
                 rgba(40, 80, 160, 0.4) clamp(70px, 14vw, 160px),
                 transparent clamp(70px, 14vw, 160px),
                 transparent clamp(110px, 22vw, 240px)
@@ -318,7 +305,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(90deg,
                 transparent,
                 transparent clamp(40px, 8vw, 100px),
-                rgba(255, 120, 0, 0.25) clamp(40px, 8vw, 100px), /* Stronger sunset orange waves */
+                rgba(255, 120, 0, 0.25) clamp(40px, 8vw, 100px),
                 rgba(255, 120, 0, 0.25) clamp(80px, 16vw, 200px)
               )
             `,
@@ -334,7 +321,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Additional wave layer for more depth and realism */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -345,7 +331,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(45deg,
                 transparent,
                 transparent clamp(15px, 3vw, 50px),
-                rgba(60, 100, 180, 0.3) clamp(15px, 3vw, 50px), /* Deeper blue waves */
+                rgba(60, 100, 180, 0.3) clamp(15px, 3vw, 50px),
                 rgba(60, 100, 180, 0.3) clamp(35px, 7vw, 100px)
               )
             `
@@ -353,7 +339,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               repeating-linear-gradient(45deg,
                 transparent,
                 transparent clamp(20px, 4vw, 60px),
-                rgba(255, 160, 0, 0.2) clamp(20px, 4vw, 60px), /* More visible yellow-orange waves */
+                rgba(255, 160, 0, 0.2) clamp(20px, 4vw, 60px),
                 rgba(255, 160, 0, 0.2) clamp(40px, 8vw, 120px)
               )
             `,
@@ -369,7 +355,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Moonlight/Sunlight reflection on water - Enhanced */}
       <motion.div
         className="fixed"
         style={{
@@ -380,7 +365,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             ? `
               linear-gradient(to bottom,
                 transparent 0%,
-                rgba(248, 250, 252, 0.6) 10%, /* Brighter, more defined reflection */
+                rgba(248, 250, 252, 0.6) 10%,
                 rgba(226, 232, 240, 0.8) 30%,
                 rgba(203, 213, 225, 0.7) 50%,
                 rgba(148, 163, 184, 0.6) 70%,
@@ -390,9 +375,9 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             : `
               linear-gradient(to bottom,
                 transparent 0%,
-                rgba(255, 140, 0, 0.6) 20%, /* Stronger sunset orange reflection */
-                rgba(255, 180, 0, 0.5) 50%, /* Stronger golden reflection */
-                rgba(255, 210, 0, 0.4) 80%, /* Stronger yellow reflection */
+                rgba(255, 140, 0, 0.6) 20%,
+                rgba(255, 180, 0, 0.5) 50%,
+                rgba(255, 210, 0, 0.4) 80%,
                 transparent 100%
               )
             `,
@@ -412,7 +397,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Realistic Beach Sand - Main body */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -421,29 +405,28 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           background: isDarkRealm
             ? `
               linear-gradient(to top,
-                rgba(50, 60, 70, 0.98) 0%, /* Darker, more desaturated for wet sand */
+                rgba(50, 60, 70, 0.98) 0%,
                 rgba(70, 80, 90, 0.9) 20%,
                 rgba(100, 110, 120, 0.8) 40%,
                 rgba(130, 140, 150, 0.7) 60%,
-                rgba(160, 170, 180, 0.5) 80%, /* Lighter, drier sand near top */
+                rgba(160, 170, 180, 0.5) 80%,
                 transparent 100%
               )
             `
             : `
               linear-gradient(to top,
-                #5a3010 0%, /* Deepest, wet sand brown */
+                #5a3010 0%,
                 #7a451a 15%,
                 #9a602a 30%,
-                #b57b3a 50%, /* Mid-tone golden brown */
+                #b57b3a 50%,
                 #d0964a 70%,
-                #e8b05a 85%, /* Lighter, drier sand near top */
+                #e8b05a 85%,
                 transparent 100%
               )
             `,
         }}
       />
 
-      {/* Beach Texture / Grain */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -458,7 +441,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               radial-gradient(circle at 80% 20%, rgba(140, 150, 160, 0.3) 1px, transparent 1px)
             `
             : `
-              radial-gradient(circle at 25% 30%, rgba(100, 50, 10, 0.5) 1px, transparent 1px), /* Darker sand texture */
+              radial-gradient(circle at 25% 30%, rgba(100, 50, 10, 0.5) 1px, transparent 1px),
               radial-gradient(circle at 75% 70%, rgba(140, 80, 20, 0.4) 1px, transparent 1px),
               radial-gradient(circle at 50% 50%, rgba(180, 110, 30, 0.45) 1px, transparent 1px),
               radial-gradient(circle at 30% 80%, rgba(200, 140, 50, 0.4) 1px, transparent 1px),
@@ -482,7 +465,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Shoreline Foam/Wet sand line */}
       <motion.div
         className="fixed bottom-0 left-0 right-0"
         style={{
@@ -490,7 +472,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           height: 'clamp(2px, 0.5vw, 4px)',
           background: isDarkRealm
             ? 'linear-gradient(90deg, transparent 0%, rgba(241, 245, 249, 0.9) 15%, rgba(248, 250, 252, 1) 35%, rgba(255, 255, 255, 0.95) 50%, rgba(248, 250, 252, 1) 65%, rgba(241, 245, 249, 0.9) 85%, transparent 100%)'
-            : 'linear-gradient(90deg, transparent 0%, rgba(255, 180, 0, 0.7) 15%, rgba(255, 200, 50, 0.8) 35%, rgba(255, 220, 100, 0.9) 50%, rgba(255, 200, 50, 0.8) 65%, rgba(255, 180, 0, 0.7) 85%, transparent 100%)', // Golden wet line for sunset
+            : 'linear-gradient(90deg, transparent 0%, rgba(255, 180, 0, 0.7) 15%, rgba(255, 200, 50, 0.8) 35%, rgba(255, 220, 100, 0.9) 50%, rgba(255, 200, 50, 0.8) 65%, rgba(255, 180, 0, 0.7) 85%, transparent 100%)',
           top: `calc(100% - clamp(18vh, 25vh, 30vh))`,
           filter: 'blur(clamp(0.5px, 0.2vw, 2px))',
         }}
@@ -505,9 +487,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Beach Details: Footprints & Shells */}
       <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(15vh, 20vh, 25vh)', zIndex: -7 }}>
-        {/* Footprints */}
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={`footprint-${i}`}
@@ -516,8 +496,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(6px, 1.2vw, 18px)`,
               height: `clamp(3px, 0.6vw, 10px)`,
               background: isDarkRealm
-                ? 'rgba(60, 70, 80, 0.6)' // Darker, more subtle for moonlit footprints
-                : 'rgba(80, 50, 20, 0.6)', // Richer brown for sunset footprints
+                ? 'rgba(60, 70, 80, 0.6)'
+                : 'rgba(80, 50, 20, 0.6)',
               left: Math.random() * 85 + 5 + '%',
               top: Math.random() * 70 + 15 + '%',
               filter: 'blur(clamp(0.3px, 0.1vw, 1px))',
@@ -535,7 +515,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
           />
         ))}
 
-        {/* Shells */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={`shell-${i}`}
@@ -544,8 +523,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(3px, 0.8vw, 12px)`,
               height: `clamp(2px, 0.6vw, 8px)`,
               background: isDarkRealm
-                ? `hsl(${210 + Math.random() * 30}, 10%, ${60 + Math.random() * 20}%)` // Muted cool colors for moonlit shells
-                : `hsl(${30 + Math.random() * 20}, ${30 + Math.random() * 30}%, ${50 + Math.random() * 25}%)`, // More natural, desaturated warm tones for sunset shells
+                ? `hsl(${210 + Math.random() * 30}, 10%, ${60 + Math.random() * 20}%)`
+                : `hsl(${30 + Math.random() * 20}, ${30 + Math.random() * 30}%, ${50 + Math.random() * 25}%)`,
               left: Math.random() * 90 + 5 + '%',
               top: Math.random() * 60 + 20 + '%',
               borderRadius: Math.random() > 0.5 ? '50%' : '30% 70% 70% 30% / 30% 30% 70% 70%',
@@ -564,7 +543,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         ))}
       </div>
 
-      {/* Sand Dunes / Beach undulations */}
       {[...Array(4)].map((_, i) => (
         <motion.div
           key={`dune-${i}`}
@@ -575,8 +553,8 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
             height: `clamp(20px, ${4 + Math.random() * 3}vh, 50px)`,
             borderRadius: '50% 50% 50% 50% / 100% 100% 0% 0%',
             background: isDarkRealm
-              ? `linear-gradient(to top, rgba(40, 50, 60, 0.9) 0%, rgba(60, 70, 80, 0.8) 50%, transparent 100%)` // Darker, desaturated dunes for moonlit beach
-              : `linear-gradient(to top, #45250a 0%, #6a3a15 50%, transparent 100%)`, // Deeper, more shadowed natural brown for sunset dunes
+              ? `linear-gradient(to top, rgba(40, 50, 60, 0.9) 0%, rgba(60, 70, 80, 0.8) 50%, transparent 100%)`
+              : `linear-gradient(to top, #45250a 0%, #6a3a15 50%, transparent 100%)`,
             left: `${i * 25 + (Math.random() * 10 - 5)}vw`,
             transform: `translateX(-50%)`,
             bottom: `clamp(16vh, 22vh, 28vh)`,
@@ -595,7 +573,6 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         />
       ))}
 
-      {/* Beach Sparkles / Glimmer */}
       <div className="fixed bottom-0 left-0 right-0" style={{ height: 'clamp(20vh, 30vh, 35vh)', zIndex: -5 }}>
         {[...Array(35)].map((_, i) => (
           <motion.div
@@ -605,13 +582,13 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               width: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 5px)`,
               height: `clamp(1px, ${Math.random() * 0.4 + 0.2}vw, 5px)`,
               background: isDarkRealm
-                ? `hsl(${200 + Math.random() * 40}, ${30 + Math.random() * 40}%, ${80 + Math.random() * 15}%)` // Brighter, cooler white sparkles for moonlit beach
-                : `hsl(${40 + Math.random() * 20}, ${70 + Math.random() * 20}%, ${90 + Math.random() * 5}%)`, // More intense golden sparkles for sunset beach
+                ? `hsl(${200 + Math.random() * 40}, ${30 + Math.random() * 40}%, ${80 + Math.random() * 15}%)`
+                : `hsl(${40 + Math.random() * 20}, ${70 + Math.random() * 20}%, ${90 + Math.random() * 5}%)`,
               left: Math.random() * 100 + '%',
               top: Math.random() * 85 + 5 + '%',
               boxShadow: isDarkRealm
-                ? `0 0 clamp(4px, 1vw, 10px) rgba(226, 232, 240, 0.8)` // Stronger cool glow
-                : `0 0 clamp(6px, 1.2vw, 12px) rgba(255, 190, 0, 0.9)`, // Stronger golden glow
+                ? `0 0 clamp(4px, 1vw, 10px) rgba(226, 232, 240, 0.8)`
+                : `0 0 clamp(6px, 1.2vw, 12px) rgba(255, 190, 0, 0.9)`,
             }}
             animate={{
               opacity: [0.3, 0.9, 0.3],
