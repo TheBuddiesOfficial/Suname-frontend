@@ -348,7 +348,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           {/* SUNAME Heading - Character Ripple Reveal with Neon Glow */}
           <motion.h1
-            className={`text-7xl md:text-8xl font-extrabold mb-4 relative leading-none text-white`} {/* Added text-white here */}
+            className={`text-7xl md:text-8xl font-extrabold mb-4 relative leading-none text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
           >
             <motion.span
@@ -378,7 +378,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           {/* Tagline - Word by Word Reveal with Gentle Wave Color Shift and Glow */}
           <motion.p
-            className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white`} {/* Added text-white here */}
+            className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
             variants={{
                 visible: {
@@ -430,7 +430,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl`} {/* Re-added size classes */}
+                className={`text-4xl md:text-5xl`}
                 style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set base icon color
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -540,7 +540,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
-            className={`text-3xl md:text-4xl font-bold italic mb-8 relative`} {/* Removed text-white here */}
+            className={`text-3xl md:text-4xl font-bold italic mb-8 relative`}
             variants={{
                 visible: {
                     transition: {
@@ -568,7 +568,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   className="block mb-2"
                   variants={quoteLineReveal}
                   animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
-                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set base color for quote
+                  style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
                 >
                     {line}
                     {index < splitQuote.length - 1 && "."}
@@ -607,7 +607,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       <footer className="py-8 text-center z-10 relative">
         <motion.p
           className={`text-base`}
-          style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }} // Set color dynamically
+          style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.8 }}
