@@ -102,7 +102,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     className="flex items-center space-x-2"
                     whileHover={{ x: 5 }}
                   >
-                    {/* Replaced Music2 with SUNAME logo for desktop */}
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -126,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                   </motion.div>
                   {/* Dark hover underline for desktop nav items */}
                   <motion.div
-                    className={`absolute -bottom-1 left-0 h-0.5 transform origin-left bg-gray-800`} // Always use dark gray for underline
+                    className={`absolute -bottom-1 left-0 h-0.5 transform origin-left bg-gray-800`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isActive ? 1 : 0 }}
                     whileHover={{ scaleX: 1 }}
@@ -220,7 +219,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkRealm }) => {
                     whileHover={{ x: 5, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {/* SUNAME logo for mobile menu */}
                     <img
                       src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
                       alt="SUNAME Icon"
