@@ -33,18 +33,37 @@ const MixesPage = () => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
   const [isVinylPlaying, setIsVinylPlaying] = useState(false);
 
+  // Animation variants for staggered appearance
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, // Delay between each child animation
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={containerVariants} // Apply container variants
       className="min-h-screen pt-24 pb-12 px-4"
     >
       <div className="max-w-6xl mx-auto">
+        {/* Page Title and Description */}
         <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
+          variants={itemVariants} // Apply item variants
           className="text-center mb-12"
         >
           <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${
@@ -61,25 +80,28 @@ const MixesPage = () => {
 
         {/* Featured Mix */}
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          variants={itemVariants} // Apply item variants
           className={`rounded-2xl p-8 mb-12 ${
-            isDarkMode 
-              ? 'bg-gray-900/60 border border-gray-800' 
+            isDarkMode
+              ? 'bg-gray-900/60 border border-gray-800'
               : 'bg-white/80 border border-gray-200'
           } backdrop-blur-sm shadow-xl`}
         >
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="flex justify-center">
-              <VinylRecord 
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.4, type: "spring", stiffness: 100 }}
+              className="flex justify-center"
+            >
+              <VinylRecord
                 size={300}
                 isPlaying={isVinylPlaying}
                 onTogglePlay={() => setIsVinylPlaying(!isVinylPlaying)}
                 albumCover="https://images.pexels.com/photos/1694900/pexels-photo-1694900.jpeg"
               />
-            </div>
-            
+            </motion.div>
+
             <div>
               <h2 className={`text-2xl font-bold mb-4 ${
                 isDarkMode ? 'text-white' : 'text-gray-900'
@@ -91,27 +113,28 @@ const MixesPage = () => {
               }`}>
                 {biography.mixes[0].title}
               </p>
-              
-              <AudioVisualizer 
-                height={60} 
+
+              <AudioVisualizer
+                height={60}
                 barCount={12}
                 color={isDarkMode ? 'rgb(139, 92, 246)' : 'rgb(109, 40, 217)'}
                 className="mb-8"
               />
-              
+
               <motion.a
                 href={biography.mixes[0].url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-flex items-center space-x-2 px-8 py-4 rounded-full text-white ${
-                  isDarkMode 
-                    ? 'bg-primary-600 hover:bg-primary-500' 
+                  isDarkMode
+                    ? 'bg-primary-600 hover:bg-primary-500'
                     : 'bg-primary-500 hover:bg-primary-400'
                 } transition-colors`}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, boxShadow: isDarkMode ? "0 0 15px rgba(139, 92, 246, 0.6)" : "0 0 15px rgba(109, 40, 217, 0.6)" }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span>Listen on SoundCloud</span>
+                <ExternalLink size={20} /> {/* Added ExternalLink icon */}
               </motion.a>
             </div>
           </div>
@@ -119,46 +142,51 @@ const MixesPage = () => {
 
         {/* Recent Mixes Grid */}
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          variants={itemVariants} // Apply item variants
         >
           <h2 className={`text-2xl font-bold mb-8 ${
             isDarkMode ? 'text-white' : 'text-gray-900'
           }`}>
             Recent Mixes
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={containerVariants} // Apply container variants for staggered children within the grid
+          >
             {featuredMixes.map((mix, index) => (
-              <MusicCard
+              <motion.div
                 key={index}
-                title={mix.title}
-                description={mix.description}
-                imageUrl={mix.imageUrl}
-                isPlaying={activeMix === index}
-                onTogglePlay={() => {
-                  if (activeMix === index) {
-                    setActiveMix(null);
-                  } else {
-                    setActiveMix(index);
-                  }
-                }}
-              />
+                variants={itemVariants} // Apply item variants to each MusicCard
+                whileHover={{ y: -5 }} // Subtle lift on hover
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <MusicCard
+                  title={mix.title}
+                  description={mix.description}
+                  imageUrl={mix.imageUrl}
+                  isPlaying={activeMix === index}
+                  onTogglePlay={() => {
+                    if (activeMix === index) {
+                      setActiveMix(null);
+                    } else {
+                      setActiveMix(index);
+                    }
+                  }}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* SoundCloud Embed */}
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          variants={itemVariants} // Apply item variants
           className="mt-12"
         >
           <div className={`rounded-2xl p-6 ${
-            isDarkMode 
-              ? 'bg-gray-900/60 border border-gray-800' 
+            isDarkMode
+              ? 'bg-gray-900/60 border border-gray-800'
               : 'bg-white/80 border border-gray-200'
           } backdrop-blur-sm shadow-xl`}
           >
@@ -175,9 +203,7 @@ const MixesPage = () => {
 
         {/* Credit Section */}
         <motion.section
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          variants={itemVariants} // Apply item variants
           className="text-center mt-12"
         >
           <p className={`text-sm font-bold ${
