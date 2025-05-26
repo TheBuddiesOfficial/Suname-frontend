@@ -8,6 +8,7 @@ interface BackgroundEffectsProps {
 const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) => {
   const [showLightning, setShowLightning] = useState(false);
   const [prevMode, setPrevMode] = useState(isDarkRealm);
+  const [showBirds, setShowBirds] = useState(false); // New state for bird visibility
 
   // Memoize static styles and configurations that don't depend on state or props
   const backgroundGradients = useMemo(
@@ -221,6 +222,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
   );
 
   useEffect(() => {
+    // Lightning effect on mode change
     if (prevMode !== isDarkRealm) {
       setShowLightning(true);
       const timer = setTimeout(() => {
@@ -230,6 +232,22 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       return () => clearTimeout(timer);
     }
   }, [isDarkRealm, prevMode]);
+
+  useEffect(() => {
+    // Bird appearance logic
+    if (!isDarkRealm && prevMode === true) { // Switched from dark to light
+      setShowBirds(true);
+      const timer = setTimeout(() => {
+        setShowBirds(false); // Hide after a delay to allow for reappearance
+      }, 100); // Short delay
+    } else if (isDarkRealm && prevMode === false) { // Switched from light to dark
+        setShowBirds(false); // Hide immediately if switching to dark
+    } else if (!isDarkRealm && !showBirds) { // Ensure birds are visible in light mode if not already
+        setShowBirds(true);
+    }
+    setPrevMode(isDarkRealm);
+  }, [isDarkRealm, prevMode, showBirds]);
+
 
   return (
     <>
@@ -278,7 +296,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               style={{
                 // More jagged, thunder-like shape
                 background: `radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.95) 5%, transparent 15%),
-                              radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.8) 5%, transparent 15%)`,
+                               radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.8) 5%, transparent 15%)`,
                 mixBlendMode: 'screen',
                 zIndex: -3,
                 pointerEvents: 'none',
@@ -374,7 +392,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
       />
 
       {/* Seagulls (Day) - Enhanced Quality */}
-      {!isDarkRealm && (
+      {!isDarkRealm && showBirds && (
         <div className="fixed inset-0" style={{ zIndex: -17 }}>
           {[...Array(6)].map((_, i) => (
             <motion.div
@@ -388,10 +406,11 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 filter: 'drop-shadow(1px 1px 1px rgba(0,0,0,0.2))', // Subtle shadow for depth
                 transform: `scaleX(${Math.random() > 0.5 ? 1 : -1})`, // Randomly flip direction
               }}
+              initial={{ opacity: 0 }} // Start invisible
               animate={{
                 x: [0, 200 + Math.random() * 300, 400 + Math.random() * 400],
                 y: [0, -40 + Math.random() * 80, -30 + Math.random() * 60],
-                opacity: [0, 1, 0],
+                opacity: [0, 1, 0], // Fade in, stay, fade out
               }}
               transition={{
                 duration: 25 + Math.random() * 15, // Smoother movement
