@@ -93,14 +93,22 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (kept for consistency in other contexts, though not used for the pulse here)
-  const iconHover = {
-    scale: 1.15,
-    textShadow: isDarkRealm
-      ? '0px 0px 15px rgba(139,92,246,0.6)' // Purple for dark realm
-      : '0px 0px 15px rgba(0,0,0,0.5)', // Dark shadow for light realm
-    transition: { type: "spring", stiffness: 300, damping: 15 }
-  };
+  // Social Icon Continuous Pulse Animation
+  const socialIconPulse = (delay: number) => ({
+    animate: {
+      scale: [1, 1.08, 1], // Scale slightly up and back down
+      textShadow: isDarkRealm
+        ? ['0px 0px 10px rgba(139,92,246,0.5)', '0px 0px 20px rgba(139,92,246,0.8)', '0px 0px 10px rgba(139,92,246,0.5)']
+        : ['0px 0px 10px rgba(0,0,0,0.5)', '0px 0px 20px rgba(0,0,0,0.8)', '0px 0px 10px rgba(0,0,0,0.5)'],
+    },
+    transition: {
+      duration: 2.5, // Length of one pulse cycle
+      repeat: Infinity,
+      ease: "easeInOut",
+      repeatType: "mirror",
+      delay: delay // Staggered start for each icon
+    }
+  });
 
 
   // --- MAIN HEADING "SUNAME" - Gentle Ripple Glow ---
@@ -300,7 +308,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ rotateX, rotateY, y: heroImageY, scale: 1 }}
-            // Removed whileHover from here
             animate={{ rotate: [0, 10, -10, 5, -5, 0] }} // Subtle continuous rotation
             transition={{
               duration: 8,
@@ -331,7 +338,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
               }}
             />
-            {/* Kept this div for consistency, but its 'group-hover' class won't do anything without group-hover on parent */}
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300
                              ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
@@ -403,7 +409,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 y: 0,
                 transition: {
                   delay: 1.5,
-                  staggerChildren: 0.1
+                  staggerChildren: 0.1 // Stagger the initial entry of icons
                 }
               }
             }}
@@ -423,18 +429,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-4xl md:text-5xl text-white`}
-                style={{
-                  textShadow: !isDarkRealm ? '0 0 10px rgba(0,0,0,0.6)' : 'none'
-                }}
-                // Removed whileHover
+                // Apply initial entry animation
                 initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: [1, 1.1, 1] }} // Gentle pulse
-                transition={{
-                  delay: 1.5 + index * 0.1, // Staggered entry
-                  duration: 2, // Duration of one pulse cycle
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                // Apply continuous pulse animation
+                animate={isMounted ? socialIconPulse(index * 0.1).animate : { opacity: 1, y: 0, scale: 1 }}
+                transition={isMounted ? socialIconPulse(index * 0.1).transition : { duration: 0.8, type: "spring", stiffness: 150, damping: 10, delay: 1.5 + index * 0.1 }}
               >
                 <Icon />
               </motion.a>
@@ -618,7 +617,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400 font-semibold"
-            // Slightly smoother hover for the designer link
             whileHover={{ scale: 1.03, textShadow: isDarkRealm ? '0px 0px 5px rgba(139, 92, 246, 0.5)' : '0px 0px 5px rgba(0,0,0,0.5)' }}
             transition={{ duration: 0.15 }}
           >
