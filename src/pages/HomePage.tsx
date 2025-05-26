@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Play, Pause } from 'lucide-react'; // Added Play/Pause icons
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
 import { biography } from '../data/biography';
 import AudioVisualizer from '../components/AudioVisualizer';
-import VinylRecord from '../components/VinylRecord';
 import ParticleSystem from '../components/ParticleSystem';
 import MusicCard from '../components/MusicCard';
 
@@ -16,6 +15,17 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const heroRef = useRef<HTMLElement>(null); // Ref for hero section for parallax
+
+  // Parallax scroll effects for hero section
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]); // Image moves slower than scroll
+  const heroTextY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]); // Text moves slightly slower
+  const heroTextOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]); // Text fades out
 
   useEffect(() => {
     setIsMounted(true);
@@ -25,55 +35,59 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
   // Hero Section Elements Fade In & Up
   const heroReveal = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 50, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.9,
-        ease: [0.2, 0.65, 0.3, 0.9],
-        staggerChildren: 0.15,
-        delayChildren: 0.2
+        duration: 1.2, // Longer, more dramatic entrance
+        ease: [0.25, 0.46, 0.45, 0.94], // Smoother, more elegant ease
+        staggerChildren: 0.1, // Faster stagger for snappier appearance of elements
+        delayChildren: 0.3 // Start staggering after a slight delay
       },
     },
   };
 
-  // Section Heading Reveal
+  // Section Heading Reveal (stronger, more pronounced)
   const sectionHeadingReveal = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 60, scale: 0.9 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.7,
-        ease: [0.2, 0.65, 0.3, 0.9],
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   };
 
-  // Card / Item entrance animation
-  const itemFadeUp = {
-    hidden: { opacity: 0, y: 50 },
+  // Card / Item entrance animation (more pronounced spring)
+  const itemSpringUp = {
+    hidden: { opacity: 0, y: 80, scale: 0.8 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
-        ease: [0.2, 0.65, 0.3, 0.9],
+        type: "spring", // Use spring for a more bouncy, lively feel
+        stiffness: 120,
+        damping: 15,
+        mass: 0.8
       },
     },
   };
 
-  // Social Icon Hover Effect
+  // Social Icon Hover Effect (more pronounced and responsive)
   const iconHover = {
-    scale: 1.25,
-    rotateY: 20,
-    y: -10,
-    transition: { type: "spring", stiffness: 300, damping: 10 }
+    scale: 1.4, // Larger scale on hover
+    rotate: [0, 15, -15, 0], // Quick rotation burst
+    y: -15, // Lift higher
+    transition: { type: "spring", stiffness: 400, damping: 10, mass: 0.5 }
   };
 
-  // --- Adjusted: Hero Text Glitch Effect Colors ---
-  // Glitch colors remain consistent as they are effects, not primary text color
+  // --- Hero Text Glitch Effect Colors (unchanged, as per last request) ---
   const glitchColors = {
     primaryGlitch: '#8b5cf6', // Purple
     secondaryGlitch: '#ec4899', // Pink
@@ -102,15 +116,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // --- NEW: Dynamic Text Shadow/Outline for White Text ---
-  // This function will apply a text shadow based on the current realm
+  // --- Dynamic Text Shadow/Outline for White Text (adapted) ---
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
     return {
-      // In dark mode, white text is fine, maybe a subtle glow or no shadow
-      // In light mode, add a dark outline/shadow to make white text readable
       textShadow: isDark
-        ? '0 0 8px rgba(255,255,255,0.2), 0 0 10px rgba(139,92,246,0.2)' // Subtle white glow with primary color hint
-        : '1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)', // Strong dark outline
+        ? '0 0 12px rgba(255,255,255,0.3), 0 0 15px rgba(139,92,246,0.3)' // More prominent glow for dark mode
+        : '1px 1px 3px rgba(0,0,0,0.9), -1px -1px 3px rgba(0,0,0,0.9), 1px -1px 3px rgba(0,0,0,0.9), -1px 1px 3px rgba(0,0,0,0.9)', // Stronger, crisper dark outline
     };
   };
 
@@ -134,24 +145,32 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
   return (
     <div className="min-h-screen overflow-hidden relative">
+      {/* Particle system as dynamic background */}
       <ParticleSystem isDarkRealm={isDarkRealm} />
 
-      {/* --- BACKGROUND WAVE --- */}
+      {/* --- BACKGROUND WAVE (More pronounced & responsive) --- */}
       <motion.svg
-        className="absolute bottom-0 left-0 w-full h-32 md:h-48 z-0"
+        className="absolute bottom-0 left-0 w-full h-48 md:h-64 z-0" // Larger wave area
         viewBox="0 0 350 100"
         preserveAspectRatio="none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.8 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-        style={{ fill: isDarkRealm ? 'rgba(30,61,89,0.3)' : 'rgba(255,127,80,0.08)' }}
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5, delay: 0.8 }}
+        style={{ fill: isDarkRealm ? 'rgba(30,61,89,0.5)' : 'rgba(255,127,80,0.2)' }} // More visible wave colors
       >
         <motion.path
           d="M0 60 C 100 10 200 100 300 40 L 300 100 L 0 100 Z"
-          animate={{ d: ["M0 70 C 150 120 250 20 350 80 L 350 100 L 0 100 Z", "M0 60 C 100 10 200 100 300 40 L 300 100 L 0 100 Z"] }} // Changed to cycle between two paths
+          animate={{
+            d: [
+              "M0 60 C 100 10 200 100 300 40 L 300 100 L 0 100 Z",
+              "M0 70 C 150 120 250 20 350 80 L 350 100 L 0 100 Z",
+              "M0 50 C 80 0 220 110 300 60 L 300 100 L 0 100 Z",
+              "M0 60 C 100 10 200 100 300 40 L 300 100 L 0 100 Z"
+            ]
+          }}
           transition={{
-            duration: 5, // Slower wave motion
-            yoyo: Infinity,
+            duration: 8, // Slower, more flowing animation
+            repeat: Infinity,
             ease: "easeInOut",
           }}
         />
@@ -159,19 +178,20 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10">
+      <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10 overflow-hidden"> {/* Added overflow-hidden for parallax */}
         <motion.div
           className="container mx-auto text-center relative z-20"
           variants={heroReveal}
           initial="hidden"
           animate={isMounted ? "visible" : "hidden"}
         >
-          {/* Artist Photo with Border Animation & Bounce */}
+          {/* Artist Photo with Border Animation & Interactive Glow */}
           <motion.div
             className="relative w-72 h-72 mx-auto mb-10 cursor-pointer group"
-            variants={itemFadeUp}
-            whileHover={{ scale: 1.05, rotate: 3 }}
+            variants={itemSpringUp} // Using itemSpringUp for a bouncier photo intro
+            whileHover={{ scale: 1.08, rotate: 5, boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.8)' : '0px 0px 20px rgba(255,127,80,0.8)' }} // Stronger glow on hover
             transition={{ type: "spring", stiffness: 150, damping: 10 }}
+            style={{ y: heroImageY }} // Apply parallax to image
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -186,7 +206,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                      'linear-gradient(180deg, rgba(255,127,80,0.8), transparent)',
                      'linear-gradient(270deg, rgba(255,127,80,0.8), transparent)']
               }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }} // Slightly faster border animation
             />
             <motion.img
               src="/images/artist_main.jpg"
@@ -196,15 +216,15 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 borderColor: isDarkRealm ? 'rgba(30,61,89,0.8)' : 'rgba(255,127,80,0.8)'
               }}
             />
-             {/* Glow effect on hover */}
+             {/* Dynamic Glow effect around the border on hover */}
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-75 transition-opacity duration-300
-                            ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
+                            ${isDarkRealm ? 'bg-primary-500/60' : 'bg-orange-400/60'}`} />
           </motion.div>
 
-          {/* SUNAME Heading - White with dynamic shadow */}
+          {/* SUNAME Heading - White with dynamic shadow and parallax */}
           <motion.h1
             className={`text-6xl md:text-7xl font-extrabold mb-4 relative text-white`}
-            style={getDynamicWhiteTextStyle(isDarkRealm)} // Apply dynamic text shadow
+            style={{ ...getDynamicWhiteTextStyle(isDarkRealm), y: heroTextY, opacity: heroTextOpacity }} // Apply dynamic text shadow and parallax
             variants={heroReveal}
             initial="hidden"
             animate="visible"
@@ -236,10 +256,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           </motion.h1>
 
 
-          {/* Tagline - White with dynamic shadow */}
+          {/* Tagline - White with dynamic shadow and parallax */}
           <motion.p
             className={`text-xl md:text-2xl mb-8 text-white`}
-            style={getDynamicWhiteTextStyle(isDarkRealm)} // Apply dynamic text shadow
+            style={{ ...getDynamicWhiteTextStyle(isDarkRealm), y: heroTextY, opacity: heroTextOpacity }} // Apply dynamic text shadow and parallax
             variants={heroReveal}
           >
             Within every dark realm, there is light – SUNAME
@@ -249,6 +269,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           <motion.div
             className="flex justify-center space-x-6 mb-12"
             variants={heroReveal}
+            style={{ y: heroTextY, opacity: heroTextOpacity }} // Apply parallax to social icons
           >
             {[
               { icon: FaSoundcloud, url: biography.socials.soundcloud },
@@ -265,7 +286,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-3xl md:text-4xl text-white`}
-                style={{ // Add a subtle glow for light mode on icons
+                style={{
                   textShadow: !isDarkRealm ? '0 0 10px rgba(255,127,80,0.6), 0 0 20px rgba(255,127,80,0.4)' : 'none'
                 }}
                 whileHover={iconHover}
@@ -301,13 +322,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
           >
             {mixes.map((mix, index) => (
-              <motion.div key={index} variants={itemFadeUp}>
+              <motion.div key={index} variants={itemSpringUp}> {/* Use itemSpringUp here */}
                 <MusicCard
                   title={mix.title}
                   imageUrl={mix.image}
                   link={mix.url}
                   isPlaying={activeMix === index}
                   onTogglePlay={() => setActiveMix(activeMix === index ? null : index)}
+                  isDarkRealm={isDarkRealm} // Pass isDarkRealm to MusicCard for styling
                 />
               </motion.div>
             ))}
@@ -348,7 +370,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                     transition: { type: "spring", stiffness: 100, damping: 10, delay: index * 0.05 }
                   },
                 }}
-                whileHover={{ scale: 1.08, rotate: index % 2 === 0 ? 3 : -3, z: 10 }}
+                whileHover={{ scale: 1.08, rotate: index % 2 === 0 ? 3 : -3, z: 10,
+                  boxShadow: isDarkRealm ? '0px 0px 25px rgba(139,92,246,0.8)' : '0px 0px 25px rgba(255,127,80,0.8)' // Consistent hover glow
+                }}
               >
                 <img
                   src={`/images/artist_main.jpg`}
@@ -356,10 +380,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   className="w-full h-full object-cover"
                 />
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity"
+                  className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity flex items-end p-4" // Added flex for content positioning
                   whileHover={{ opacity: 1 }}
                 >
-                  <p className="absolute bottom-4 left-4 text-white text-lg font-semibold">Live Set {index + 1}</p>
+                  <p className="text-white text-lg font-semibold" style={getDynamicWhiteTextStyle(isDarkRealm)}>
+                    Live Set {index + 1}
+                  </p>
                 </motion.div>
               </motion.div>
             ))}
