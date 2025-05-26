@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
@@ -23,23 +23,40 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
   // Animation variants for initial load
   const initialFadeIn = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.8, ease: [0.6, -0.05, 0.01, 0.99] },
+    transition: { duration: 0.9, ease: [0.17, 0.67, 0.83, 0.67] },
   };
 
   // Animation variants for sections
   const sectionFadeIn = {
-    initial: { opacity: 0, y: 40 },
+    initial: { opacity: 0, y: 60 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
-    transition: { duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] },
+    transition: { duration: 0.7, ease: [0.17, 0.67, 0.83, 0.67] },
   };
 
   // Animation variant for social icons
   const iconBounce = {
-    whileHover: { scale: 1.1, y: -5, transition: { duration: 0.2 } },
+    whileHover: { scale: 1.15, y: -8, transition: { duration: 0.2 } },
     whileTap: { scale: 0.9 },
+  };
+
+  // Custom animated wave
+  const wavePath1 = "M0 60 C 100 10 200 100 300 40 L 300 100 L 0 100 Z";
+  const wavePath2 = "M0 70 C 150 120 250 20 350 80 L 350 100 L 0 100 Z";
+
+  const waveVariants = {
+    initial: { path: wavePath1, opacity: 0.6 },
+    animate: {
+      path: wavePath2,
+      opacity: 0.8,
+      transition: {
+        duration: 3,
+        yoyo: Infinity,
+        ease: "easeInOut",
+      },
+    },
   };
 
   const mixes = [
@@ -61,25 +78,36 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden relative">
       <ParticleSystem />
+      <motion.svg
+        className="absolute bottom-0 left-0 w-full h-32 md:h-48 z-0"
+        viewBox="0 0 350 100"
+        preserveAspectRatio="none"
+        variants={waveVariants}
+        initial="initial"
+        animate="animate"
+        style={{ fill: isDarkRealm ? 'rgba(30,61,89,0.5)' : 'rgba(255,127,80,0.3)' }}
+      >
+        <motion.path d={wavePath1} variants={waveVariants} />
+      </motion.svg>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4">
+      <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10">
         <motion.div
-          className="container mx-auto text-center relative z-10"
+          className="container mx-auto text-center relative z-20"
           variants={initialFadeIn}
           initial="initial"
           animate={isMounted ? "animate" : "initial"}
         >
 
-          {/* Artist Photo with Border Animation - Subtle zoom on hover */}
+          {/* Artist Photo with Border Animation - More pronounced zoom and rotation */}
           <motion.div
             className="relative w-72 h-72 mx-auto mb-10 cursor-pointer"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
-            whileHover={{ scale: 1.02 }}
+            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.17, 0.67, 0.83, 0.67] }}
+            whileHover={{ scale: 1.05, rotate: 5 }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -92,7 +120,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                      'linear-gradient(180deg, rgba(255,127,80,0.8), transparent)',
                      'linear-gradient(360deg, rgba(255,127,80,0.8), transparent)']
               }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.img
               src="/images/artist_main.jpg"
@@ -110,6 +138,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             initial="initial"
             animate={isMounted ? "animate" : "initial"}
             transition={{ ...initialFadeIn.transition, delay: 0.2 }}
+            style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}
           >
             SUNAME
           </motion.h1>
@@ -120,11 +149,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             initial="initial"
             animate={isMounted ? "animate" : "initial"}
             transition={{ ...initialFadeIn.transition, delay: 0.4 }}
+            style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)' }}
           >
             {biography.tagline}
           </motion.p>
 
-          {/* Social Icons - Bounce on hover */}
+          {/* Social Icons - More prominent bounce and rotation on hover */}
           <motion.div
             className="flex justify-center space-x-6 mb-12"
             variants={initialFadeIn}
@@ -148,6 +178,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 rel="noopener noreferrer"
                 className={`text-3xl ${isDarkRealm ? 'text-white' : 'text-gray-900'} hover:text-primary-500 transition-colors`}
                 variants={iconBounce}
+                style={{ perspective: 200 }}
+                whileHover={{ ...iconBounce.whileHover, rotateY: 30 }}
               >
                 <Icon />
               </motion.a>
@@ -156,15 +188,19 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </motion.div>
       </section>
 
-      {/* Latest Mixes Section - Fade in on scroll */}
-      <section className="py-20 px-4">
+      {/* Latest Mixes Section - Slide up with stagger */}
+      <section className="py-20 px-4 z-10">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className={`text-4xl font-bold mb-12 text-center ${isDarkRealm ? 'text-white' : 'text-gray-900'}`}
-            variants={sectionFadeIn}
+            variants={{
+              initial: { opacity: 0, y: 80 },
+              whileInView: { opacity: 1, y: 0 },
+            }}
             initial="initial"
             whileInView="whileInView"
             viewport={sectionFadeIn.viewport}
+            transition={{ duration: 0.8, ease: [0.17, 0.67, 0.83, 0.67] }}
           >
             Latest Mixes
           </motion.h2>
@@ -173,14 +209,18 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={{
               initial: { opacity: 0 },
-              whileInView: { opacity: 1, transition: { staggerChildren: 0.2 } },
+              whileInView: { opacity: 1, transition: { staggerChildren: 0.3, delayChildren: 0.2 } },
             }}
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true }}
           >
             {mixes.map((mix, index) => (
-              <motion.div key={index} variants={sectionFadeIn}>
+              <motion.div key={index} variants={{
+                initial: { opacity: 0, y: 50 },
+                whileInView: { opacity: 1, y: 0 },
+                transition: { duration: 0.6, ease: [0.17, 0.67, 0.83, 0.67] }
+              }}>
                 <MusicCard
                   title={mix.title}
                   imageUrl={mix.image}
@@ -194,31 +234,31 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Artist Photos Section - Slide in from sides on scroll */}
-      <section className="py-20 px-4 relative overflow-hidden">
+      {/* Artist Photos Section - Parallax effect and staggered zoom */}
+      <section className="py-20 px-4 relative overflow-hidden z-10">
         <motion.div
           className="absolute inset-0 -z-10"
           animate={{
             background: isDarkRealm
-              ? ['linear-gradient(0deg, rgba(30,61,89,0.2), transparent)',
-                 'linear-gradient(180deg, rgba(30,61,89,0.2), transparent)']
-              : ['linear-gradient(0deg, rgba(255,127,80,0.2), transparent)',
-                 'linear-gradient(180deg, rgba(255,127,80,0.2), transparent)']
+              ? ['linear-gradient(0deg, rgba(30,61,89,0.3), transparent)',
+                 'linear-gradient(180deg, rgba(30,61,89,0.3), transparent)']
+              : ['linear-gradient(0deg, rgba(255,127,80,0.3), transparent)',
+                 'linear-gradient(180deg, rgba(255,127,80,0.3), transparent)']
           }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
 
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className={`text-4xl font-bold mb-12 text-center ${isDarkRealm ? 'text-white' : 'text-gray-900'}`}
             variants={{
-              initial: { opacity: 0, y: 60 },
+              initial: { opacity: 0, y: 80 },
               whileInView: { opacity: 1, y: 0 },
             }}
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.6, -0.05, 0.01, 0.99] }}
+            transition={{ duration: 0.8, ease: [0.17, 0.67, 0.83, 0.67] }}
           >
             Gallery
           </motion.h2>
@@ -227,7 +267,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
             variants={{
               initial: { opacity: 0 },
-              whileInView: { opacity: 1, transition: { staggerChildren: 0.3 } },
+              whileInView: { opacity: 1, transition: { staggerChildren: 0.4 } },
             }}
             initial="initial"
             whileInView="whileInView"
@@ -238,11 +278,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={index}
                 className="relative aspect-square rounded-xl overflow-hidden"
                 variants={{
-                  initial: { x: index % 2 === 0 ? -50 : 50, opacity: 0 },
-                  whileInView: { x: 0, opacity: 1 },
+                  initial: { scale: 0.8, opacity: 0 },
+                  whileInView: { scale: 1, opacity: 1 },
                 }}
-                transition={{ duration: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
-                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 80, damping: 15, delay: index * 0.1 }}
+                whileHover={{ scale: 1.08 }}
               >
                 <img
                   src={`/images/artist_main.jpg`}
@@ -259,27 +299,28 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Quote Section - Fade in with a slight delay */}
-      <section className="py-20 px-4">
+      {/* Quote Section - Zoom in with a slight rotation */}
+      <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
             className={`text-3xl font-bold italic mb-8 ${isDarkRealm ? 'text-primary-400' : 'text-primary-600'}`}
             variants={{
-              initial: { opacity: 0, y: 40 },
-              whileInView: { opacity: 1, y: 0 },
+              initial: { opacity: 0, scale: 0.7, rotate: 10 },
+              whileInView: { opacity: 1, scale: 1, rotate: 0 },
             }}
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.6, -0.05, 0.01, 0.99] }}
+            transition={{ duration: 0.7, ease: [0.17, 0.67, 0.83, 0.67], delay: 0.2 }}
+            style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}
           >
             "{biography.motto}"
           </motion.blockquote>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.7 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.17, 0.67, 0.83, 0.67] }}
             viewport={{ once: true }}
           >
             <AudioVisualizer
@@ -291,13 +332,13 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Footer - Subtle fade in */}
-      <footer className="py-8 text-center">
+      {/* Footer - Slide up and fade in */}
+      <footer className="py-8 text-center z-10 relative">
         <motion.p
           className={`text-sm ${isDarkRealm ? 'text-gray-400' : 'text-gray-600'}`}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isMounted ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 1 }}
+          transition={{ duration: 0.7, delay: 0.8, ease: [0.17, 0.67, 0.83, 0.67] }}
         >
           Artwork & Website by{' '}
           <motion.a
@@ -305,7 +346,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.2 }}
           >
             {biography.designer.name}
