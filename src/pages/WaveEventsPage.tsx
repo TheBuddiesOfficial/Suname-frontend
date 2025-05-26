@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Waves } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import AudioVisualizer from '../components/AudioVisualizer';
 import { biography } from '../data/biography';
 
 const WaveEventsPage = () => {
@@ -34,12 +33,11 @@ const WaveEventsPage = () => {
           </p>
         </motion.div>
 
-        {/* Movement Description */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className={`rounded-2xl p-8 mb-12 ${
+          className={`rounded-2xl p-8 ${
             isDarkMode 
               ? 'bg-gray-900/60 border border-gray-800' 
               : 'bg-white/80 border border-gray-200'
@@ -54,35 +52,15 @@ const WaveEventsPage = () => {
           <h2 className={`text-2xl font-bold mb-4 ${
             isDarkMode ? 'text-white' : 'text-gray-900'
           }`}>
-            The WAVE Movement
+            To Be Announced
           </h2>
-          <p className={`text-lg mb-8 ${
+          <p className={`text-lg mb-4 ${
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            WAVE events represent a new era in electronic music culture. 
-            We combine cutting-edge sound design with immersive visual experiences 
-            to create unforgettable moments of connection and transformation.
+            Stay tuned for upcoming WAVE events and experiences.
           </p>
-          <div className="mt-8">
-            <h3 className={`text-xl font-bold mb-4 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Events Coming Soon
-            </h3>
-            <p className={`text-lg ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              Stay tuned for upcoming WAVE events and experiences.
-            </p>
-          </div>
-          <AudioVisualizer 
-            height={40} 
-            barCount={12}
-            color={isDarkMode ? 'rgb(139, 92, 246)' : 'rgb(109, 40, 217)'}
-          />
         </motion.div>
 
-        {/* Credit */}
         <motion.section
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
