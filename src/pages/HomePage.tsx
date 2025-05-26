@@ -1,62 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
- import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
- import { Link } from 'react-router-dom';
- import { ArrowRight, Play, Pause } from 'lucide-react';
- import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
- import { biography } from '../data/biography';
- import AudioVisualizer from '../components/AudioVisualizer';
- import ParticleSystem from '../components/ParticleSystem';
- import MusicCard from '../components/MusicCard'; 
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Play, Pause } from 'lucide-react';
+import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
+import { biography } from '../data/biography';
+import AudioVisualizer from '../components/AudioVisualizer';
+import ParticleSystem from '../components/ParticleSystem';
+import MusicCard from '../components/MusicCard';
 
- // Define the props for the HomePage component, specifically for theme
- interface HomePageProps {
-  isDarkRealm: boolean; // Determines if the theme is dark or light
- }
+interface HomePageProps {
+  isDarkRealm: boolean;
+}
 
- // HomePage functional component
- const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
-  const [activeMix, setActiveMix] = useState<number | null>(null); // State for active mix
-  const [isMounted, setIsMounted] = useState(false); // State for component mounting to trigger animations
-  const heroRef = useRef<HTMLElement>(null); // Ref for hero section scroll tracking
+const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
+  const [activeMix, setActiveMix] = useState<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
-  // Parallax Scroll Effects for Hero Section
   const { scrollYProgress } = useScroll({
-    target: heroRef, 
+    target: heroRef,
     offset: ["start start", "end start"]
   });
 
-  // Transforms scroll progress for hero image and text vertical movement and text opacity
   const heroImageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroTextY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const heroTextOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  // Mouse-based Subtle Tilt for the Artist Photo
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useTransform(y, [-100, 100], [3, -3]);
   const rotateY = useTransform(x, [-100, 100], [-3, 3]);
 
-  // Handle mouse movement for tilt
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
     y.set(event.clientY - rect.top - rect.height / 2);
   }
 
-  // Handle mouse leave to reset tilt
   function handleMouseLeave() {
     x.set(0);
     y.set(0);
   }
 
-  // Effect to set isMounted to true on component mount
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Animation Variants
-
-  // Hero Section Elements Reveal
   const heroReveal = {
     hidden: { opacity: 0, y: 30, scale: 0.98 },
     visible: {
@@ -72,7 +61,6 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // Section Heading Reveal
   const sectionHeadingReveal = {
     hidden: { opacity: 0, y: 50, filter: 'blur(8px)' },
     visible: {
@@ -86,7 +74,6 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // Card / Item Entrance Animation
   const itemGentleRise = {
     hidden: { opacity: 0, y: 60 },
     visible: {
@@ -99,7 +86,6 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // MAIN HEADING "SUNAME" - Character Ripple Reveal with Neon Glow
   const sunameCharReveal = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: {
@@ -113,10 +99,9 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // "SUNAME" Active Text Animation - Dynamic neon pulse
   const sunameActiveTextAnimation = {
     animate: isDarkRealm
-      ? { // Dark Realm: Vibrant Purple Neon Pulse
+      ? {
           color: ['#E0BBE4', '#FFFFFF', '#E0BBE4'],
           textShadow: [
             '0 0 10px rgba(139,92,246,0.8), 0 0 20px rgba(139,92,246,0.6), 0 0 30px rgba(139,92,246,0.4)',
@@ -130,7 +115,7 @@ import React, { useState, useEffect, useRef } from 'react';
             repeatType: "mirror"
           }
         }
-      : { // Light Realm: Vibrant Orange Neon Pulse
+      : {
           color: ['#FFDDC1', '#FFFFFF', '#FFDDC1'],
           textShadow: [
             '0 0 12px rgba(255,165,0,0.9), 0 0 22px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.5)',
@@ -146,10 +131,9 @@ import React, { useState, useEffect, useRef } from 'react';
         }
   };
 
-  // TAGLINE - Gentle Wave Color Shift and Glow
   const taglineActiveTextAnimation = {
     animate: isDarkRealm
-      ? { // Dark Realm: Subtle wave-like color shift (White to Light Purple) + subtle glow
+      ? {
           color: ['#FFFFFF', '#B39DDB', '#FFFFFF'],
           textShadow: [
             '0 0 4px rgba(179,157,219,0.5)',
@@ -158,7 +142,7 @@ import React, { useState, useEffect, useRef } from 'react';
           ],
           transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror", delay: 0.1 }
         }
-      : { // Light Realm: Gentle Light Color Shift (Orange-tinted light to light gray) + subtle glow
+      : {
           color: ['#FFC074', '#FFAA66', '#FFC074'],
           textShadow: [
             '0 0 5px rgba(255,165,0,0.4)',
@@ -169,7 +153,6 @@ import React, { useState, useEffect, useRef } from 'react';
         }
   };
 
-  // Tagline Word by Word Reveal animation
   const taglineWordReveal = {
     hidden: { opacity: 0, y: 15 },
     visible: {
@@ -182,10 +165,9 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // QUOTE - Ethereal Fade & Color Breath
   const quoteActiveTextAnimation = {
     animate: isDarkRealm
-      ? { // Dark Realm: Fading glow with slight color change
+      ? {
           color: ['#FFFFFF', 'rgba(179,157,219,0.9)', '#FFFFFF'],
           textShadow: ['0 0 5px rgba(139,92,246,0.3)', '0 0 10px rgba(139,92,246,0.6)', '0 0 5px rgba(139,92,246,0.3)'],
           transition: {
@@ -195,7 +177,7 @@ import React, { useState, useEffect, useRef } from 'react';
             repeatType: "mirror"
           }
         }
-      : { // Light Realm: Dynamic color shift with a subtle shadow for depth
+      : {
           color: ['#3A404F', '#2A2E3D', '#3A404F'],
           textShadow: [
             '0 0 2px rgba(0,0,0,0.1)', '0 0 4px rgba(0,0,0,0.2)', '0 0 2px rgba(0,0,0,0.1)'
@@ -209,7 +191,6 @@ import React, { useState, useEffect, useRef } from 'react';
         }
   };
 
-  // Quote Line Reveal animation
   const quoteLineReveal = {
     hidden: { opacity: 0, y: 30, filter: 'blur(5px)' },
     visible: {
@@ -223,7 +204,6 @@ import React, { useState, useEffect, useRef } from 'react';
     },
   };
 
-  // Dynamic Text Shadow/Outline for White Text
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
     return {
       textShadow: isDark
@@ -232,7 +212,6 @@ import React, { useState, useEffect, useRef } from 'react';
     };
   };
 
-  // Sample mix data for "Latest Mixes"
   const mixes = [
     {
       title: "SUNAME @ Elixr Orlando December Set",
@@ -246,7 +225,7 @@ import React, { useState, useEffect, useRef } from 'react';
     },
     {
       title: "Elixr Full Set Preview",
-      url: "httpscloud.com/sunamemusic/elixr-full-set-preview",
+      url: "https://soundcloud.com/sunamemusic/elixr-full-set-preview",
       image: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
     }
   ];
@@ -256,13 +235,11 @@ import React, { useState, useEffect, useRef } from 'react';
 
   return (
     <div className="min-h-screen overflow-hidden relative">
-      {/* Particle system background */}
       <ParticleSystem
         isDarkRealm={isDarkRealm}
         customColors={isDarkRealm ? ['#303F9F', '#42A5F5', '#8B5CF6'] : ['#FFD180', '#FFA07A', '#FF7043']}
       />
 
-      {/* Animated SVG background wave */}
       <motion.svg
         className="absolute bottom-0 left-0 w-full h-80 md:h-96 z-0"
         viewBox="0 0 350 100"
@@ -293,7 +270,6 @@ import React, { useState, useEffect, useRef } from 'react';
         />
       </motion.svg>
 
-      {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10 overflow-hidden perspective-1000">
         <motion.div
           className="container mx-auto text-center relative z-20"
@@ -301,7 +277,6 @@ import React, { useState, useEffect, useRef } from 'react';
           animate={isMounted ? "visible" : "hidden"}
           variants={heroReveal}
         >
-          {/* Artist Photo with Border Animation & Subtle 3D Tilt */}
           <motion.div
             className="relative w-80 h-80 mx-auto mb-10 cursor-grab active:cursor-grabbing rounded-full overflow-hidden"
             onMouseMove={handleMouseMove}
@@ -314,7 +289,6 @@ import React, { useState, useEffect, useRef } from 'react';
               ease: "linear",
             }}
           >
-            {/* Animated border effect */}
             <motion.div
               className="absolute inset-0 rounded-full"
               animate={{
@@ -338,11 +312,9 @@ import React, { useState, useEffect, useRef } from 'react';
                 borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
               }}
             />
-            {/* Subtle background blur/glow */}
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300 ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
-          {/* SUNAME Heading */}
           <motion.h1
             className={`text-7xl md:text-8xl font-extrabold mb-4 relative leading-none text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
@@ -371,7 +343,6 @@ import React, { useState, useEffect, useRef } from 'react';
             </motion.span>
           </motion.h1>
 
-          {/* Tagline */}
           <motion.p
             className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white`}
             style={{ y: heroTextY, opacity: heroTextOpacity }}
@@ -396,7 +367,6 @@ import React, { useState, useEffect, useRef } from 'react';
             ))}
           </motion.p>
 
-          {/* Social Icons */}
           <motion.div
             className="flex justify-center space-x-8 mb-12"
             variants={{
@@ -431,7 +401,7 @@ import React, { useState, useEffect, useRef } from 'react';
                   opacity: 1,
                   y: 0,
                   scale: 1,
-                  color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Initial and constant color
+                  color: isDarkRealm ? '#8B5CF6' : '#FF7043',
                   filter: isDarkRealm
                     ? 'drop-shadow(0px 0px 8px rgba(139,92,246,0.9)) drop-shadow(0px 0px 15px rgba(139,92,246,0.7)) drop-shadow(0px 0px 25px rgba(139,92,246,0.5))'
                     : 'drop-shadow(0px 0px 8px rgba(255,165,0,0.9)) drop-shadow(0px 0px 15px rgba(255,165,0,0.7)) drop-shadow(0px 0px 25px rgba(255,165,0,0.5))',
@@ -445,7 +415,6 @@ import React, { useState, useEffect, useRef } from 'react';
         </motion.div>
       </section>
 
-      {/* Latest Mixes Section */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -481,7 +450,6 @@ import React, { useState, useEffect, useRef } from 'react';
         </div>
       </section>
 
-      {/* Artist Photos Section */}
       <section className="py-20 px-4 relative overflow-hidden z-10">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -519,7 +487,7 @@ import React, { useState, useEffect, useRef } from 'react';
                 }}
               >
                 <img
-                  src={`/images/artist_main.jpg`}
+                  src={`/images/artist_gallery.jpg`}
                   alt={`SUNAME ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -537,7 +505,6 @@ import React, { useState, useEffect, useRef } from 'react';
         </div>
       </section>
 
-      {/* Quote Section */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
@@ -554,16 +521,14 @@ import React, { useState, useEffect, useRef } from 'react';
             whileInView="visible"
             viewport={{ once: true, amount: 0.6 }}
           >
-            {/* Animated opening quote mark */}
             <motion.span
               className={`absolute -top-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 0.2 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
             >
-                &ldquo;
+              &ldquo;
             </motion.span>
-            {/* Quote tagline words */}
             {quoteTagline.split(" ").map((word, index) => (
                 <motion.span
                   key={index}
@@ -572,17 +537,16 @@ import React, { useState, useEffect, useRef } from 'react';
                   animate={isMounted ? quoteActiveTextAnimation.animate : undefined}
                   style={{ color: isDarkRealm ? '#FFFFFF' : '#1A202C' }}
                 >
-                    {word}
+                  {word}
                 </motion.span>
             ))}
-            {/* Animated closing quote mark */}
             <motion.span
               className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-7xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 0.2 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: quoteTagline.split(" ").length * 0.05 + 0.3 }}
             >
-                &rdquo;
+              &rdquo;
             </motion.span>
           </motion.blockquote>
 
@@ -604,7 +568,6 @@ import React, { useState, useEffect, useRef } from 'react';
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-8 text-center z-10 relative">
         <motion.p
           className={`text-base`}
@@ -629,6 +592,6 @@ import React, { useState, useEffect, useRef } from 'react';
       </footer>
     </div>
   );
- };
+};
 
- export default HomePage;
+export default HomePage;
