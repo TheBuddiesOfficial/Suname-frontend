@@ -23,14 +23,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     offset: ["start start", "end start"]
   });
 
-  const heroImageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]); // Less aggressive parallax
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroTextY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const heroTextOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]); // Smoother fade out
+  const heroTextOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   // Mouse-based subtle tilt for the artist photo
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [3, -3]); // Reduced tilt angle for subtlety
+  const rotateX = useTransform(y, [-100, 100], [3, -3]);
   const rotateY = useTransform(x, [-100, 100], [-3, 3]);
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
@@ -58,8 +58,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       y: 0,
       scale: 1,
       transition: {
-        duration: 1.2, // Smooth, longer duration
-        ease: [0.2, 0.8, 0.2, 1], // Classic ease-out for smoothness
+        duration: 1.2,
+        ease: [0.2, 0.8, 0.2, 1],
         staggerChildren: 0.1,
         delayChildren: 0.4
       },
@@ -75,7 +75,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       filter: 'blur(0px)',
       transition: {
         duration: 1.0,
-        ease: [0.2, 0.8, 0.2, 1], // Smooth ease
+        ease: [0.2, 0.8, 0.2, 1],
       },
     },
   };
@@ -88,7 +88,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       y: 0,
       transition: {
         duration: 0.9,
-        ease: [0.2, 0.8, 0.2, 1], // Smooth ease
+        ease: [0.2, 0.8, 0.2, 1],
       },
     },
   };
@@ -97,31 +97,31 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const iconHover = {
     scale: 1.15,
     textShadow: isDarkRealm
-      ? '0px 0px 15px rgba(139,92,246,0.6)'
-      : '0px 0px 15px rgba(255,127,80,0.8)',
+      ? '0px 0px 15px rgba(139,92,246,0.6)' // Purple for dark realm
+      : '0px 0px 15px rgba(255,165,0,0.8)', // Orange for light realm
     transition: { type: "spring", stiffness: 300, damping: 15 }
   };
 
-  // --- Main Heading "SUNAME" - Character Ripple/Wave Reveal ---
-  const sunameCharReveal = {
-    hidden: { opacity: 0, y: 30, rotateX: 20 }, // Subtle initial rotation
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.2, 0.8, 0.2, 1],
-      },
+
+  // --- MAIN HEADING "SUNAME" - Radiant Pulse / Ocean Wave Effect ---
+  // Dark Realm: Subtle pulsing glow (purple/blue)
+  // Light Realm: Radiant color shift (sunset oranges/reds)
+  const sunameMainColors = {
+    dark: {
+      start: '#B39DDB', // Lighter purple for glow
+      end: '#8B5CF6'    // Main purple
     },
+    light: {
+      colors: ['#FFC107', '#FF9800', '#F44336', '#FF5722'], // Yellow, Orange, Red-Orange
+    }
   };
 
-  // Tagline (Word by Word) - Gentle Slide
-  const taglineWordReveal = {
-    hidden: { opacity: 0, y: 15 },
+  const sunameCharReveal = {
+    hidden: { opacity: 0, y: 30, scale: 0.8 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.8,
         ease: [0.2, 0.8, 0.2, 1],
@@ -129,25 +129,100 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Quote (Line by Line) - Soft Fade & Slide
-  const quoteLineReveal = {
-    hidden: { opacity: 0, x: -30 },
+  const sunameActiveTextAnimation = {
+    animate: isDarkRealm
+      ? { // Dark Realm: Pulsing Glow
+          textShadow: [
+            `0 0 10px ${sunameMainColors.dark.start}, 0 0 20px ${sunameMainColors.dark.end}, 0 0 30px ${sunameMainColors.dark.start}`,
+            `0 0 15px ${sunameMainColors.dark.end}, 0 0 25px ${sunameMainColors.dark.start}, 0 0 35px ${sunameMainColors.dark.end}`,
+            `0 0 10px ${sunameMainColors.dark.start}, 0 0 20px ${sunameMainColors.dark.end}, 0 0 30px ${sunameMainColors.dark.start}`
+          ],
+          transition: {
+            repeat: Infinity,
+            duration: 3,
+            ease: "easeInOut",
+            repeatType: "mirror"
+          }
+        }
+      : { // Light Realm: Sunset Color Shift
+          color: sunameMainColors.light.colors,
+          textShadow: [
+            `0 0 5px ${sunameMainColors.light.colors[0]}, 0 0 10px ${sunameMainColors.light.colors[1]}`,
+            `0 0 8px ${sunameMainColors.light.colors[1]}, 0 0 15px ${sunameMainColors.light.colors[2]}`,
+            `0 0 10px ${sunameMainColors.light.colors[2]}, 0 0 20px ${sunameMainColors.light.colors[3]}`,
+            `0 0 5px ${sunameMainColors.light.colors[0]}, 0 0 10px ${sunameMainColors.light.colors[1]}`
+          ],
+          transition: {
+            repeat: Infinity,
+            duration: 6, // Slower, more flowing color shift
+            ease: "easeInOut",
+            repeatType: "loop",
+            delay: 1.5 // Start after initial reveal
+          }
+        }
+  };
+
+
+  // --- TAGLINE - Shimmering Reveal / Typewriter Fade ---
+  const taglineColors = {
+    dark: '#B39DDB', // Light purple
+    light: ['#FFCC80', '#FFA726', '#FF7043'] // Light orange, orange, dark orange
+  };
+
+  const taglineWordReveal = {
+    hidden: { opacity: 0, x: -20 },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.9,
+        duration: 0.7,
         ease: [0.2, 0.8, 0.2, 1],
       },
     },
   };
 
-  // --- Dynamic Text Shadow/Outline for White Text (Refined for smoothness) ---
+  const taglineActiveTextAnimation = {
+    animate: isDarkRealm
+      ? { // Dark Realm: Subtle wave-like color shift
+          color: ['#FFFFFF', taglineColors.dark, '#FFFFFF'],
+          transition: { repeat: Infinity, duration: 4, ease: "easeInOut", repeatType: "mirror" }
+        }
+      : { // Light Realm: Gentle highlight pulse
+          background: `linear-gradient(90deg, ${taglineColors.light[0]} 0%, ${taglineColors.light[1]} 50%, ${taglineColors.light[2]} 100%)`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundSize: '200% 100%',
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+          transition: { repeat: Infinity, duration: 8, ease: "linear" }
+        }
+  };
+
+
+  // --- QUOTE - Gradient Reveal / Ocean Sweep ---
+  const quoteGradientColors = {
+    dark: ['#8B5CF6', '#42A5F5', '#303F9F'], // Purple, Blue, Dark Blue
+    light: ['#FFC107', '#FFA07A', '#FF7043'] // Yellow, Coral, Orange
+  };
+
+  const quoteLineReveal = {
+    hidden: { opacity: 0, y: 30, filter: 'blur(5px)' }, // Initial blur
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)', // Unblur
+      transition: {
+        duration: 1.0,
+        ease: [0.2, 0.8, 0.2, 1]
+      },
+    },
+  };
+
+  // Dynamic Text Shadow/Outline for White Text
   const getDynamicWhiteTextStyle = (isDark: boolean) => {
     return {
       textShadow: isDark
-        ? '0 0 10px rgba(255,255,255,0.2), 0 0 12px rgba(139,92,246,0.2)' // Softer glow
-        : '0 0 4px rgba(0,0,0,0.5), 0 0 6px rgba(0,0,0,0.3)', // Subtle, smooth dark shadow
+        ? '0 0 10px rgba(255,255,255,0.2), 0 0 12px rgba(139,92,246,0.2)' // Softer purple glow
+        : '0 0 8px rgba(255,165,0,0.5), 0 0 10px rgba(255,127,80,0.3)', // Soft orange glow
     };
   };
 
@@ -164,13 +239,12 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
     {
       title: "Elixr Full Set Preview",
-      url: "https://soundcloud.com/sunamemusic/elixr-full-set-preview",
+      url: "httpscloud.com/sunamemusic/elixr-full-set-preview",
       image: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
     }
   ];
 
   const splitTagline = biography.tagline.split(" ");
-  // Note: Splitting by ". " can sometimes drop the last period. Ensure re-addition if necessary.
   const splitQuote = "WE ARE NOT RAVERS, WE ARE WAVERS. WE FLOOD CITIES THEN BRING PURE SUNLIGHT - SUNAME".split(". ");
 
 
@@ -179,19 +253,19 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
       {/* Particle system as dynamic background - Sunset/Beach colors */}
       <ParticleSystem
         isDarkRealm={isDarkRealm}
-        customColors={isDarkRealm ? ['#303F9F', '#42A5F5', '#8B5CF6'] : ['#FFD180', '#FFA07A', '#FF7043']} // Deep blues/purples for dark sunset, warm oranges for light sunset
+        customColors={isDarkRealm ? ['#303F9F', '#42A5F5', '#8B5CF6'] : ['#FFD180', '#FFA07A', '#FF7043']}
       />
 
       {/* --- BACKGROUND WAVE - Karachi Sunset --- */}
       <motion.svg
-        className="absolute bottom-0 left-0 w-full h-80 md:h-96 z-0" // Larger, more dominant wave
+        className="absolute bottom-0 left-0 w-full h-80 md:h-96 z-0"
         viewBox="0 0 350 100"
         preserveAspectRatio="none"
         initial={{ opacity: 0, y: 200 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2.5, delay: 1 }}
         style={{
-          fill: isDarkRealm ? 'rgba(48,63,159,0.4)' : 'rgba(255,165,0,0.2)' // Muted blue for dark, soft orange for light
+          fill: isDarkRealm ? 'rgba(48,63,159,0.4)' : 'rgba(255,165,0,0.2)'
         }}
       >
         <motion.path
@@ -206,7 +280,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             ]
           }}
           transition={{
-            duration: 12, // Even slower, more majestic wave motion
+            duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -220,16 +294,16 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           className="container mx-auto text-center relative z-20"
           initial="hidden"
           animate={isMounted ? "visible" : "hidden"}
-          variants={heroReveal} // Using heroReveal for overall stagger and initial animation
+          variants={heroReveal}
         >
           {/* Artist Photo with Border Animation & Subtle 3D Tilt */}
           <motion.div
             className="relative w-80 h-80 mx-auto mb-10 cursor-grab active:cursor-grabbing group rounded-full overflow-hidden"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={{ rotateX, rotateY, y: heroImageY, scale: 1 }} // Initial scale 1, no chaotic entry
-            whileHover={{ scale: 1.05, boxShadow: isDarkRealm ? '0px 0px 25px rgba(139,92,246,0.6)' : '0px 0px 25px rgba(255,127,80,0.7)' }} // Softer glow
-            transition={{ type: "spring", stiffness: 100, damping: 20 }} // Softer spring
+            style={{ rotateX, rotateY, y: heroImageY, scale: 1 }}
+            whileHover={{ scale: 1.05, boxShadow: isDarkRealm ? '0px 0px 25px rgba(139,92,246,0.6)' : '0px 0px 25px rgba(255,165,0,0.7)' }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -244,38 +318,43 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                      'linear-gradient(180deg, rgba(255,165,0,0.6), transparent)',
                      'linear-gradient(270deg, rgba(255,165,0,0.6), transparent)']
               }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }} // Smoother, slower border animation
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
             />
             <motion.img
               src="/images/artist_main.jpg"
               alt="SUNAME"
               className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300"
               style={{
-                borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)' // Border color matching sunset theme
+                borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
               }}
             />
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300
-                            ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} /> {/* Softer blur/opacity */}
+                            ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
-          {/* SUNAME Heading - Character Ripple Reveal */}
+          {/* SUNAME Heading - Character Ripple Reveal with Dynamic Glow */}
           <motion.h1
             className={`text-7xl md:text-8xl font-extrabold mb-4 relative text-white leading-none`}
-            style={{ ...getDynamicWhiteTextStyle(isDarkRealm), y: heroTextY, opacity: heroTextOpacity }}
+            style={{ y: heroTextY, opacity: heroTextOpacity }}
           >
             <motion.span
               className="relative z-0 inline-block overflow-hidden"
               variants={{
                 visible: {
                   transition: {
-                    staggerChildren: 0.08, // Gentle stagger
-                    delayChildren: 0.8 // Delay after initial hero reveal
+                    staggerChildren: 0.08,
+                    delayChildren: 0.8
                   }
                 }
               }}
             >
               {"SUNAME".split("").map((char, index) => (
-                <motion.span key={index} className="inline-block" variants={sunameCharReveal}>
+                <motion.span
+                  key={index}
+                  className="inline-block"
+                  variants={sunameCharReveal}
+                  animate={isMounted ? sunameActiveTextAnimation.animate : undefined} // Apply active animation
+                >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
               ))}
@@ -283,21 +362,26 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           </motion.h1>
 
 
-          {/* Tagline - Word by Word Reveal */}
+          {/* Tagline - Word by Word Reveal with Shimmer */}
           <motion.p
             className={`text-xl md:text-2xl mb-8 text-white max-w-2xl mx-auto`}
-            style={{ ...getDynamicWhiteTextStyle(isDarkRealm), y: heroTextY, opacity: heroTextOpacity }}
+            style={{ y: heroTextY, opacity: heroTextOpacity }}
             variants={{
                 visible: {
                     transition: {
-                        staggerChildren: 0.05, // Gentle stagger
-                        delayChildren: 1.2 // Delay after SUNAME reveal
+                        staggerChildren: 0.05,
+                        delayChildren: 1.2
                     }
                 }
             }}
           >
             {splitTagline.map((word, index) => (
-              <motion.span key={index} className="inline-block mr-2" variants={taglineWordReveal}>
+              <motion.span
+                key={index}
+                className="inline-block mr-2"
+                variants={taglineWordReveal}
+                animate={isMounted ? taglineActiveTextAnimation.animate : undefined} // Apply active animation
+              >
                 {word}
               </motion.span>
             ))}
@@ -312,7 +396,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 opacity: 1,
                 y: 0,
                 transition: {
-                  delay: 1.5, // Delay after tagline
+                  delay: 1.5,
                   staggerChildren: 0.1
                 }
               }
@@ -334,7 +418,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 rel="noopener noreferrer"
                 className={`text-4xl md:text-5xl text-white`}
                 style={{
-                  textShadow: !isDarkRealm ? '0 0 10px rgba(255,127,80,0.5)' : 'none' // Soft orange glow for light mode
+                  textShadow: !isDarkRealm ? '0 0 10px rgba(255,127,80,0.5)' : 'none'
                 }}
                 whileHover={iconHover}
                 initial={{ opacity: 0, y: 30 }}
@@ -369,7 +453,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
           >
             {mixes.map((mix, index) => (
-              <motion.div key={index} variants={itemGentleRise}> {/* GentleRise */}
+              <motion.div key={index} variants={itemGentleRise}>
                 <MusicCard
                   title={mix.title}
                   imageUrl={mix.image}
@@ -409,7 +493,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={index}
                 className="relative aspect-square rounded-xl overflow-hidden shadow-lg"
                 variants={{
-                  hidden: { opacity: 0, scale: 0.9, y: 50 }, // Smoother initial state
+                  hidden: { opacity: 0, scale: 0.9, y: 50 },
                   visible: {
                     opacity: 1,
                     scale: 1,
@@ -417,8 +501,8 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                     transition: { duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: index * 0.05 }
                   },
                 }}
-                whileHover={{ scale: 1.05, z: 10, // Softer hover scale
-                  boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.5)' : '0px 0px 20px rgba(255,127,80,0.6)' // Softer glow
+                whileHover={{ scale: 1.05, z: 10,
+                  boxShadow: isDarkRealm ? '0px 0px 20px rgba(139,92,246,0.5)' : '0px 0px 20px rgba(255,127,80,0.6)'
                 }}
               >
                 <img
@@ -427,11 +511,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                   className="w-full h-full object-cover"
                 />
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity flex items-end p-4" // Lighter overlay
+                  className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity flex items-end p-4"
                   whileHover={{ opacity: 1 }}
                 >
                   <p className="text-white text-lg font-semibold" style={getDynamicWhiteTextStyle(isDarkRealm)}>
-                    Beach Set {index + 1} {/* Changed text to reflect beach theme */}
+                    Beach Set {index + 1}
                   </p>
                 </motion.div>
               </motion.div>
@@ -440,16 +524,27 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Quote Section - Soft Fade & Slide */}
+      {/* Quote Section - Soft Fade & Slide with Dynamic Gradient */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
             className={`text-3xl md:text-4xl font-bold italic mb-8 relative text-white`}
-            style={getDynamicWhiteTextStyle(isDarkRealm)}
+            style={{
+              // Apply dynamic gradient to the quote text itself
+              background: isDarkRealm
+                ? `linear-gradient(90deg, ${quoteGradientColors.dark[0]}, ${quoteGradientColors.dark[1]}, ${quoteGradientColors.dark[2]})`
+                : `linear-gradient(90deg, ${quoteGradientColors.light[0]}, ${quoteGradientColors.light[1]}, ${quoteGradientColors.light[2]})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              // Add a subtle text shadow that matches the gradient for clear legibility
+              textShadow: isDarkRealm
+                ? '0 0 5px rgba(139,92,246,0.5), 0 0 8px rgba(48,63,159,0.3)'
+                : '0 0 5px rgba(255,165,0,0.6), 0 0 8px rgba(255,127,80,0.4)'
+            }}
             variants={{
                 visible: {
                     transition: {
-                        staggerChildren: 0.1, // Softer stagger
+                        staggerChildren: 0.1,
                         delayChildren: 0.2
                     }
                 }
@@ -470,7 +565,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
 
           <motion.div
             variants={{
-              hidden: { opacity: 0, y: 50 }, // Simple slide up
+              hidden: { opacity: 0, y: 50 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.2, 0.8, 0.2, 1], delay: 0.5 } }
             }}
             initial="hidden"
@@ -480,7 +575,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             <AudioVisualizer
               height={80}
               barCount={48}
-              color={isDarkRealm ? 'rgb(139, 92, 246)' : 'rgb(255,127,80)'} // Orange for light mode
+              color={isDarkRealm ? 'rgb(139, 92, 246)' : 'rgb(255,127,80)'}
             />
           </motion.div>
         </div>
@@ -502,7 +597,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-500 hover:text-primary-400 font-semibold"
-            whileHover={{ scale: 1.05, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(255,127,80,0.6)' }} // Softer glow
+            whileHover={{ scale: 1.05, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(255,127,80,0.6)' }}
             transition={{ duration: 0.2 }}
           >
             JimmyDesigns
