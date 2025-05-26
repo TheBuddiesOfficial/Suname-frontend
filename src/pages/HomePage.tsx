@@ -429,13 +429,19 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl text-white`} // Ensures icons are initially white
+                // The main anchor tag's class remains simple, it's just a container
+                className="text-4xl md:text-5xl"
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
-                whileHover={socialIconHover}
               >
-                <Icon />
+                {/* Wrap the icon in a motion.span to apply color and shadow */}
+                <motion.span
+                  className="inline-block text-white" // Keep text-white for initial color
+                  whileHover={socialIconHover}
+                >
+                  <Icon />
+                </motion.span>
               </motion.a>
             ))}
           </motion.div>
