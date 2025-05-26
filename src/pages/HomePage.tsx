@@ -230,10 +230,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
+  // Modified to display the main artist image in all three slots
   const galleryImages = [
-    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" }, // Added main artist image
-    { src: "/images/gallery-beach-1.jpg", alt: "Beach Set 1" },
-    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" }, // Added main artist image again
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
   ];
 
   const splitTagline = biography.tagline.split(" ");
