@@ -62,14 +62,16 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               key={`lightning-main-${index}`}
               className="fixed inset-0"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.9 + Math.random() * 0.1, 0] }}
+              animate={{ opacity: [0, 0.95, 0] }} // Sharper flash
               transition={{
-                duration: 0.08 + Math.random() * 0.15, // Faster, sharper flashes
-                delay: Math.random() * 0.4,
+                duration: 0.05 + Math.random() * 0.08, // Even faster, sharper flashes
+                delay: Math.random() * 0.3,
                 ease: 'linear',
               }}
               style={{
-                background: `radial-gradient(circle at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.9), transparent 8%)`,
+                // More jagged, thunder-like shape
+                background: `radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.95) 5%, transparent 15%),
+                             radial-gradient(at ${Math.random() * 100}% ${Math.random() * 40}%, rgba(255, 255, 255, 0.8) 5%, transparent 15%)`,
                 mixBlendMode: 'screen',
                 zIndex: -3,
                 pointerEvents: 'none',
@@ -81,14 +83,15 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               key={`lightning-secondary-${index}`}
               className="fixed inset-0"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.6 + Math.random() * 0.2, 0] }}
+              animate={{ opacity: [0, 0.7 + Math.random() * 0.2, 0] }}
               transition={{
-                duration: 0.12 + Math.random() * 0.2,
-                delay: 0.1 + Math.random() * 0.5,
+                duration: 0.08 + Math.random() * 0.1,
+                delay: 0.1 + Math.random() * 0.4,
                 ease: 'linear',
               }}
               style={{
-                background: `radial-gradient(ellipse at ${Math.random() * 100}% ${Math.random() * 60}%, rgba(190, 225, 240, 0.7), transparent 12%)`,
+                // More diffuse secondary flashes
+                background: `radial-gradient(at ${Math.random() * 100}% ${Math.random() * 60}%, rgba(190, 225, 240, 0.75) 8%, transparent 20%)`,
                 mixBlendMode: 'screen',
                 zIndex: -3,
                 pointerEvents: 'none',
@@ -169,7 +172,7 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
         }}
       />
 
-      {/* Seagulls (Day) */}
+      {/* Seagulls (Day) - Enhanced Quality */}
       {!isDarkRealm && (
         <div className="fixed inset-0" style={{ zIndex: -17 }}>
           {[...Array(6)].map((_, i) => (
@@ -179,9 +182,10 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
               style={{
                 left: Math.random() * 70 + 5 + '%',
                 top: Math.random() * 40 + 15 + '%',
-                fontSize: 'clamp(10px, 2.2vw, 25px)', // Slightly smaller
-                color: 'rgba(0, 0, 0, 0.65)',
-                transform: 'scaleX(-1)',
+                fontSize: 'clamp(12px, 2.5vw, 30px)', // Slightly larger for detail
+                color: 'rgba(0, 0, 0, 0.7)',
+                filter: 'drop-shadow(1px 1px 1px rgba(0,0,0,0.2))', // Subtle shadow for depth
+                transform: `scaleX(${Math.random() > 0.5 ? 1 : -1})`, // Randomly flip direction
               }}
               animate={{
                 x: [0, 200 + Math.random() * 300, 400 + Math.random() * 400],
@@ -195,16 +199,25 @@ const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({ isDarkRealm }) =>
                 ease: 'linear',
               }}
             >
-              ︶
+              {/* SVG-like seagull shape for better quality */}
+              <svg
+                width="clamp(12px, 2.5vw, 30px)"
+                height="clamp(8px, 1.5vw, 20px)"
+                viewBox="0 0 100 60"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M0 30 C 20 0, 40 0, 50 30 C 60 0, 80 0, 100 30 C 80 45, 60 45, 50 30 C 40 45, 20 45, 0 30 Z" />
+              </svg>
             </motion.div>
           ))}
         </div>
       )}
 
-      {/* Stars and Shooting Stars (Night) */}
+      {/* Stars and Shooting Stars (Night) - Reduced quantity */}
       {isDarkRealm && (
         <div className="fixed inset-0" style={{ zIndex: -17 }}>
-          {[...Array(200)].map((_, i) => (
+          {[...Array(120)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full"
