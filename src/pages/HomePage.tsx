@@ -93,11 +93,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Social Icon Hover Effect (CRITICAL FIX: Inline whileHover for dynamic glow)
-  // This variant is now defined inline within the map to ensure `isDarkRealm` is always fresh.
-  // We'll remove the `socialIconHover` constant from here as it's no longer needed globally.
-
-
   // --- MAIN HEADING "SUNAME" - Gentle Ripple Glow (FIXED NEON) ---
   const sunameCharReveal = {
     hidden: { opacity: 0, y: 20, scale: 0.9 }, // Softer initial state
@@ -250,10 +245,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
+  // **FIX: Defined splitTagline here at the top with other variable declarations**
+  const splitTagline = biography.tagline.split(" ");
   // The new tagline text for the quote section
   const quoteTagline = "WITHIN EVERY DARK REALM, THERE IS LIGHT – SUNAME";
-  const splitQuote = quoteTagline.split(". "); // Keeping splitQuote for the previous quote, adjust if this is replacing it.
-                                            // If the user meant this to replace the *main* tagline, we'll adjust that.
 
 
   return (
