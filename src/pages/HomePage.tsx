@@ -96,6 +96,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   // Social Icon Hover Effect (FIXED)
   const socialIconHover = {
     scale: 1.2, // Slightly larger scale on hover
+    color: isDarkRealm ? '#8B5CF6' : '#FF7043', // Direct color change on hover
     textShadow: isDarkRealm
       ? '0px 0px 20px rgba(139,92,246,0.8)' // Stronger purple glow for dark realm
       : '0px 0px 20px rgba(255,165,0,0.8)', // Stronger orange glow for light realm
@@ -342,8 +343,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
               }}
             />
-            <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300
-                             ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
+            <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300 ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
           {/* SUNAME Heading - Character Ripple Reveal with Neon Glow */}
@@ -430,7 +430,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-4xl md:text-5xl`} // Keeping your existing size classes
+                className={`text-4xl md:text-5xl text-white`} // Added text-white here
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
