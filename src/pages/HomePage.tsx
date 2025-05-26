@@ -46,21 +46,15 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Logo Animation */}
-          <motion.div
-            className="w-48 h-48 mx-auto mb-8 relative"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
-            <motion.img
-              src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
-              alt="SUNAME"
-              className="w-full h-full object-contain"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            />
-          </motion.div>
+          {/* Logo - No longer rotating */}
+          <motion.img
+            src={isDarkRealm ? "/logo-dark.png" : "/logo-light.png"}
+            alt="SUNAME"
+            className="w-48 h-48 mx-auto mb-8 object-contain"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          />
 
           {/* Artist Photo with Border Animation */}
           <motion.div
