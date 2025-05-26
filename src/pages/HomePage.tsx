@@ -73,17 +73,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   };
 
   // --- Adjusted: Hero Text Glitch Effect Colors ---
-  const glitchColors = isDarkRealm
-    ? {
-        primaryGlitch: '#8b5cf6', // Dark Realm: Purple (primary-500)
-        secondaryGlitch: '#ec4899', // Dark Realm: Pink (pink-500)
-        mainTextColor: 'text-white' // Dark Realm: White for main text
-      }
-    : {
-        primaryGlitch: '#FF7F50', // Light Realm: Coral/Orange
-        secondaryGlitch: '#00bfff', // Light Realm: Deep Sky Blue
-        mainTextColor: 'text-gray-900' // Light Realm: Dark text for main text
-      };
+  const glitchColors = {
+    primaryGlitch: '#8b5cf6', // Dark: Purple, Light: Will still be purple
+    secondaryGlitch: '#ec4899', // Dark: Pink, Light: Will still be pink
+  };
 
   const glitchVariants = {
     animate: {
@@ -128,13 +121,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   ];
 
   return (
-    // Removed the dynamic 'bg-white' or 'bg-gray-900' from this div
     <div className="min-h-screen overflow-hidden relative">
-      {/* Particle system handles background ambience */}
       <ParticleSystem isDarkRealm={isDarkRealm} />
 
       {/* --- BACKGROUND WAVE --- */}
-      {/* Adjusted fill color for light mode to be very subtle */}
       <motion.svg
         className="absolute bottom-0 left-0 w-full h-32 md:h-48 z-0"
         viewBox="0 0 350 100"
@@ -142,7 +132,6 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.8 }}
         transition={{ duration: 1.5, delay: 0.5 }}
-        // Very light color for light mode to avoid overpowering other elements
         style={{ fill: isDarkRealm ? 'rgba(30,61,89,0.3)' : 'rgba(255,127,80,0.08)' }}
       >
         <motion.path
@@ -200,9 +189,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                             ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
-          {/* SUNAME Heading with Glitch Effect */}
+          {/* SUNAME Heading - Now always white */}
           <motion.h1
-            className={`text-6xl md:text-7xl font-extrabold mb-4 relative ${glitchColors.mainTextColor}`} // Main text color from glitchColors
+            className={`text-6xl md:text-7xl font-extrabold mb-4 relative text-white`}
             variants={heroReveal}
             initial="hidden"
             animate="visible"
@@ -230,18 +219,19 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             >
               SUNAME
             </motion.span>
-            <span className="relative z-0">SUNAME</span> {/* Main text */}
+            <span className="relative z-0">SUNAME</span> {/* Main text is white */}
           </motion.h1>
 
 
+          {/* Tagline - Now always white */}
           <motion.p
-            className={`text-xl md:text-2xl mb-8 ${isDarkRealm ? 'text-gray-300' : 'text-gray-700'}`} // Retained existing subtle text colors
+            className={`text-xl md:text-2xl mb-8 text-white`}
             variants={heroReveal}
           >
-            {biography.tagline}
+            Within every dark realm, there is light – SUNAME
           </motion.p>
 
-          {/* Social Icons - Staggered entrance, prominent hover */}
+          {/* Social Icons - Adjusted for better visibility on both backgrounds */}
           <motion.div
             className="flex justify-center space-x-6 mb-12"
             variants={heroReveal}
@@ -260,7 +250,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-3xl md:text-4xl ${isDarkRealm ? 'text-white' : 'text-gray-800'} hover:text-primary-500 transition-colors`}
+                className={`text-3xl md:text-4xl text-white hover:text-primary-500 transition-colors`}
                 whileHover={iconHover}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -273,7 +263,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </motion.div>
       </section>
 
-      {/* Latest Mixes Section - Cards spring in */}
+      {/* Latest Mixes Section */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -308,7 +298,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Artist Photos Section - Images spring in with parallax */}
+      {/* Artist Photos Section */}
       <section className="py-20 px-4 relative overflow-hidden z-10">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -360,11 +350,11 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Quote Section - Punchy entrance for quote and visualizer */}
+      {/* Quote Section - Now always white */}
       <section className="py-20 px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.blockquote
-            className={`text-3xl md:text-4xl font-bold italic mb-8 relative ${isDarkRealm ? 'text-primary-400' : 'text-gray-800'}`}
+            className={`text-3xl md:text-4xl font-bold italic mb-8 relative text-white`}
             variants={{
               hidden: { opacity: 0, y: 30, scale: 0.95 },
               visible: {
@@ -384,7 +374,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             viewport={{ once: true, amount: 0.6 }}
           >
             <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-6xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}>&ldquo;</span>
-            "{biography.motto}"
+            "WE ARE NOT RAVERS, WE ARE WAVERS. WE FLOOD CITIES THEN BRING PURE SUNLIGHT - SUNAME"
             <span className={`absolute -bottom-4 left-1/2 -translate-x-1/2 text-6xl opacity-20 ${isDarkRealm ? 'text-primary-500' : 'text-orange-500'}`}>&rdquo;</span>
           </motion.blockquote>
 
@@ -406,10 +396,10 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         </div>
       </section>
 
-      {/* Footer - Final smooth fade-in */}
+      {/* Footer - Now always white */}
       <footer className="py-8 text-center z-10 relative">
         <motion.p
-          className={`text-sm ${isDarkRealm ? 'text-gray-400' : 'text-gray-600'}`}
+          className={`text-sm text-white`}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.8 }}
@@ -424,7 +414,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
             whileHover={{ scale: 1.1, textShadow: isDarkRealm ? '0px 0px 8px rgba(139, 92, 246, 0.5)' : '0px 0px 8px rgba(255,127,80,0.5)' }}
             transition={{ duration: 0.2 }}
           >
-            {biography.designer.name}
+            JimmyDesigns
           </motion.a>
         </motion.p>
       </footer>
