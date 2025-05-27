@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
-import { biography } from '../data/biography';
+import { biography } = from '../data/biography';
 import AudioVisualizer from '../components/AudioVisualizer';
 import ParticleSystem from '../components/ParticleSystem';
 import MusicCard from '../components/MusicCard';
@@ -15,6 +15,7 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const [activeMix, setActiveMix] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // New state for image index
   const heroRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -30,6 +31,20 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const y = useMotionValue(0);
   const rotateX = useTransform(y, [-100, 100], [3, -3]);
   const rotateY = useTransform(x, [-100, 100], [-3, 3]);
+
+  const heroImages = [
+    { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
+    { src: "/images/artist_beachball.jpg", alt: "SUNAME Beachball Headshot" },
+    { src: "/images/artist_orange.jpg", alt: "SUNAME Orange Full Body" },
+  ]; // Array of images for the transition
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -230,7 +245,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     }
   ];
 
-  // Modified to display the main artist image in all three slots
+  // Original gallery images, not affected by the hero image rotation
   const galleryImages = [
     { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
     { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
@@ -311,14 +326,21 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
               }}
               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
             />
-            <motion.img
-              src="/images/artist_main.jpg"
-              alt="SUNAME"
-              className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300"
-              style={{
-                borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
-              }}
-            />
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={currentImageIndex} // Key changes to trigger exit/enter animations
+                src={heroImages[currentImageIndex].src}
+                alt={heroImages[currentImageIndex].alt}
+                className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300 absolute"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 1.0, ease: "easeInOut" }} // Smooth transition duration
+                style={{
+                  borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
+                }}
+              />
+            </AnimatePresence>
             <div className={`absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-300 ${isDarkRealm ? 'bg-primary-500/50' : 'bg-orange-400/50'}`} />
           </motion.div>
 
@@ -375,7 +397,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
           </motion.p>
 
           <motion.div
-            className="flex justify-center space-x-8 mb-12"
+            className="flex justify-center space-x-4 mb-12" // Reduced space-x to 4
             variants={{
               hidden: { opacity: 0, y: 50 },
               visible: {
@@ -402,7 +424,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-4xl md:text-5xl"
+                className="text-3xl md:text-4xl" // Adjusted icon size here
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 1.5 + index * 0.1 }}
