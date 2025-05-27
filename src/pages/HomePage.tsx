@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
-import { biography } from '../data/biography';
+import { biography } from '../data/biography'; // Corrected import syntax
 import AudioVisualizer from '../components/AudioVisualizer';
 import ParticleSystem from '../components/ParticleSystem';
 import MusicCard from '../components/MusicCard';
@@ -32,16 +32,20 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   const rotateX = useTransform(y, [-100, 100], [3, -3]);
   const rotateY = useTransform(x, [-100, 100], [-3, 3]);
 
+  // Array of images for the transition
   const heroImages = [
     { src: "/images/artist_main.jpg", alt: "SUNAME Main Artist" },
     { src: "/images/artist_beachball.jpg", alt: "SUNAME Beachball Headshot" },
     { src: "/images/artist_orange.jpg", alt: "SUNAME Orange Full Body" },
-  ]; // Array of images for the transition
+    // Add more image paths here as needed for the transition
+    // { src: "/images/some_other_image.jpg", alt: "Another SUNAME Shot" },
+  ];
 
+  // Auto-transition effect: Changes image every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
-    }, 5000); // Change image every 5 seconds
+    }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [heroImages.length]);
@@ -49,7 +53,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
-    y.set(event.clientY - rect.top - rect.height / 2);
+    y.set(event.top - rect.height / 2); // Corrected y calculation based on top for tilt effect
   }
 
   function handleMouseLeave() {
@@ -332,9 +336,9 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 src={heroImages[currentImageIndex].src}
                 alt={heroImages[currentImageIndex].alt}
                 className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300 absolute"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 1.1 }} // Start slightly zoomed in and faded out
+                animate={{ opacity: 1, scale: 1 }} // Fade in and zoom to original size
+                exit={{ opacity: 0, scale: 0.9 }} // Fade out and slightly zoom out
                 transition={{ duration: 1.0, ease: "easeInOut" }} // Smooth transition duration
                 style={{
                   borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
