@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
-import { biography } = from '../data/biography';
+import { biography } from '../data/biography';
 import AudioVisualizer from '../components/AudioVisualizer';
 import ParticleSystem from '../components/ParticleSystem';
 import MusicCard from '../components/MusicCard';
