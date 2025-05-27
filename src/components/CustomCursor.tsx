@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, animate } from 'framer-motion';
 
 interface CustomCursorProps {
@@ -6,73 +6,64 @@ interface CustomCursorProps {
 }
 
 const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
-  // Motion values for all three cursor elements
-  const mainCursorX = useMotionValue(0);
-  const mainCursorY = useMotionValue(0);
-  const dotCursorX = useMotionValue(0);
-  const dotCursorY = useMotionValue(0);
-  const ghostCursorX = useMotionValue(0);
-  const ghostCursorY = useMotionValue(0);
+  // Main cursor position
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
 
-  // States for cursor variants
-  const [cursorVariant, setCursorVariant] = useState('default'); // 'default', 'hover', 'clicked'
-  const [isPressed, setIsPressed] = useState(false); // To trigger click squish effect
+  // Secondary cursor (glow/trail) position - slightly more damped for a smoother lag
+  const glowX = useMotionValue(0);
+  const glowY = useMotionValue(0);
 
-  // Spring configurations for different levels of "lag" and "bounce"
-  const mainSpring = { stiffness: 600, damping: 30, mass: 0.5 };
-  const dotSpring = { stiffness: 400, damping: 25, mass: 0.6 }; // Slower, more floaty
-  const ghostSpring = { stiffness: 200, damping: 20, mass: 0.8 }; // Even slower, very floaty
+  // Current variant for styling ('default', 'hover', 'clicked')
+  const [cursorVariant, setCursorVariant] = useState('default');
 
-  const springMainX = useSpring(mainCursorX, mainSpring);
-  const springMainY = useSpring(mainCursorY, mainSpring);
-  const springDotX = useSpring(dotCursorX, dotSpring);
-  const springDotY = useSpring(dotCursorY, dotSpring);
-  const springGhostX = useSpring(ghostCursorX, ghostSpring);
-  const springGhostY = useSpring(ghostCursorY, ghostSpring);
+  // Framer Motion spring configurations
+  const primarySpring = { stiffness: 400, damping: 25, mass: 0.8 }; // Quick but smooth
+  const glowSpring = { stiffness: 200, damping: 20, mass: 1 }; // Slower, more floaty
 
-  // Transform scale for the squish effect
-  const scaleX = useSpring(1, { stiffness: 500, damping: 30 });
-  const scaleY = useSpring(1, { stiffness: 500, damping: 30 });
+  const springCursorX = useSpring(cursorX, primarySpring);
+  const springCursorY = useSpring(cursorY, primarySpring);
+  const springGlowX = useSpring(glowX, glowSpring);
+  const springGlowY = useSpring(glowY, glowSpring);
+
+  // States for dynamic sizing and effects
+  const [isHovering, setIsHovering] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      mainCursorX.set(e.clientX);
-      mainCursorY.set(e.clientY);
-
-      // Dot follows with a slight delay naturally due to its spring config
-      dotCursorX.set(e.clientX);
-      dotCursorY.set(e.clientY);
-
-      // Ghost follows with a larger delay
-      ghostCursorX.set(e.clientX);
-      ghostCursorY.set(e.clientY);
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      glowX.set(e.clientX);
+      glowY.set(e.clientY);
     };
 
     const handleMouseDown = () => {
-      setIsPressed(true);
-      // Squish animation on click
-      animate(scaleX, 0.8);
-      animate(scaleY, 1.2);
+      setIsClicking(true);
+      setCursorVariant('clicked');
     };
-
     const handleMouseUp = () => {
-      setIsPressed(false);
-      // Revert squish
-      animate(scaleX, 1);
-      animate(scaleY, 1);
+      setIsClicking(false);
+      setCursorVariant(isHovering ? 'hover' : 'default'); // Revert to hover if still hovering
     };
 
     window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
 
-    const setHover = () => setCursorVariant('hover');
-    const clearHover = () => setCursorVariant('default');
+    const setHover = () => {
+      setIsHovering(true);
+      setCursorVariant('hover');
+    };
+    const clearHover = () => {
+      setIsHovering(false);
+      setCursorVariant('default');
+    };
 
-    // Callback to apply/reapply listeners
     const applyHoverListeners = () => {
+      // Select interactive elements
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
-        el.removeEventListener('mouseenter', setHover); // Remove before adding to prevent duplicates
+        el.removeEventListener('mouseenter', setHover); // Remove before adding
         el.removeEventListener('mouseleave', clearHover);
         el.addEventListener('mouseenter', setHover);
         el.addEventListener('mouseleave', clearHover);
@@ -81,7 +72,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
     applyHoverListeners();
 
-    // Use MutationObserver to re-apply listeners if DOM changes
+    // Use MutationObserver to re-apply listeners if DOM changes (e.g., new elements loaded)
     const observer = new MutationObserver(applyHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -90,27 +81,22 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       observer.disconnect();
-      // Clean up hover listeners
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
         el.removeEventListener('mouseenter', setHover);
         el.removeEventListener('mouseleave', clearHover);
       });
     };
-  }, [mainCursorX, mainCursorY, dotCursorX, dotCursorY, ghostCursorX, ghostCursorY, scaleX, scaleY]); // Dependencies for useEffect
+  }, [cursorX, cursorY, glowX, glowY, isHovering]); // Dependencies for useEffect
 
   // Define color themes
   const themeColors = {
     light: {
-      mainBg: 'rgba(255, 165, 0, 0.1)', // Very subtle orange fill
-      mainBorder: 'rgba(255, 165, 0, 0.7)', // Brighter orange border
-      dotBg: 'rgba(255, 165, 0, 0.9)', // Solid orange dot
-      ghostBg: 'rgba(255, 165, 0, 0.05)', // Even more subtle ghost
+      primaryColor: '255, 165, 0', // Orange RGB values
+      glowColor: '255, 165, 0',
     },
     dark: {
-      mainBg: 'rgba(139, 92, 246, 0.1)', // Very subtle purple fill
-      mainBorder: 'rgba(139, 92, 246, 0.7)', // Brighter purple border
-      dotBg: 'rgba(139, 92, 246, 0.9)', // Solid purple dot
-      ghostBg: 'rgba(139, 92, 246, 0.05)', // Even more subtle ghost
+      primaryColor: '139, 92, 246', // Purple RGB values
+      glowColor: '139, 92, 246',
     },
   };
 
@@ -119,54 +105,79 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
   // Prevent cursor from showing on touch devices
   if (typeof window !== 'undefined' && 'ontouchstart' in window) return null;
 
+  // Define dynamic properties based on cursor variant
+  const cursorProps = {
+    default: {
+      width: 32,
+      height: 32,
+      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.1)`, // Light fill
+      border: `1px solid rgba(${currentTheme.primaryColor}, 0.7)`, // Solid border
+    },
+    hover: {
+      width: 60, // Significantly larger on hover
+      height: 60,
+      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.2)`, // More opaque fill
+      border: `2px solid rgba(${currentTheme.primaryColor}, 0.9)`, // Thicker, more solid border
+    },
+    clicked: {
+      width: 24, // Smaller on click
+      height: 24,
+      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.4)`, // Even more opaque
+      border: `2px solid rgba(${currentTheme.primaryColor}, 1)`, // Fully solid border
+    },
+  };
+
+  // Glow cursor's dynamic properties
+  const glowProps = {
+    default: {
+      width: 60,
+      height: 60,
+      opacity: 0.3,
+    },
+    hover: {
+      width: 90, // Glow expands more on hover
+      height: 90,
+      opacity: 0.4,
+    },
+    clicked: {
+      width: 50,
+      height: 50,
+      opacity: 0.2,
+    },
+  };
+
   return (
     <>
-      {/* Ghost Cursor (slowest, largest, most translucent) */}
+      {/* Glow / Trail Cursor */}
       <motion.div
         className="fixed top-0 left-0 rounded-full pointer-events-none z-[9997] hidden md:block"
         style={{
-          x: springGhostX,
-          y: springGhostY,
-          height: cursorVariant === 'hover' ? 80 : 60, // Larger on hover
-          width: cursorVariant === 'hover' ? 80 : 60,
-          backgroundColor: currentTheme.ghostBg,
-          transition: 'height 0.3s ease-out, width 0.3s ease-out, background-color 0.3s ease-out',
+          x: springGlowX,
+          y: springGlowY,
+          backgroundColor: `rgba(${currentTheme.glowColor}, ${glowProps[cursorVariant].opacity})`,
+          width: glowProps[cursorVariant].width,
+          height: glowProps[cursorVariant].height,
           transform: 'translateX(-50%) translateY(-50%)',
-          mixBlendMode: 'difference', // Or 'exclusion', 'hard-light' for different effects
-          filter: 'blur(5px)', // Apply a subtle blur
+          filter: 'blur(15px)', // Stronger blur for a soft aura
+          transition: 'width 0.3s ease, height 0.3s ease, opacity 0.3s ease',
+          mixBlendMode: 'overlay', // or 'screen', 'lighten' for different effects
         }}
       />
 
-      {/* Main Cursor (circle with squish and hover effects) */}
+      {/* Main Cursor (the interactive blob) */}
       <motion.div
         className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
         style={{
-          x: springMainX,
-          y: springMainY,
-          height: cursorVariant === 'hover' ? 48 : 36, // Grow on hover, larger than default
-          width: cursorVariant === 'hover' ? 48 : 36,
-          backgroundColor: currentTheme.mainBg,
-          border: `2px solid ${currentTheme.mainBorder}`, // Stronger border
-          transition: 'height 0.2s ease-out, width 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out',
-          transform: `translateX(-50%) translateY(-50%) scaleX(${scaleX}) scaleY(${scaleY})`, // Apply squish
-          mixBlendMode: 'difference',
-          filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))', // Subtle glow
-        }}
-      />
-
-      {/* Trailing Dot Cursor (faster, solid color) */}
-      <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] hidden md:block"
-        style={{
-          x: springDotX,
-          y: springDotY,
-          height: cursorVariant === 'hover' ? 12 : 8, // Dot also changes size on hover
-          width: cursorVariant === 'hover' ? 12 : 8,
-          backgroundColor: currentTheme.dotBg,
-          opacity: isPressed ? 0 : 1, // Hide dot when main cursor is pressed
-          transition: 'height 0.2s ease-out, width 0.2s ease-out, opacity 0.1s ease-out, background-color 0.2s ease-out',
+          x: springCursorX,
+          y: springCursorY,
+          backgroundColor: cursorProps[cursorVariant].backgroundColor,
+          border: cursorProps[cursorVariant].border,
+          width: cursorProps[cursorVariant].width,
+          height: cursorProps[cursorVariant].height,
           transform: 'translateX(-50%) translateY(-50%)',
-          mixBlendMode: 'difference', // Can be 'overlay', 'lighten' for different effects
+          transition: 'width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease',
+          mixBlendMode: 'difference', // Excellent for contrast against any background
+          filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))', // Subtle glow
         }}
       />
     </>
