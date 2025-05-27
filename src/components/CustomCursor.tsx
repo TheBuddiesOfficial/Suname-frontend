@@ -1,35 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
-// Define props interface to accept isDarkRealm
 interface CustomCursorProps {
   isDarkRealm: boolean; // True if the overall website is in dark mode
 }
 
 const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const [cursorVariant, setCursorVariant] = useState('default');
+  // Motion values for the main cursor (circle)
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
 
-  // Adjust stiffness and damping for faster and smoother movement
-  const cursorX = useSpring(x, { stiffness: 1000, damping: 60, mass: 0.3 });
-  const cursorY = useSpring(y, { stiffness: 1000, damping: 60, mass: 0.3 });
+  // Motion values for the secondary cursor (dot)
+  const dotX = useMotionValue(0);
+  const dotY = useMotionValue(0);
+
+  // Spring animations for smooth movement
+  const springConfig = { stiffness: 600, damping: 40, mass: 0.5 }; // Optimized for main cursor
+  const dotSpringConfig = { stiffness: 800, damping: 50, mass: 0.3 }; // Slightly faster, less damped for dot
+
+  const springCursorX = useSpring(cursorX, springConfig);
+  const springCursorY = useSpring(cursorY, springConfig);
+
+  const springDotX = useSpring(dotX, dotSpringConfig);
+  const springDotY = useSpring(dotY, dotSpringConfig);
+
+  const [cursorVariant, setCursorVariant] = useState('default');
+  const [isClicking, setIsClicking] = useState(false); // New state for click visual feedback
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      dotX.set(e.clientX); // Dot also follows immediately
+      dotY.set(e.clientY);
     };
 
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
     window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mousedown', () => setCursorVariant('clicked'));
-    window.addEventListener('mouseup', () => setCursorVariant('default'));
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
 
     const setHover = () => setCursorVariant('hover');
     const clearHover = () => setCursorVariant('default');
 
     const applyHoverListeners = () => {
-      // Select interactive elements
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
         el.addEventListener('mouseenter', setHover);
         el.addEventListener('mouseleave', clearHover);
@@ -38,82 +54,107 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
     applyHoverListeners();
 
-    // Use MutationObserver to re-apply listeners if DOM changes
     const observer = new MutationObserver(applyHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
       observer.disconnect();
-      // Clean up hover listeners from all elements
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
         el.removeEventListener('mouseenter', setHover);
         el.removeEventListener('mouseleave', clearHover);
       });
     };
-  }, [x, y]); // Depend on x and y motion values
+  }, [cursorX, cursorY, dotX, dotY]); // Dependencies for useEffect
 
   // Define color themes
   const themeColors = {
-    light: { // These colors are for the LIGHT theme (should be orange for the cursor)
-      defaultBg: 'rgba(255, 165, 0, 0.15)', // Light orange
-      defaultBorder: 'rgba(255, 165, 0, 0.5)',
-      hoverBg: 'rgba(255, 165, 0, 0.25)', // Slightly more opaque on hover
-      hoverBorder: 'rgba(255, 165, 0, 0.8)',
-      clickedBg: 'rgba(255, 165, 0, 0.4)',
+    light: {
+      defaultBg: 'rgba(255, 165, 0, 0.15)', // Light orange, very subtle
+      defaultBorder: 'rgba(255, 165, 0, 0.6)', // More prominent orange border
+      dotBg: 'rgba(255, 165, 0, 0.8)', // Solid orange dot
+      hoverBg: 'rgba(255, 165, 0, 0.4)', // More opaque on hover
+      hoverBorder: 'rgba(255, 165, 0, 1)', // Solid border on hover
+      clickedBg: 'rgba(255, 165, 0, 0.6)', // Even more opaque on click
       clickedBorder: 'rgba(255, 165, 0, 1)',
     },
-    dark: { // These colors are for the DARK theme (should be purple for the cursor)
-      defaultBg: 'rgba(139, 92, 246, 0.15)', // Purple
-      defaultBorder: 'rgba(139, 92, 246, 0.5)',
-      hoverBg: 'rgba(139, 92, 246, 0.25)',
-      hoverBorder: 'rgba(139, 92, 246, 0.8)',
-      clickedBg: 'rgba(139, 92, 246, 0.4)',
+    dark: {
+      defaultBg: 'rgba(139, 92, 246, 0.15)', // Light purple, very subtle
+      defaultBorder: 'rgba(139, 92, 246, 0.6)', // More prominent purple border
+      dotBg: 'rgba(139, 92, 246, 0.8)', // Solid purple dot
+      hoverBg: 'rgba(139, 92, 246, 0.4)',
+      hoverBorder: 'rgba(139, 92, 246, 1)',
+      clickedBg: 'rgba(139, 92, 246, 0.6)',
       clickedBorder: 'rgba(139, 92, 246, 1)',
     },
   };
 
-  // This logic is correct IF `isDarkRealm` accurately reflects the website's theme.
-  // If `isDarkRealm` is true, use dark colors; otherwise, use light colors.
   const currentTheme = isDarkRealm ? themeColors.dark : themeColors.light;
 
-  const styles: Record<string, React.CSSProperties> = {
+  // Define styles for the main circle cursor
+  const cursorStyles: Record<string, React.CSSProperties> = {
     default: {
-      height: 32,
-      width: 32,
+      height: 36,
+      width: 36,
       backgroundColor: currentTheme.defaultBg,
       border: `1px solid ${currentTheme.defaultBorder}`,
+      transition: 'height 0.2s ease-out, width 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out',
     },
     hover: {
-      height: 48,
-      width: 48,
+      height: 50, // Larger on hover
+      width: 50,
       backgroundColor: currentTheme.hoverBg,
-      border: `1px solid ${currentTheme.hoverBorder}`,
+      border: `2px solid ${currentTheme.hoverBorder}`, // Thicker border
+      transition: 'height 0.2s ease-out, width 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out',
     },
     clicked: {
-      height: 24,
-      width: 24,
+      height: 28, // Smaller on click
+      width: 28,
       backgroundColor: currentTheme.clickedBg,
-      border: `1px solid ${currentTheme.clickedBorder}`,
+      border: `2px solid ${currentTheme.clickedBorder}`,
+      transition: 'height 0.1s ease-out, width 0.1s ease-out, background-color 0.1s ease-out, border-color 0.1s ease-out',
     },
   };
 
   // Prevent cursor from showing on touch devices
   if (typeof window !== 'undefined' && 'ontouchstart' in window) return null;
 
+  // Determine the current style for the main cursor
+  const activeCursorStyle = isClicking ? cursorStyles.clicked : cursorStyles[cursorVariant];
+
   return (
-    <motion.div
-      className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
-      style={{
-        x: cursorX,
-        y: cursorY,
-        ...styles[cursorVariant],
-        mixBlendMode: 'difference', // Creates a nice inversion effect
-        position: 'fixed',
-        translateX: '-50%', // Center the cursor on the mouse pointer
-        translateY: '-50%', // Center the cursor on the mouse pointer
-      }}
-    />
+    <>
+      {/* Main Cursor (Circle) */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
+        style={{
+          x: springCursorX,
+          y: springCursorY,
+          ...activeCursorStyle, // Apply the determined style
+          mixBlendMode: 'difference', // Creates a nice inversion effect
+          transform: 'translateX(-50%) translateY(-50%)', // Center the cursor
+          // Added a filter for a subtle glow or blur, enhance as needed
+          // filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))',
+        }}
+      />
+
+      {/* Secondary Cursor (Dot) */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] hidden md:block" // Slightly lower z-index
+        style={{
+          x: springDotX,
+          y: springDotY,
+          height: cursorVariant === 'hover' ? 10 : 6, // Slightly larger dot on hover
+          width: cursorVariant === 'hover' ? 10 : 6,
+          backgroundColor: currentTheme.dotBg, // Solid color for the dot
+          opacity: isClicking ? 0 : 1, // Hide dot on click for a cleaner effect
+          transition: 'height 0.2s ease-out, width 0.2s ease-out, opacity 0.1s ease-out',
+          transform: 'translateX(-50%) translateY(-50%)', // Center the dot
+        }}
+      />
+    </>
   );
 };
 
