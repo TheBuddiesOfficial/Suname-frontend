@@ -12,10 +12,8 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
   const [cursorVariant, setCursorVariant] = useState('default');
 
   // Adjust stiffness and damping for faster and smoother movement
-  // Lower damping means less "bounce" and quicker settling
-  // Higher stiffness means more force applied to reach the target faster
-  const cursorX = useSpring(x, { stiffness: 1000, damping: 60, mass: 0.3 }); // Increased stiffness, adjusted damping
-  const cursorY = useSpring(y, { stiffness: 1000, damping: 60, mass: 0.3 }); // Increased stiffness, adjusted damping
+  const cursorX = useSpring(x, { stiffness: 1000, damping: 60, mass: 0.3 });
+  const cursorY = useSpring(y, { stiffness: 1000, damping: 60, mass: 0.3 });
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
@@ -40,14 +38,12 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
     applyHoverListeners();
 
-    // Use a MutationObserver to re-apply listeners if DOM changes
     const observer = new MutationObserver(applyHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
       observer.disconnect();
-      // Clean up listeners when component unmounts
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
         el.removeEventListener('mouseenter', setHover);
         el.removeEventListener('mouseleave', clearHover);
@@ -57,7 +53,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
   // Define color themes
   const themeColors = {
-    light: {
+    light: { // These colors are for the LIGHT theme (should be orange)
       defaultBg: 'rgba(255, 165, 0, 0.15)', // Light orange
       defaultBorder: 'rgba(255, 165, 0, 0.5)',
       hoverBg: 'rgba(255, 165, 0, 0.25)', // Slightly more opaque on hover
@@ -65,7 +61,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
       clickedBg: 'rgba(255, 165, 0, 0.4)',
       clickedBorder: 'rgba(255, 165, 0, 1)',
     },
-    dark: {
+    dark: { // These colors are for the DARK theme (should be purple)
       defaultBg: 'rgba(139, 92, 246, 0.15)', // Purple
       defaultBorder: 'rgba(139, 92, 246, 0.5)',
       hoverBg: 'rgba(139, 92, 246, 0.25)',
@@ -75,6 +71,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     },
   };
 
+  // Corrected logic: If it's dark realm, use dark colors, otherwise use light colors.
   const currentTheme = isDarkRealm ? themeColors.dark : themeColors.light;
 
   const styles: Record<string, React.CSSProperties> = {
@@ -108,7 +105,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
         x: cursorX,
         y: cursorY,
         ...styles[cursorVariant],
-        mixBlendMode: 'difference', // Creates a cool inverted color effect
+        mixBlendMode: 'difference',
         position: 'fixed',
         translateX: '-50%',
         translateY: '-50%',
