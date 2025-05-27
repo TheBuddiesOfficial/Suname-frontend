@@ -3,7 +3,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 // Define props interface to accept isDarkRealm
 interface CustomCursorProps {
-  isDarkRealm: boolean;
+  isDarkRealm: boolean; // True if the overall website is in dark mode
 }
 
 const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
@@ -38,22 +38,24 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
     applyHoverListeners();
 
+    // Use MutationObserver to re-apply listeners if DOM changes
     const observer = new MutationObserver(applyHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
       observer.disconnect();
+      // Clean up hover listeners from all elements
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
         el.removeEventListener('mouseenter', setHover);
         el.removeEventListener('mouseleave', clearHover);
       });
     };
-  }, [x, y]);
+  }, [x, y]); // Depend on x and y motion values
 
   // Define color themes
   const themeColors = {
-    light: { // These colors are for the LIGHT theme (should be orange)
+    light: { // These colors are for the LIGHT theme (should be orange for the cursor)
       defaultBg: 'rgba(255, 165, 0, 0.15)', // Light orange
       defaultBorder: 'rgba(255, 165, 0, 0.5)',
       hoverBg: 'rgba(255, 165, 0, 0.25)', // Slightly more opaque on hover
@@ -61,7 +63,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
       clickedBg: 'rgba(255, 165, 0, 0.4)',
       clickedBorder: 'rgba(255, 165, 0, 1)',
     },
-    dark: { // These colors are for the DARK theme (should be purple)
+    dark: { // These colors are for the DARK theme (should be purple for the cursor)
       defaultBg: 'rgba(139, 92, 246, 0.15)', // Purple
       defaultBorder: 'rgba(139, 92, 246, 0.5)',
       hoverBg: 'rgba(139, 92, 246, 0.25)',
@@ -71,7 +73,8 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     },
   };
 
-  // Corrected logic: If it's dark realm, use dark colors, otherwise use light colors.
+  // This logic is correct IF `isDarkRealm` accurately reflects the website's theme.
+  // If `isDarkRealm` is true, use dark colors; otherwise, use light colors.
   const currentTheme = isDarkRealm ? themeColors.dark : themeColors.light;
 
   const styles: Record<string, React.CSSProperties> = {
@@ -105,10 +108,10 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
         x: cursorX,
         y: cursorY,
         ...styles[cursorVariant],
-        mixBlendMode: 'difference',
+        mixBlendMode: 'difference', // Creates a nice inversion effect
         position: 'fixed',
-        translateX: '-50%',
-        translateY: '-50%',
+        translateX: '-50%', // Center the cursor on the mouse pointer
+        translateY: '-50%', // Center the cursor on the mouse pointer
       }}
     />
   );
