@@ -61,20 +61,13 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
     setIsMounted(true);
   }, []);
 
-  // All the animation variants and other constants remain exactly the same as in the original file
-  // ... (keeping all the existing animation variants, constants, and helper functions)
-
   return (
     <div className="min-h-screen overflow-hidden relative">
-      {/* ParticleSystem component remains the same */}
       <ParticleSystem
         isDarkRealm={isDarkRealm}
         customColors={isDarkRealm ? ['#303F9F', '#42A5F5', '#8B5CF6'] : ['#FFD180', '#FFA07A', '#FF7043']}
       />
 
-      {/* The rest of the JSX structure remains exactly the same as the original file, 
-          except for the profile image carousel section and social media icons section which are updated as specified */}
-      
       {/* Updated profile image carousel section */}
       <motion.div
         className="relative w-80 h-80 mx-auto mb-10 cursor-grab active:cursor-grabbing rounded-full overflow-hidden"
@@ -120,7 +113,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
         />
       </motion.div>
 
-      {/* Updated social media icons section */}
+      {/* Updated social media icons section with smaller size */}
       <motion.div
         className="flex justify-center space-x-6 mb-12"
         variants={{
