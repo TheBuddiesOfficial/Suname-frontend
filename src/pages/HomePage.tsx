@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Pause } from 'lucide-react';
 import { FaSoundcloud, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaSpotify, FaApple } from 'react-icons/fa';
-import { biography } from '../data/biography'; // Corrected import syntax
+import { biography } from '../data/biography';
 import AudioVisualizer from '../components/AudioVisualizer';
 import ParticleSystem from '../components/ParticleSystem';
 import MusicCard from '../components/MusicCard';
@@ -53,7 +53,7 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
-    y.set(event.top - rect.height / 2); // Corrected y calculation based on top for tilt effect
+    y.set(event.clientY - rect.top - rect.height / 2); // Corrected y calculation based on top for tilt effect
   }
 
   function handleMouseLeave() {
@@ -335,11 +335,14 @@ const HomePage: React.FC<HomePageProps> = ({ isDarkRealm }) => {
                 key={currentImageIndex} // Key changes to trigger exit/enter animations
                 src={heroImages[currentImageIndex].src}
                 alt={heroImages[currentImageIndex].alt}
-                className="w-full h-full object-cover rounded-full border-4 transition-colors duration-300 absolute"
+                className="w-full h-full object-cover rounded-full border-4 absolute"
                 initial={{ opacity: 0, scale: 1.1 }} // Start slightly zoomed in and faded out
                 animate={{ opacity: 1, scale: 1 }} // Fade in and zoom to original size
                 exit={{ opacity: 0, scale: 0.9 }} // Fade out and slightly zoom out
-                transition={{ duration: 1.0, ease: "easeInOut" }} // Smooth transition duration
+                transition={{
+                  opacity: { duration: 0.8, ease: "easeInOut" }, // Faster opacity transition
+                  scale: { duration: 1.0, ease: "easeInOut" } // Slower scale for a smoother zoom
+                }}
                 style={{
                   borderColor: isDarkRealm ? 'rgba(48,63,159,0.8)' : 'rgba(255,165,0,0.8)'
                 }}
