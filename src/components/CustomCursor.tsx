@@ -5,11 +5,12 @@ interface CustomCursorProps {
   isDarkRealm: boolean; // True if the overall website is in dark mode
 }
 
-// Particle interface
+// Corrected Particle interface
 interface Particle {
   id: number;
   x: number;
-  y: duration: number;
+  y: number;
+  duration: number;
   // Add other properties if needed for unique particle animations
 }
 
@@ -29,7 +30,6 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
   // States for visual effects
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false); // For click burst effect
-  const [mainCursorShape, setMainCursorShape] = useState<'square' | 'star'>('square');
 
   // Animation variants for the main cursor's shape/size/rotation
   const cursorVariants = {
@@ -45,7 +45,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     hover: {
       width: 45,
       height: 45,
-      borderRadius: '50%', // Briefly morph to circle on hover
+      borderRadius: '50%', // Briefly morph to circle on hover (can change to other shapes!)
       rotate: 45, // Rotate on hover
       backgroundColor: `rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 0.6)`,
       border: `2px solid rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 1)`,
@@ -68,7 +68,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
       mainCursorX.set(e.clientX);
       mainCursorY.set(e.clientY);
 
-      // Generate a particle only if not hovering (or if you want particles on hover too)
+      // Generate a particle only if not hovering or clicking, to avoid overwhelming
       if (!isHovering && !isClicking) {
         setParticles(prev => {
           const newParticle: Particle = {
@@ -118,7 +118,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
 
     const applyHoverListeners = () => {
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
-        el.removeEventListener('mouseenter', setHover);
+        el.removeEventListener('mouseenter', setHover); // Remove before adding to prevent duplicates
         el.removeEventListener('mouseleave', clearHover);
         el.addEventListener('mouseenter', setHover);
         el.addEventListener('mouseleave', clearHover);
@@ -141,15 +141,14 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     };
   }, [mainCursorX, mainCursorY, isHovering, isClicking]); // Add isHovering, isClicking to dependencies
 
-  // Cleanup particles over time
+  // Cleanup particles over time (they fade out via CSS, but we remove from state)
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
-      setParticles(prev => prev.filter(p => {
-        // Simple heuristic: remove after a rough duration or when off screen
-        // For production, you'd track elapsed time for each particle more precisely
-        return true; // We're letting CSS animation handle fade-out and display: none
-      }));
-    }, 500); // Clean up every 0.5 seconds (adjust as needed)
+      // In a real app, you might track start time of each particle and remove after duration
+      // For this example, we're relying on the 'slice' in mousemove and the CSS animation for visibility.
+      // This interval could be used to remove truly expired particles if `slice` isn't enough for very long trails.
+      setParticles(prev => prev.filter(p => p.duration > 0)); // Placeholder - ideally check if animation is truly done
+    }, 1000); // Clean up every 1 second (adjust as needed)
 
     return () => clearInterval(cleanupInterval);
   }, []);
