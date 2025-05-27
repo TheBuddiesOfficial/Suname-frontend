@@ -1,50 +1,106 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring, animate } from 'framer-motion';
 
 interface CustomCursorProps {
   isDarkRealm: boolean; // True if the overall website is in dark mode
 }
 
+// Particle interface
+interface Particle {
+  id: number;
+  x: number;
+  y: duration: number;
+  // Add other properties if needed for unique particle animations
+}
+
 const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
-  // Main cursor position
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
+  const mainCursorX = useMotionValue(0);
+  const mainCursorY = useMotionValue(0);
 
-  // Secondary cursor (glow/trail) position - slightly more damped for a smoother lag
-  const glowX = useMotionValue(0);
-  const glowY = useMotionValue(0);
+  // Spring for the main cursor (less damped for a bit more direct feel)
+  const mainSpring = { stiffness: 450, damping: 28, mass: 0.7 };
+  const springMainX = useSpring(mainCursorX, mainSpring);
+  const springMainY = useSpring(mainCursorY, mainSpring);
 
-  // Current variant for styling ('default', 'hover', 'clicked')
-  const [cursorVariant, setCursorVariant] = useState('default');
+  const [cursorVariant, setCursorVariant] = useState('default'); // 'default', 'hover', 'clicked'
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const particleId = useRef(0);
 
-  // Framer Motion spring configurations
-  const primarySpring = { stiffness: 400, damping: 25, mass: 0.8 }; // Quick but smooth
-  const glowSpring = { stiffness: 200, damping: 20, mass: 1 }; // Slower, more floaty
-
-  const springCursorX = useSpring(cursorX, primarySpring);
-  const springCursorY = useSpring(cursorY, primarySpring);
-  const springGlowX = useSpring(glowX, glowSpring);
-  const springGlowY = useSpring(glowY, glowSpring);
-
-  // States for dynamic sizing and effects
+  // States for visual effects
   const [isHovering, setIsHovering] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
+  const [isClicking, setIsClicking] = useState(false); // For click burst effect
+  const [mainCursorShape, setMainCursorShape] = useState<'square' | 'star'>('square');
 
+  // Animation variants for the main cursor's shape/size/rotation
+  const cursorVariants = {
+    default: {
+      width: 20,
+      height: 20,
+      borderRadius: '4px', // Small square
+      rotate: 0,
+      backgroundColor: `rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 0.8)`,
+      border: `1px solid rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 1)`,
+      scale: 1,
+    },
+    hover: {
+      width: 45,
+      height: 45,
+      borderRadius: '50%', // Briefly morph to circle on hover
+      rotate: 45, // Rotate on hover
+      backgroundColor: `rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 0.6)`,
+      border: `2px solid rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 1)`,
+      scale: 1.1,
+    },
+    clicked: {
+      width: 15, // Shrink quickly on click
+      height: 15,
+      borderRadius: '2px',
+      rotate: 90,
+      backgroundColor: `rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 1)`,
+      border: `1px solid rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, 1)`,
+      scale: 0.8,
+    },
+  };
+
+  // --- Particle System Logic ---
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      glowX.set(e.clientX);
-      glowY.set(e.clientY);
+      mainCursorX.set(e.clientX);
+      mainCursorY.set(e.clientY);
+
+      // Generate a particle only if not hovering (or if you want particles on hover too)
+      if (!isHovering && !isClicking) {
+        setParticles(prev => {
+          const newParticle: Particle = {
+            id: particleId.current++,
+            x: e.clientX + (Math.random() - 0.5) * 10, // Slight random offset
+            y: e.clientY + (Math.random() - 0.5) * 10,
+            duration: 0.5 + Math.random() * 0.5, // Random fade duration
+          };
+          // Keep a limited number of particles for performance
+          return [...prev, newParticle].slice(-50); // Keep last 50 particles
+        });
+      }
     };
 
     const handleMouseDown = () => {
       setIsClicking(true);
       setCursorVariant('clicked');
+      // Trigger a burst of particles on click
+      setParticles(prev => {
+        const burstParticles: Particle[] = Array.from({ length: 15 }).map(() => ({
+          id: particleId.current++,
+          x: mainCursorX.get() + (Math.random() - 0.5) * 30,
+          y: mainCursorY.get() + (Math.random() - 0.5) * 30,
+          duration: 0.3 + Math.random() * 0.3, // Faster fade for burst
+        }));
+        return [...prev, ...burstParticles].slice(-100); // Keep more for burst
+      });
     };
+
     const handleMouseUp = () => {
       setIsClicking(false);
-      setCursorVariant(isHovering ? 'hover' : 'default'); // Revert to hover if still hovering
+      setCursorVariant(isHovering ? 'hover' : 'default');
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -61,9 +117,8 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     };
 
     const applyHoverListeners = () => {
-      // Select interactive elements
       document.querySelectorAll('a, button, input[type="submit"], [role="button"], [data-cursor-hover="true"]').forEach((el) => {
-        el.removeEventListener('mouseenter', setHover); // Remove before adding
+        el.removeEventListener('mouseenter', setHover);
         el.removeEventListener('mouseleave', clearHover);
         el.addEventListener('mouseenter', setHover);
         el.addEventListener('mouseleave', clearHover);
@@ -71,8 +126,6 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
     };
 
     applyHoverListeners();
-
-    // Use MutationObserver to re-apply listeners if DOM changes (e.g., new elements loaded)
     const observer = new MutationObserver(applyHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -86,98 +139,68 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ isDarkRealm }) => {
         el.removeEventListener('mouseleave', clearHover);
       });
     };
-  }, [cursorX, cursorY, glowX, glowY, isHovering]); // Dependencies for useEffect
+  }, [mainCursorX, mainCursorY, isHovering, isClicking]); // Add isHovering, isClicking to dependencies
 
-  // Define color themes
-  const themeColors = {
-    light: {
-      primaryColor: '255, 165, 0', // Orange RGB values
-      glowColor: '255, 165, 0',
-    },
-    dark: {
-      primaryColor: '139, 92, 246', // Purple RGB values
-      glowColor: '139, 92, 246',
-    },
-  };
+  // Cleanup particles over time
+  useEffect(() => {
+    const cleanupInterval = setInterval(() => {
+      setParticles(prev => prev.filter(p => {
+        // Simple heuristic: remove after a rough duration or when off screen
+        // For production, you'd track elapsed time for each particle more precisely
+        return true; // We're letting CSS animation handle fade-out and display: none
+      }));
+    }, 500); // Clean up every 0.5 seconds (adjust as needed)
 
-  const currentTheme = isDarkRealm ? themeColors.dark : themeColors.light;
+    return () => clearInterval(cleanupInterval);
+  }, []);
 
   // Prevent cursor from showing on touch devices
   if (typeof window !== 'undefined' && 'ontouchstart' in window) return null;
 
-  // Define dynamic properties based on cursor variant
-  const cursorProps = {
-    default: {
-      width: 32,
-      height: 32,
-      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.1)`, // Light fill
-      border: `1px solid rgba(${currentTheme.primaryColor}, 0.7)`, // Solid border
-    },
-    hover: {
-      width: 60, // Significantly larger on hover
-      height: 60,
-      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.2)`, // More opaque fill
-      border: `2px solid rgba(${currentTheme.primaryColor}, 0.9)`, // Thicker, more solid border
-    },
-    clicked: {
-      width: 24, // Smaller on click
-      height: 24,
-      backgroundColor: `rgba(${currentTheme.primaryColor}, 0.4)`, // Even more opaque
-      border: `2px solid rgba(${currentTheme.primaryColor}, 1)`, // Fully solid border
-    },
-  };
-
-  // Glow cursor's dynamic properties
-  const glowProps = {
-    default: {
-      width: 60,
-      height: 60,
-      opacity: 0.3,
-    },
-    hover: {
-      width: 90, // Glow expands more on hover
-      height: 90,
-      opacity: 0.4,
-    },
-    clicked: {
-      width: 50,
-      height: 50,
-      opacity: 0.2,
-    },
-  };
-
   return (
     <>
-      {/* Glow / Trail Cursor */}
-      <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9997] hidden md:block"
-        style={{
-          x: springGlowX,
-          y: springGlowY,
-          backgroundColor: `rgba(${currentTheme.glowColor}, ${glowProps[cursorVariant].opacity})`,
-          width: glowProps[cursorVariant].width,
-          height: glowProps[cursorVariant].height,
-          transform: 'translateX(-50%) translateY(-50%)',
-          filter: 'blur(15px)', // Stronger blur for a soft aura
-          transition: 'width 0.3s ease, height 0.3s ease, opacity 0.3s ease',
-          mixBlendMode: 'overlay', // or 'screen', 'lighten' for different effects
-        }}
-      />
+      {/* Dynamic Particle Trail */}
+      {particles.map(p => (
+        <motion.div
+          key={p.id}
+          className="fixed top-0 left-0 pointer-events-none z-[9998] hidden md:block"
+          initial={{
+            x: p.x,
+            y: p.y,
+            opacity: 1,
+            scale: 1,
+            borderRadius: Math.random() > 0.5 ? '0%' : '50%', // Random square or circle
+            backgroundColor: `rgba(${isDarkRealm ? '139, 92, 246' : '255, 165, 0'}, ${0.3 + Math.random() * 0.4})`, // Varied opacity
+          }}
+          animate={{
+            opacity: 0,
+            scale: 0.5,
+            x: p.x + (Math.random() - 0.5) * 50, // Drift slightly
+            y: p.y + (Math.random() - 0.5) * 50,
+          }}
+          transition={{ duration: p.duration, ease: "easeOut" }}
+          style={{
+            width: 8,
+            height: 8,
+            transform: 'translateX(-50%) translateY(-50%)',
+            mixBlendMode: 'screen', // Makes particles lighten or glow
+          }}
+        />
+      ))}
 
-      {/* Main Cursor (the interactive blob) */}
+      {/* Main Cursor (The Glitchy Orb/Square) */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
+        variants={cursorVariants}
+        animate={cursorVariant}
         style={{
-          x: springCursorX,
-          y: springCursorY,
-          backgroundColor: cursorProps[cursorVariant].backgroundColor,
-          border: cursorProps[cursorVariant].border,
-          width: cursorProps[cursorVariant].width,
-          height: cursorProps[cursorVariant].height,
+          x: springMainX,
+          y: springMainY,
           transform: 'translateX(-50%) translateY(-50%)',
-          transition: 'width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease',
-          mixBlendMode: 'difference', // Excellent for contrast against any background
-          filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))', // Subtle glow
+          mixBlendMode: 'difference', // Still good for contrast
+          // Added for a subtle "glitch" feel by default
+          filter: `hue-rotate(${Math.random() * 360}deg) saturate(${1 + Math.random() * 0.5})`,
+          transition: { filter: { duration: 0.1, ease: 'linear', repeat: Infinity, repeatType: 'reverse' } } // Quick filter flicker
         }}
       />
     </>
