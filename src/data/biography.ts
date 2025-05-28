@@ -27,41 +27,24 @@ Key Highlights:
     appleMusic: "https://music.apple.com/us/artist/suname/1755948288",
     youtube: "https://www.youtube.com/@sunamemusic"
   },
-  mixes: [
-    {
-      title: "SUNAME @ Elixr Orlando December Set",
-      url: "https://soundcloud.com/sunamemusic/suname-elixr-orlando-december-set",
-      image: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
-    },
-    {
-      title: "Elixir Set 20",
-      url: "https://soundcloud.com/sunamemusic/elixir-set-20",
-      image: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
-    },
-    {
-      title: "Elixr Full Set Preview",
-      url: "https://soundcloud.com/sunamemusic/elixr-full-set-preview",
-      image: "https://i1.sndcdn.com/artworks-gDPWvhZZKXtYBHGz-5ZtXyg-t500x500.jpg"
-    }
-  ],
+  mixes: [],
   photos: {
     light: [
       "/images/artist_main.jpg",
-      "/images/artist_main.jpg",
-      "/images/artist_main.jpg"
+      "/images/artist_beachball.jpg",
+      "/images/artist_orange.jpg"
     ],
     dark: [
       "/images/artist_main.jpg",
-      "/images/artist_main.jpg",
-      "/images/artist_main.jpg"
+      "/images/artist_beachball.jpg",
+      "/images/artist_orange.jpg"
     ]
   },
   artistPhotos: {
     main: "/images/artist_main.jpg",
     additional: [
-      "/images/artist_main.jpg",
-      "/images/artist_main.jpg",
-      "/images/artist_main.jpg"
+      "/images/artist_beachball.jpg",
+      "/images/artist_orange.jpg"
     ]
   },
   designer: {
